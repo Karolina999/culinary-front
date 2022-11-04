@@ -12,6 +12,11 @@ body {
 
 .caladea-font {
   font-family: 'Caladea', serif;
+  letter-spacing: 0.75px;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 .navColor {

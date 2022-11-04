@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Banner from "../components/homePage/banner";
+import PopularRecipes from "../components/homePage/popularRecipes";
 import Topbar from "../components/topbar";
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
     <>
       <Topbar transparent={scrollY < 90} />
       <Banner />
+      <PopularRecipes />
     </>
   );
 }
