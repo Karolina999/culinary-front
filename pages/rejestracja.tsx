@@ -4,21 +4,24 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import styles from "../styles/login.module.css";
 
-const LogIn = () => {
+const Rejestracja = () => {
   const schema = yup.object().shape({
+    firstName: yup.string().required("To pole jest wymagane"),
+    lastName: yup.string().required("To pole jest wymagane"),
     email: yup
       .string()
       .required("To pole jest wymagane")
       .email("Nieprawidłowy adres email"),
     password: yup.string().required("To pole jest wymagane"),
   });
+
   return (
     <div className={styles.background}>
       <Container className="py-5 my-5">
         <Row className="justify-content-center">
           <Col md={6}>
             <h3 className="bold text-center pb-5 pt-sm-5 pt-md-0 mt-5 mt-md-0">
-              Logowanie
+              Rejestracja
             </h3>
             <Formik
               validateOnBlur={false}
@@ -26,12 +29,40 @@ const LogIn = () => {
               validationSchema={schema}
               onSubmit={console.log}
               initialValues={{
+                firstName: "",
+                lastName: "",
                 email: "",
                 password: "",
               }}
             >
               {({ handleSubmit, handleChange, values, errors }) => (
                 <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-4">
+                    <Form.Label>Imię</Form.Label>
+                    <Form.Control
+                      placeholder="Jan"
+                      name="firstName"
+                      value={values.firstName}
+                      onChange={handleChange}
+                      isInvalid={!!errors.firstName}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.firstName}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                  <Form.Group className="mb-4">
+                    <Form.Label>Nazwisko</Form.Label>
+                    <Form.Control
+                      placeholder="Kowalski"
+                      name="lastName"
+                      value={values.lastName}
+                      onChange={handleChange}
+                      isInvalid={!!errors.lastName}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.lastName}
+                    </Form.Control.Feedback>
+                  </Form.Group>
                   <Form.Group className="mb-4">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
@@ -68,10 +99,6 @@ const LogIn = () => {
                 </Form>
               )}
             </Formik>
-            <div className="pt-5 text-center">
-              <h5>Nie posiadasz konta?</h5>
-              <p className="cursor-pointer">Zarejestruj się</p>
-            </div>
           </Col>
         </Row>
       </Container>
@@ -79,4 +106,4 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export default Rejestracja;
