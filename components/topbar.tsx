@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { GiCook, GiShoppingCart } from "react-icons/gi";
 import { BsSearch } from "react-icons/bs";
+import { CgNotes } from "react-icons/cg";
 
 interface TopbarProps {
   transparent?: boolean;
@@ -46,6 +47,10 @@ const Topbar = ({ transparent }: TopbarProps) => {
             <div className="d-lg-flex px-2 pt-4 py-lg-0">
               <Nav.Link href="" className="d-flex">
                 <GiShoppingCart style={{ fontSize: "30px", color: "white" }} />
+                <p className="px-2 pt-1 text-white d-lg-none">Listy zakupów</p>
+              </Nav.Link>
+              <Nav.Link href="" className="d-flex">
+                <CgNotes style={{ fontSize: "30px", color: "white" }} />
                 <p className="px-2 pt-1 text-white d-lg-none">Listy zakupów</p>
               </Nav.Link>
               <Nav.Link href="" className="d-flex">

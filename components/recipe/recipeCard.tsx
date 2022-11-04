@@ -34,14 +34,6 @@ const RecipeCard = ({ recipe, star }: RecipeProps) => {
           recipe.title
         )}
       </h5>
-      {/* <Row className="d-flex">
-        <BsClock style={{ fontSize: "18px" }} />
-        <p>{recipe.time}</p>
-        <BsClock style={{ fontSize: "18px" }} />
-        <p>{recipe.time}</p>
-        <BsClock style={{ fontSize: "18px" }} />
-        <p>{recipe.time}</p>
-      </Row> */}
       <div className="d-flex px-2">
         <BsFillAlarmFill style={{ fontSize: "18px" }} />
         <p className="ps-2 pe-2 mb-2">{recipe.time}</p>
