@@ -18,7 +18,6 @@ const RecipeCard = ({ recipe, star }: RecipeProps) => {
   const halfStar = !Number.isInteger(star);
   const fillStar = Math.floor(star);
   const regStar = halfStar ? 5 - fillStar - 1 : 5 - fillStar;
-  console.log(halfStar);
   return (
     <div style={{ width: "250px" }} className="mx-auto caladea-font shadow ">
       <Image

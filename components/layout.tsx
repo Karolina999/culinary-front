@@ -19,7 +19,6 @@ const Layout = ({ children, topbarTransparent }: LayoutProps) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  console.log(topbarTransparent);
   return (
     <>
       <Topbar transparent={topbarTransparent ? scrollY < 90 : false} />
