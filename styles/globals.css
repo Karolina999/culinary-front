@@ -28,3 +28,11 @@ body {
   background: transparent;
   transition: background-color 0.5s ease-out;
 }
+
+.bledMultiply {
+  mix-blend-mode: multiply;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}

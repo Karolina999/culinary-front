@@ -43,15 +43,18 @@ const Topbar = ({ transparent }: TopbarProps) => {
           </Nav>
           <Nav>
             {/* <Nav.Link href="">More deets</Nav.Link> */}
-            <div className="d-flex px-2">
-              <Nav.Link href="">
+            <div className="d-lg-flex px-2 pt-4 py-lg-0">
+              <Nav.Link href="" className="d-flex">
                 <GiShoppingCart style={{ fontSize: "30px", color: "white" }} />
+                <p className="px-2 pt-1 text-white d-lg-none">Listy zakupów</p>
               </Nav.Link>
-              <Nav.Link href="">
+              <Nav.Link href="" className="d-flex">
                 <GiCook style={{ fontSize: "30px", color: "white" }} />
+                <p className="px-2 pt-1 text-white d-lg-none">Moje konto</p>
               </Nav.Link>
-              <Nav.Link href="">
+              <Nav.Link href="" className="d-flex">
                 <BsSearch style={{ fontSize: "25px", color: "white" }} />
+                <p className="px-2 pt-1 text-white d-lg-none">Znajdź przepis</p>
               </Nav.Link>
             </div>
             <Button

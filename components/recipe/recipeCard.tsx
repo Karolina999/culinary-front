@@ -14,7 +14,7 @@ interface RecipeProps {
   recipe: RecipeInterface;
   star: number;
 }
-const Recipe = ({ recipe, star }: RecipeProps) => {
+const RecipeCard = ({ recipe, star }: RecipeProps) => {
   const halfStar = !Number.isInteger(star);
   const fillStar = Math.floor(star);
   const regStar = halfStar ? 5 - fillStar - 1 : 5 - fillStar;
@@ -67,4 +67,4 @@ const Recipe = ({ recipe, star }: RecipeProps) => {
   );
 };
 
-export default Recipe;
+export default RecipeCard;

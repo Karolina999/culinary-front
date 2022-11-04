@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import Recipe from "../recipe/recipe";
+import RecipeCard from "../recipe/recipeCard";
 
 const PopularRecipes = () => {
   const recipes = [
@@ -43,12 +43,12 @@ const PopularRecipes = () => {
     },
   ];
   return (
-    <Container className="py-5 mt-3">
+    <Container className="py-5">
       <h3 className="caladea-font bold pb-4">Popularne przepisy</h3>
       <Row>
         {recipes.map((recipe) => (
           <Col md={6} lg={4} xl={3} className="pb-3">
-            <Recipe recipe={recipe} star={3.5} />
+            <RecipeCard recipe={recipe} star={3.5} />
           </Col>
         ))}
       </Row>
