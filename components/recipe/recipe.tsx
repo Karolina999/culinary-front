@@ -20,7 +20,7 @@ const Recipe = ({ recipe, star }: RecipeProps) => {
   const regStar = halfStar ? 5 - fillStar - 1 : 5 - fillStar;
   console.log(halfStar);
   return (
-    <div style={{ width: "250px" }} className="mx- caladea-font">
+    <div style={{ width: "250px" }} className="mx-auto caladea-font shadow ">
       <Image
         src={recipe.photo.length > 0 ? recipe.photo : "/recipe.jpg"}
         alt="Picture of the author"
@@ -28,7 +28,7 @@ const Recipe = ({ recipe, star }: RecipeProps) => {
         height={150}
         style={{ objectFit: "cover" }}
       />
-      <h5 className="bold mt-3" style={{ height: "60px" }}>
+      <h5 className="bold mt-3 px-2" style={{ height: "60px" }}>
         {recipe.title.length > 37 ? (
           <>{recipe.title.slice(0, 40)}...</>
         ) : (
@@ -43,7 +43,7 @@ const Recipe = ({ recipe, star }: RecipeProps) => {
         <BsClock style={{ fontSize: "18px" }} />
         <p>{recipe.time}</p>
       </Row> */}
-      <div className="d-flex">
+      <div className="d-flex px-2">
         <BsFillAlarmFill style={{ fontSize: "18px" }} />
         <p className="ps-2 pe-2 mb-2">{recipe.time}</p>
         <AiFillSignal style={{ fontSize: "18px" }} />
@@ -51,15 +51,17 @@ const Recipe = ({ recipe, star }: RecipeProps) => {
         <BsFillPersonFill style={{ fontSize: "20px" }} />
         <p className="ps-1 pe-2 mb-2">{recipe.people}</p>
       </div>
-      <div className="d-flex text-warning" style={{ alignItems: "start" }}>
+      <div className="d-flex text-warning px-2" style={{ alignItems: "start" }}>
         {[...Array(fillStar)].map((x) => (
-          <FaStar style={{ fontSize: "20px" }} />
+          <FaStar style={{ fontSize: "18px" }} />
         ))}
-        {halfStar && <FaStarHalfAlt style={{ fontSize: "20px" }} />}
+        {halfStar && <FaStarHalfAlt style={{ fontSize: "18px" }} />}
         {[...Array(regStar)].map((x) => (
-          <FaRegStar style={{ fontSize: "20px" }} />
+          <FaRegStar style={{ fontSize: "18px" }} />
         ))}
-        <p className="ps-2 text-dark">{star}/5 z 10 recenzji</p>
+        <p className="ps-2 text-dark" style={{ fontSize: "14px" }}>
+          {star}/5 z 124 recenzji
+        </p>
       </div>
     </div>
   );
