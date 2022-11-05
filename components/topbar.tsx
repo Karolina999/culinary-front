@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { GiCook, GiShoppingCart } from "react-icons/gi";
 import { BsSearch } from "react-icons/bs";
@@ -6,14 +6,16 @@ import { CgNotes } from "react-icons/cg";
 
 interface TopbarProps {
   transparent?: boolean;
+  transparentNav?: boolean;
 }
 
-const Topbar = ({ transparent }: TopbarProps) => {
+const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
   return (
     <Navbar
       collapseOnSelect
       expand="lg"
       variant="dark"
+      // className={`py-3 ${transparent ? "navTransparent" : "navColor"}`}
       className={`py-3 ${transparent ? "navTransparent" : "navColor"}`}
       sticky="top"
     >
@@ -42,7 +44,19 @@ const Topbar = ({ transparent }: TopbarProps) => {
               </NavDropdown.Item>
             </NavDropdown> */}
           </Nav>
-          <Nav>
+          <Nav
+            // style={{
+            //   position: "absolute",
+            //   zIndex: "-1",
+            //   top: "0",
+            //   left: "0",
+            //   right: "0",
+            //   background: "rgba(0, 0, 0, .70)",
+            // }}
+            className={
+              transparentNav ? "navTransparentOpen pt-5 mt-1 pb-3 px-2" : ""
+            }
+          >
             {/* <Nav.Link href="">More deets</Nav.Link> */}
             <div className="d-lg-flex px-2 pt-4 py-lg-0">
               <Nav.Link href="" className="d-flex">

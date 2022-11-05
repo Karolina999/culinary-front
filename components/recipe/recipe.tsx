@@ -43,10 +43,32 @@ const Recipe = () => {
       photo: "",
     },
   ];
+  const products = [
+    {
+      name: "Łsosoś",
+      amount: 3,
+      unit: "szczytpa",
+    },
+    {
+      name: "Mąka",
+      amount: 5,
+      unit: "kg",
+    },
+    {
+      name: "Cukier",
+      amount: 1,
+      unit: "kg",
+    },
+    {
+      name: "Sól",
+      amount: 1,
+      unit: "łyżeczka",
+    },
+  ];
   return (
     <Container className="pt-lg-5">
       <Row>
-        <Col xs={12} lg={6} xxl={5} className="d-flex flex-column py-4">
+        <Col xs={12} lg={5} className="d-flex flex-column py-4">
           <div>
             <h1 className="caladea-font display-5 bold mt-auto">
               {recipe.title}
@@ -54,16 +76,31 @@ const Recipe = () => {
             <p className="text-secondary">Autor: {user}</p>
           </div>
           <div className="mt-auto">
-            <div className="d-flex pt-3" style={{ fontSize: "20px" }}>
-              <BsFillAlarmFill style={{ fontSize: "25px" }} />
-              <p className="ps-2 pe-2 mb-2">{recipe.time}</p>
-              <AiFillSignal style={{ fontSize: "25px" }} />
-              <p className="ps-1 pe-2 mb-2">{recipe.level}</p>
-              <BsFillPersonFill style={{ fontSize: "27px" }} />
-              <p className="ps-1 pe-2 mb-2">{recipe.people}</p>
+            <div className="pb-3 caladea-font" style={{ fontSize: "20px" }}>
+              <div className="d-flex my-0">
+                <BsFillAlarmFill
+                  style={{ fontSize: "22px" }}
+                  className="me-2 mb-0 mt-1"
+                />
+                <p className="my-0">{recipe.time}</p>
+              </div>
+              <div className="d-flex my-0">
+                <AiFillSignal
+                  style={{ fontSize: "22px" }}
+                  className="me-2 mb-0 mt-1"
+                />
+                <p className="my-0">{recipe.level}</p>
+              </div>
+              <div className="d-flex my-0">
+                <BsFillPersonFill
+                  style={{ fontSize: "23px" }}
+                  className="me-2 mb-0 mt-1"
+                />
+                <p className="my-0">{recipe.people} osób</p>
+              </div>
             </div>
             <div
-              className="d-flex text-warning"
+              className="d-flex text-warning caladea-font"
               style={{ alignItems: "start" }}
             >
               {[...Array(fillStar)].map((x) => (
@@ -77,17 +114,12 @@ const Recipe = () => {
                 {star}/5 z 124 recenzji
               </p>
             </div>
-            <div className="pt-2 d-grid gap-2 d-lg-flex">
+            <div className="pt-2 d-grid gap-2 d-xl-flex">
               <Button variant="success" size="lg">
                 <CgNotes className="mb-1 me-2" style={{ fontSize: "25px" }} />
                 Dodaj do listy
               </Button>
-              <Button
-                variant="danger"
-                // size="lg"
-                className="d-inline btn-lg"
-                // className="ms-xl-2 mt-2 mt-xl-0"
-              >
+              <Button variant="danger" className="d-inline btn-lg">
                 <BsCalendarPlus
                   className="mb-1 me-2"
                   style={{ fontSize: "25px" }}
@@ -103,7 +135,11 @@ const Recipe = () => {
           lg={{ order: "last" }}
         >
           <Image
-            src={recipe.photo.length > 0 ? recipe.photo : "/recipe.jpg"}
+            src={
+              recipe.photo && recipe.photo.length > 0
+                ? recipe.photo
+                : "/recipe.jpg"
+            }
             alt="Picture of the author"
             layout="fill"
             style={{ objectFit: "cover" }}
@@ -111,8 +147,27 @@ const Recipe = () => {
         </Col>
       </Row>
       <Row className="pt-4 mt-lg-3">
-        <Col xs={12} lg={6} xxl={5}>
+        <Col xs={12} lg={5} className="pb-4 pb-lg-0 pe-lg-5">
           <h3 className="caladea-font bold mt-auto">Składniki</h3>
+          {products.map((product) => (
+            <div className="d-flex pe-lg-2 pb-1">
+              <Col
+                xs="auto"
+                className="align-self-end me-2"
+                style={{ fontWeight: "500" }}
+              >
+                {product.name}
+              </Col>
+              <div className="dotted-border align-self-start mb-1"></div>
+              <Col
+                xs="auto"
+                className="align-self-end ms-2"
+                style={{ fontWeight: "500" }}
+              >
+                {product.amount} {product.unit}
+              </Col>
+            </div>
+          ))}
         </Col>
         <Col className="px-lg-0">
           <h3 className="caladea-font bold mt-auto">Przygotowanie</h3>
@@ -134,9 +189,6 @@ const Recipe = () => {
               )}
             </Row>
           ))}
-          {/* stepNumber: 1,
-      description: "Lorem impsum",
-      photo: "", */}
         </Col>
       </Row>
     </Container>
