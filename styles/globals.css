@@ -24,6 +24,16 @@ body {
   transition: background-color 0.5s ease-out;
 }
 
+.navTransparentOpen {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: "rgba(0, 0, 0, .70)";
+  transition: background-color 0.5s ease-out;
+}
+
 .navTransparent { 
   background: transparent;
   transition: background-color 0.5s ease-out;
@@ -35,4 +45,14 @@ body {
 
 .cursor-pointer{
   cursor: pointer;
+}
+
+.dotted-border {
+  border-bottom: 2px dotted gray;
+  /* content: "0"; */
+  width: 100%;
+}
+
+.dotted-border::before{
+  content: "\200B";
 }
