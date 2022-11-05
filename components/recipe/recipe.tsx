@@ -76,7 +76,7 @@ const Recipe = () => {
             <p className="text-secondary">Autor: {user}</p>
           </div>
           <div className="mt-auto">
-            <div className="pb-3 caladea-font" style={{ fontSize: "20px" }}>
+            <div className="pb-3" style={{ fontSize: "18px" }}>
               <div className="d-flex my-0">
                 <BsFillAlarmFill
                   style={{ fontSize: "22px" }}
@@ -100,7 +100,7 @@ const Recipe = () => {
               </div>
             </div>
             <div
-              className="d-flex text-warning caladea-font"
+              className="d-flex text-warning "
               style={{ alignItems: "start" }}
             >
               {[...Array(fillStar)].map((x) => (
@@ -115,14 +115,14 @@ const Recipe = () => {
               </p>
             </div>
             <div className="pt-2 d-grid gap-2 d-xl-flex">
-              <Button variant="success" size="lg">
-                <CgNotes className="mb-1 me-2" style={{ fontSize: "25px" }} />
+              <Button variant="danger">
+                <CgNotes className="mb-1 me-2" style={{ fontSize: "22px" }} />
                 Dodaj do listy
               </Button>
-              <Button variant="danger" className="d-inline btn-lg">
+              <Button variant="danger" className="d-inline">
                 <BsCalendarPlus
                   className="mb-1 me-2"
-                  style={{ fontSize: "25px" }}
+                  style={{ fontSize: "22px" }}
                 />
                 Dodaj do plannera
               </Button>
@@ -177,7 +177,7 @@ const Recipe = () => {
         <Col className="px-lg-0">
           <h3 className="caladea-font bold mt-auto">Przygotowanie</h3>
           {steps.map((step) => (
-            <Row className="py-3">
+            <Row className="pt-3">
               <Col xs={12} lg={step.photo ? 8 : 12}>
                 <h5>Krok {step.stepNumber}</h5>
                 <p>{step.description}</p>
