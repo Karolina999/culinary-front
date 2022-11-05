@@ -5,6 +5,7 @@ import {
   BsFillAlarmFill,
   BsFillPersonFill,
   BsCalendarPlus,
+  BsHeart,
 } from "react-icons/bs";
 import { AiFillSignal } from "react-icons/ai";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
@@ -125,6 +126,12 @@ const Recipe = () => {
                   style={{ fontSize: "22px" }}
                 />
                 Dodaj do plannera
+              </Button>
+            </div>
+            <div className="pt-2 d-grid gap-2 d-xl-flex">
+              <Button variant="danger">
+                <BsHeart className="mb-1 me-2" style={{ fontSize: "20px" }} />
+                Dodaj do ulubionych
               </Button>
             </div>
           </div>
