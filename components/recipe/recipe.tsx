@@ -130,7 +130,11 @@ const Recipe = () => {
           </div>
         </Col>
         <Col
-          style={{ position: "relative", minHeight: "400px" }}
+          style={
+            recipe.photo
+              ? { minHeight: "400px", position: "relative" }
+              : { position: "relative" }
+          }
           xs={{ order: "first" }}
           lg={{ order: "last" }}
         >
@@ -143,6 +147,7 @@ const Recipe = () => {
             alt="Picture of the author"
             layout="fill"
             style={{ objectFit: "cover" }}
+            className={recipe.photo || "d-none d-lg-flex"}
           />
         </Col>
       </Row>
