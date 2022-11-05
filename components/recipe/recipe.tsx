@@ -147,7 +147,7 @@ const Recipe = () => {
         </Col>
       </Row>
       <Row className="pt-4 mt-lg-3">
-        <Col xs={12} lg={5} className="pb-4 pb-lg-0 pe-lg-5">
+        <Col xs={12} lg={5} className="pb-4 pb-lg-0 pe-xl-5">
           <h3 className="caladea-font bold mt-auto">Składniki</h3>
           {products.map((product) => (
             <div className="d-flex pe-lg-2 pb-1">
@@ -161,7 +161,7 @@ const Recipe = () => {
               <div className="dotted-border align-self-start mb-1"></div>
               <Col
                 xs="auto"
-                className="align-self-end ms-2"
+                className="align-self-end ms-2 me-xl-4"
                 style={{ fontWeight: "500" }}
               >
                 {product.amount} {product.unit}
