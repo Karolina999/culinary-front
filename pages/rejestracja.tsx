@@ -17,10 +17,10 @@ const Rejestracja = () => {
 
   return (
     <div className={styles.background}>
-      <Container className="py-5 my-5">
+      <Container className="py-5">
         <Row className="justify-content-center">
           <Col md={6}>
-            <h3 className="bold text-center pb-5 pt-sm-5 pt-md-0 mt-5 mt-md-0">
+            <h3 className="bold text-center pb-5 pt-sm-5 pt-lg-0 mt-5 mt-lg-0">
               Rejestracja
             </h3>
             <Formik
