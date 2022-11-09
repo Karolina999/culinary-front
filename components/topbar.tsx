@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { GiCook, GiShoppingCart } from "react-icons/gi";
 import { BsSearch } from "react-icons/bs";
@@ -15,7 +15,6 @@ const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
       collapseOnSelect
       expand="lg"
       variant="dark"
-      // className={`py-3 ${transparent ? "navTransparent" : "navColor"}`}
       className={`py-3 ${transparent ? "navTransparent" : "navColor"}`}
       sticky="top"
     >
@@ -29,30 +28,8 @@ const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            {/* <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link> */}
-            {/* <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown> */}
-          </Nav>
+          <Nav className="me-auto"></Nav>
           <Nav
-            // style={{
-            //   position: "absolute",
-            //   zIndex: "-1",
-            //   top: "0",
-            //   left: "0",
-            //   right: "0",
-            //   background: "rgba(0, 0, 0, .70)",
-            // }}
             className={
               transparentNav ? "navTransparentOpen pt-5 mt-1 pb-3 px-2" : ""
             }

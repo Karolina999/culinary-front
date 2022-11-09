@@ -8,7 +8,6 @@ import Topbar from "../components/topbar";
 function Home() {
   return (
     <>
-      {/* <Topbar transparent={scrollY < 90} /> */}
       <Banner />
       <div className="mt-3"></div>
       <Category />
