@@ -26,9 +26,6 @@ const Ingredients = ({
   console.log(values);
   return (
     <div>
-      {values.map((x) => (
-        <p>bsns</p>
-      ))}
       <Form.Group className="mb-4">
         <Form.Label className="bold">Składniki</Form.Label>
         <FieldArray
@@ -37,12 +34,15 @@ const Ingredients = ({
             <div>
               {values.map((value, index) => (
                 <div>
-                  <Row className="mb-4 pb-md-3">
+                  <Row className="mb-4 pb-md-0">
                     <Col xs={12} lg={7} className="mb-2 mb-lg-0">
                       <SelectList
                         options={options}
                         placeholder="np. Pomidory"
                         name={`productFromRecipes.${index}.ingredientId`}
+                        error={
+                          errors && errors[index] && errors[index].ingredientId
+                        }
                       />
                       <small className="pt-1 text-danger">
                         {errors && errors[index] && errors[index].ingredientId}
@@ -88,7 +88,9 @@ const Ingredients = ({
                           <Button
                             variant="link"
                             className="px-0"
-                            onClick={() => arrayHelper.remove(index)}
+                            onClick={() =>
+                              values.length > 1 && arrayHelper.remove(index)
+                            }
                           >
                             <BsTrashFill
                               style={{ fontSize: "22px" }}

@@ -57,3 +57,34 @@ body {
 .dotted-border::before{
   content: "\200B";
 }
+
+
+.errorStyle {
+  display: flex;
+  border: 1px solid #be2e3c;
+  border-radius: 7px;
+  transition: box-shadow 0.1s ease-out;
+}
+
+.errorStyleFocus {
+  border-color: #be2e3c;
+  -webkit-box-shadow: 0px 0px 0px 4px rgba(246, 204, 208, 1);
+  -moz-box-shadow: 0px 0px 0px 4px rgba(246, 204, 208, 1);
+  box-shadow: 0px 0px 0px 4px rgba(246, 204, 208, 1);
+  transition: box-shadow 0.1s ease-out;
+}
+
+.selectStyle {
+  display: flex;
+  border: 1px solid #cccccc;
+  border-radius: 7px;
+  transition: box-shadow 0.1s ease-out;
+}
+
+.selectStyleFocus {
+  transition: box-shadow 0.1s ease-out;
+  border-color: rgba(134, 183, 254, 1);
+  -webkit-box-shadow: 0px 0px 0px 4px rgba(194, 219, 254, 1);
+  -moz-box-shadow: 0px 0px 0px 4px rgba(194, 219, 254, 1);
+  box-shadow: 0px 0px 0px 4px rgba(194, 219, 254, 1);
+}

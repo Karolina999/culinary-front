@@ -11,15 +11,23 @@ interface SelectProps {
   options: Option[];
   placeholder: string;
   name: string;
+  error: boolean;
 }
 
-const SelectList = ({ options, placeholder, name }: SelectProps) => {
+const SelectList = ({ options, placeholder, name, error }: SelectProps) => {
   const { setFieldValue } = useFormikContext();
   const [selectedOption, setSelectedOption] = useState(null);
+  const [focus, setFocus] = useState(false);
   function handleChange(e: any) {
     setSelectedOption(e?.value);
     setFieldValue(name, e?.value);
   }
+  const style = {
+    control: () => ({
+      display: "flex",
+      width: "100%",
+    }),
+  };
   return (
     <div>
       <Select
@@ -29,6 +37,18 @@ const SelectList = ({ options, placeholder, name }: SelectProps) => {
         options={options}
         defaultValue={selectedOption}
         onChange={handleChange}
+        onBlur={() => setFocus(false)}
+        onFocus={() => setFocus(true)}
+        styles={style}
+        className={
+          error
+            ? focus
+              ? "errorStyleFocus errorStyle"
+              : "errorStyle"
+            : focus
+            ? "selectStyleFocus selectStyle"
+            : "selectStyle"
+        }
       />
     </div>
   );
