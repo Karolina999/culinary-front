@@ -1,3 +1,4 @@
+import { useFormikContext } from "formik";
 import React, { useState } from "react";
 import Select from "react-select";
 
@@ -9,13 +10,15 @@ interface Option {
 interface SelectProps {
   options: Option[];
   placeholder: string;
+  name: string;
 }
 
-const SelectList = ({ options, placeholder }: SelectProps) => {
+const SelectList = ({ options, placeholder, name }: SelectProps) => {
+  const { setFieldValue } = useFormikContext();
   const [selectedOption, setSelectedOption] = useState(null);
   function handleChange(e: any) {
     setSelectedOption(e?.value);
-    console.log(e?.value);
+    setFieldValue(name, e?.value);
   }
   return (
     <div>

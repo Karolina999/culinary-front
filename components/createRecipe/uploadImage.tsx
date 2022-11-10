@@ -58,14 +58,8 @@ const UploadImage = ({ onClick }: UploadImageProps) => {
                 }}
                 onClick={(e) => {
                   onClick(e);
-                  console.log("przed");
-                  images.length === 0 && console.log("rowne 0");
-                  images.length > 0 && console.log("wieksze niz 0");
                   images.length === 0 && onImageUpload();
                   images.length > 0 && onImageUpdate(0);
-                  console.log("po");
-                  images.length === 0 && console.log("rowne 0");
-                  images.length > 0 && console.log("wieksze niz 0");
                 }}
                 {...dragProps}
               >
@@ -74,7 +68,7 @@ const UploadImage = ({ onClick }: UploadImageProps) => {
                   : "Kliknij lub przeciągnij aby zmienić zdjęcie"}
                 {images.length === 0 ? (
                   <img
-                    src="./banner.jpg"
+                    src="./recipe.jpg"
                     alt=""
                     style={{
                       height: "250px",
@@ -158,22 +152,26 @@ const UploadImage = ({ onClick }: UploadImageProps) => {
               </div>
             ))} */}
             </div>
-            <Form.Text>
-              {errors?.acceptType && (
-                <span className="text-danger">Zły format zdjęcia</span>
-              )}
-              {errors?.maxFileSize && (
-                <span className="text-danger">Za duży rozmiar zdjęcia</span>
-              )}
-            </Form.Text>
+            <div className="mt-2">
+              <Form.Text>
+                {errors?.acceptType && (
+                  <span className="text-danger">Zły format zdjęcia</span>
+                )}
+                {errors?.maxFileSize && (
+                  <span className="text-danger">Za duży rozmiar zdjęcia</span>
+                )}
+              </Form.Text>
+            </div>
           </div>
         )}
       </ImageUploading>
-      <Form.Text>
-        Możesz dodać maksymalnie <strong>5</strong> zdjęć w formacie:
-        <strong>.png .jpg .jpeg .bpm</strong> o maksymalnym rozmiarze{" "}
-        <strong>5 MB</strong>
-      </Form.Text>
+      <div className="mt-1">
+        <Form.Text>
+          Możesz dodać zdjęcie w formacie:
+          <strong>.png .jpg .jpeg .bpm</strong>
+          {/* o maksymalnym rozmiarze{" "} <strong>5 MB</strong> */}
+        </Form.Text>
+      </div>
     </div>
   );
 };
