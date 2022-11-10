@@ -103,7 +103,7 @@ const Ingredients = ({
                   </Row>
                 </div>
               ))}
-              <div className="d-flex pt-4">
+              <div className="d-flex">
                 <Button
                   variant="success"
                   className="ms-auto"
