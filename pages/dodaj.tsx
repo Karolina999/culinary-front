@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
 import SelectList from "../components/inputs/selectList";
 import { BsTrashFill } from "react-icons/bs";
+import UploadImage from "../components/createRecipe/uploadImage";
 
 const Dodaj = () => {
   const options = [
@@ -19,7 +20,7 @@ const Dodaj = () => {
             <Form.Group className="mb-4">
               <Form.Label className="bold">Nazwa potrawy</Form.Label>
               <Form.Control
-                placeholder="Zupa pomidorowa"
+                placeholder="np. Zupa pomidorowa"
                 name=""
                 // value={values.email}
                 // onChange={handleChange}
@@ -94,7 +95,7 @@ const Dodaj = () => {
               <Form.Label className="bold">Składniki</Form.Label>
               <Row>
                 <Col xs={12} lg={7} className="mb-4 mb-lg-0">
-                  <SelectList options={options} placeholder="Pomidory" />
+                  <SelectList options={options} placeholder="np. Pomidory" />
                 </Col>
                 <Col>
                   <Row>
@@ -138,7 +139,7 @@ const Dodaj = () => {
             </Form.Group>
             <Form.Group className="mb-4">
               <Form.Label className="bold">Przygotowanie</Form.Label>
-              <Row className="align-items-center">
+              <Row className="align-items-end">
                 <Col xs="12">
                   <Form.Label>Krok 1</Form.Label>
                 </Col>
@@ -146,7 +147,7 @@ const Dodaj = () => {
                   <Form.Control
                     as="textarea"
                     rows={1}
-                    placeholder="Zupa pomidorowa"
+                    placeholder="Opisz krok"
                     name=""
                     // value={values.email}
                     // onChange={handleChange}
@@ -173,22 +174,19 @@ const Dodaj = () => {
                 </Col>
               </Row>
             </Form.Group>
-            <Form.Group className="mb-4">
-              <Form.Label className="bold">Nazwa potrawy</Form.Label>
-              <Form.Control
-                type="file"
-                name=""
-                // value={values.email}
-                // onChange={handleChange}
-                // isInvalid={!!errors.email}
-              />
-              {/* <Form.Control.Feedback type="invalid">
-                {errors.email}
-              </Form.Control.Feedback> */}
-            </Form.Group>
+            <div>
+              <Form.Label className="bold">Dodaj zdjęcie</Form.Label>
+              <Row>
+                <Col md={6}>
+                  <UploadImage onClick={(e) => e.preventDefault()} />
+                </Col>
+              </Row>
+            </div>
+            <Button type="submit">Dodaj przepis</Button>
           </Form>
         </Col>
       </Container>
+      {/* <section onClick={(e) => e.preventDefault()}> */}
     </div>
   );
 };
