@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { BsTrashFill } from "react-icons/bs";
 import SelectList from "../inputs/selectList";
-import { FieldArray } from "formik";
+import { FieldArray, useFormikContext } from "formik";
 
 interface Option {
   value: string;
@@ -13,9 +13,17 @@ interface IngredientsProps {
   options: Option[];
   errors: any;
   values: { unit: string; ingredientId: string; quantity: string }[];
+  handleChange: any;
 }
 
-const Ingredients = ({ options, errors, values }: IngredientsProps) => {
+const Ingredients = ({
+  options,
+  errors,
+  values,
+  handleChange,
+}: IngredientsProps) => {
+  const { setFieldValue } = useFormikContext();
+  console.log(values);
   return (
     <div>
       {values.map((x) => (
@@ -29,13 +37,16 @@ const Ingredients = ({ options, errors, values }: IngredientsProps) => {
             <div>
               {values.map((value, index) => (
                 <div>
-                  <Row className="pb-3">
-                    <Col xs={12} lg={7} className="mb-4 mb-lg-0">
+                  <Row className="mb-4 pb-md-3">
+                    <Col xs={12} lg={7} className="mb-2 mb-lg-0">
                       <SelectList
                         options={options}
                         placeholder="np. Pomidory"
                         name={`productFromRecipes.${index}.ingredientId`}
                       />
+                      <small className="pt-1 text-danger">
+                        {errors && errors[index] && errors[index].ingredientId}
+                      </small>
                     </Col>
                     <Col>
                       <Row>
@@ -43,27 +54,42 @@ const Ingredients = ({ options, errors, values }: IngredientsProps) => {
                           <Form.Control
                             type="number"
                             placeholder="1"
-                            name=""
+                            name={`productFromRecipes.${index}.quantity`}
                             min={1}
-                            // value={values.email}
-                            // onChange={handleChange}
-                            // isInvalid={!!errors.email}
+                            value={values[index].quantity}
+                            onChange={handleChange}
+                            isInvalid={
+                              errors &&
+                              errors[index] &&
+                              !!errors[index].quantity
+                            }
                           />
+                          {/* <small className="pt-1 text-danger">
+                            {errors && errors[index] && errors[index].quantity}
+                          </small> */}
                         </Col>
                         <Col>
                           <Form.Select
-                            // placeholder="Zupa pomidorowa"
-                            name=""
-                            // value={values.email}
-                            // onChange={handleChange}
-                            // isInvalid={!!errors.email}
+                            name={`productFromRecipes.${index}.unit`}
+                            // value={values[index].unit}
+                            onChange={(event) => {
+                              const selectName = `productFromRecipes.${index}.unit`;
+                              setFieldValue(selectName, event.target.value);
+                            }}
+                            isInvalid={
+                              errors && errors[index] && !!errors[index].unit
+                            }
                           >
-                            <option>Default select</option>
-                            <option>Defausslt select</option>
+                            <option value="">Default select</option>
+                            <option value={0}>Szczypta</option>
                           </Form.Select>
                         </Col>
                         <Col xs="auto">
-                          <Button variant="link" className="px-0">
+                          <Button
+                            variant="link"
+                            className="px-0"
+                            onClick={() => arrayHelper.remove(index)}
+                          >
                             <BsTrashFill
                               style={{ fontSize: "22px" }}
                               className="text-danger"
@@ -75,15 +101,24 @@ const Ingredients = ({ options, errors, values }: IngredientsProps) => {
                   </Row>
                 </div>
               ))}
+              <div className="d-flex pt-4">
+                <Button
+                  variant="success"
+                  className="ms-auto"
+                  onClick={() =>
+                    arrayHelper.insert(values.length + 1, {
+                      unit: "",
+                      ingredientId: "",
+                      quantity: "",
+                    })
+                  }
+                >
+                  Dodaj składnik
+                </Button>
+              </div>
             </div>
           )}
         />
-
-        <div className="d-flex pt-4">
-          <Button variant="success" className="ms-auto">
-            Dodaj składnik
-          </Button>
-        </div>
       </Form.Group>
     </div>
   );

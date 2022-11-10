@@ -19,15 +19,21 @@ const Dodaj = () => {
     // recipeType: yup.string().required("To pole jest wymagane"),
     // level: yup.string().required("To pole jest wymagane"),
     // people: yup.string().required("To pole jest wymagane"),
-    // time: yup.string().required("To pole jest wymagane"),
+    time: yup.string().required("To pole jest wymagane"),
     productFromRecipes: yup.array().of(
       yup.object().shape({
-        unit: yup.string().required("To pole jest wymagane"),
+        unit: yup
+          .number()
+          .min(0, "To pole jest wymagane")
+          .required("To pole jest wymagane"),
         // ingredientId: yup.string().required("To pole jest wymagane"),
         // quantity: yup.string().required("To pole jest wymagane"),
         // unit: yup.string(),
-        ingredientId: yup.string(),
-        quantity: yup.string(),
+        ingredientId: yup.string().required("To pole jest wymagane"),
+        quantity: yup
+          .number()
+          .min(1, "To pole jest wymagane")
+          .required("To pole jest wymagane"),
       })
     ),
   });
@@ -65,6 +71,7 @@ const Dodaj = () => {
                   options={options}
                   errors={errors.productFromRecipes}
                   values={values.productFromRecipes}
+                  handleChange={handleChange}
                 />
                 {/* <Steps /> */}
                 {/* <AddImage /> */}
