@@ -1,6 +1,6 @@
 import { useFormikContext } from "formik";
 import React, { useEffect, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 
 interface UploadImageProps {
@@ -21,9 +21,10 @@ const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
     if (images.length > 1) {
       //   const newImage: ImageListType = images[1];
       setImages([images[1]]);
-      setFieldValue(name, images[0]);
     }
-    if (images.length === 0) {
+    setFieldValue(name, images[0]);
+    console.log(value);
+    if (images.length === 0 && value) {
       setImages([value]);
       // console.log(value);
     }
@@ -160,6 +161,7 @@ const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
               </div>
             ))} */}
             </div>
+
             <div className="mt-2">
               <Form.Text>
                 {errors?.acceptType && (
@@ -169,6 +171,17 @@ const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
                   <span className="text-danger">Za duży rozmiar zdjęcia</span>
                 )}
               </Form.Text>
+            </div>
+            <div className="d-grid mt-2">
+              <Button
+                variant="outline-secondary"
+                onClick={() => {
+                  onImageRemove(0);
+                  setFieldValue(name, "");
+                }}
+              >
+                Usuń zdjęcie
+              </Button>
             </div>
           </div>
         )}

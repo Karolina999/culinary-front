@@ -15,25 +15,26 @@ const Dodaj = () => {
   ];
   // ,[Photo]
   const schema = yup.object().shape({
-    // title: yup.string().required("To pole jest wymagane"),
-    // recipeType: yup.string().required("To pole jest wymagane"),
-    // level: yup.string().required("To pole jest wymagane"),
-    // people: yup.string().required("To pole jest wymagane"),
-    // time: yup.string().required("To pole jest wymagane"),
-    // productFromRecipes: yup.array().of(
-    //   yup.object().shape({
-    //     unit: yup.number().required("To pole jest wymagane"),
-    //     ingredientId: yup.string().required("To pole jest wymagane"),
-    //     quantity: yup.number().required("To pole jest wymagane"),
-    //   })
-    // ),
-    // steps: yup.array().of(
-    //   yup.object().shape({
-    //     stepNumber: yup.number().required("To pole jest wymagane"),
-    //     description: yup.string().required("To pole jest wymagane"),
-    //     photo: yup.string(),
-    //   })
-    // ),
+    title: yup.string().required("To pole jest wymagane"),
+    recipeType: yup.string().required("To pole jest wymagane"),
+    level: yup.string().required("To pole jest wymagane"),
+    people: yup.string().required("To pole jest wymagane"),
+    time: yup.string().required("To pole jest wymagane"),
+    productFromRecipes: yup.array().of(
+      yup.object().shape({
+        unit: yup.number().required("To pole jest wymagane"),
+        ingredientId: yup.string().required("To pole jest wymagane"),
+        quantity: yup.number().required("To pole jest wymagane"),
+      })
+    ),
+    steps: yup.array().of(
+      yup.object().shape({
+        stepNumber: yup.number().required("To pole jest wymagane"),
+        description: yup.string().required("To pole jest wymagane"),
+        photo: yup.object(),
+      })
+    ),
+    photo: yup.object(),
   });
   return (
     <div>
@@ -41,7 +42,7 @@ const Dodaj = () => {
         <Col xs={12} lg={10} xxl={9}>
           <h3 className="bold pb-4">Dodaj przepis</h3>
           <Formik
-            onSubmit={(values) => console.log(values.steps)}
+            onSubmit={(values) => console.log(values)}
             validateOnBlur={false}
             validateOnChange={false}
             validationSchema={schema}
@@ -57,9 +58,10 @@ const Dodaj = () => {
                 { unit: "", ingredientId: "", quantity: "" },
               ],
               steps: [
-                { stepNumber: "", description: "", photo: "" },
-                { stepNumber: "", description: "", photo: "" },
+                { stepNumber: 1, description: "", photo: "" },
+                { stepNumber: 2, description: "", photo: "" },
               ],
+              photo: "",
             }}
           >
             {({ handleSubmit, handleChange, values, errors }) => (
@@ -80,7 +82,7 @@ const Dodaj = () => {
                   values={values.steps}
                   handleChange={handleChange}
                 />
-                {/* <AddImage /> */}
+                <AddImage name="photo" value={values.photo} />
                 <Button type="submit">Dodaj przepis</Button>
               </Form>
             )}

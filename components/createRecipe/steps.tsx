@@ -6,7 +6,7 @@ import UploadImage from "./uploadImage";
 
 interface StepsProps {
   errors: any;
-  values: { stepNumber: string; description: string; photo: string }[];
+  values: { stepNumber: number; description: string; photo: string }[];
   handleChange: any;
 }
 
@@ -23,7 +23,7 @@ const Steps = ({ errors, values, handleChange }: StepsProps) => {
               <div key={index}>
                 <Row className="align-items-start pt-3">
                   <Col xs="12">
-                    <Form.Label>Krok {index + 1}</Form.Label>
+                    <Form.Label>Krok {values[index].stepNumber}</Form.Label>
                   </Col>
                   <Col>
                     <Form.Control
@@ -63,7 +63,16 @@ const Steps = ({ errors, values, handleChange }: StepsProps) => {
                         <Button
                           variant="link"
                           className="px-0"
-                          onClick={() => values.length > 1 && remove(index)}
+                          onClick={() => {
+                            if (values.length > 1) {
+                              remove(index);
+                              values.map((value, i) => {
+                                if (value.stepNumber > index) {
+                                  value.stepNumber = i;
+                                }
+                              });
+                            }
+                          }}
                         >
                           <BsTrashFill
                             style={{ fontSize: "22px" }}
@@ -106,45 +115,6 @@ const Steps = ({ errors, values, handleChange }: StepsProps) => {
         </div>
       )}
     />
-    //   <div>
-    //     <Form.Group className="mb-4">
-    //       <Form.Label className="bold">Przygotowanie</Form.Label>
-    //       <Row className="align-items-end">
-    //         <Col xs="12">
-    //           <Form.Label>Krok 1</Form.Label>
-    //         </Col>
-    //         <Col>
-    //           <Form.Control
-    //             as="textarea"
-    //             rows={1}
-    //             placeholder="Opisz krok"
-    //             name=""
-    //             // value={values.email}
-    //             // onChange={handleChange}
-    //             // isInvalid={!!errors.email}
-    //           />
-    //           {/* <Form.Control.Feedback type="invalid">
-    //   {errors.email}
-    // </Form.Control.Feedback> */}
-    //         </Col>
-    //         <Col xs={12} md="auto">
-    //           <Row className="pt-2 pt-md-0">
-    //             <Col xs="auto" className="ms-auto">
-    //               <Button variant="success">Dodaj zdjęcie</Button>
-    //             </Col>
-    //             <Col xs="auto">
-    //               <Button variant="link" className="px-0">
-    //                 <BsTrashFill
-    //                   style={{ fontSize: "22px" }}
-    //                   className="text-danger"
-    //                 />
-    //               </Button>
-    //             </Col>
-    //           </Row>
-    //         </Col>
-    //       </Row>
-    //     </Form.Group>
-    //   </div>
   );
 };
 
