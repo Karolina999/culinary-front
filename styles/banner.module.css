@@ -23,17 +23,9 @@
     z-index: -1;
 }
 
-/* .banner {
-    background-image: url("../public/banner.jpg");
-    background-size: cover;
-    background-position: calc(40%) center; 
-    background-repeat: no-repeat;
-    height: 100vh;
-    display: flex;
-    align-items: center;
+@media screen and (max-width: 992px){
+    .relativeLg{
+        position: relative;
+        margin-bottom: 125px;
+    }
 }
-.wMax {
-    max-width: 1320px;
-    margin-left: auto;
-    margin-right: auto;
-} */

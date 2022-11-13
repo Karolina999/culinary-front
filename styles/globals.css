@@ -25,19 +25,20 @@ body {
   transition: background-color 0.5s ease-out;
 }
 
-.navTransparentOpen {
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: "rgba(0, 0, 0, .70)";
-  transition: background-color 0.5s ease-out;
-}
-
-.navTransparent { 
-  background: transparent;
-  transition: background-color 0.5s ease-out;
+@media screen and (min-width: 992.1px){
+  .navTransparentOpen {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: "rgba(0, 0, 0, .70)";
+    transition: background-color 0.5s ease-out;
+  }
+  .navTransparent { 
+    background: transparent;
+    transition: background-color 0.5s ease-out;
+  }
 }
 
 .bledMultiply {

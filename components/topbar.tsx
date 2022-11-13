@@ -15,7 +15,7 @@ const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
       collapseOnSelect
       expand="lg"
       variant="dark"
-      className={`py-3 ${transparent ? "navTransparent" : "navColor"}`}
+      className={`py-3 ${transparent ? "navTransparent navColor" : "navColor"}`}
       sticky="top"
     >
       <Container>

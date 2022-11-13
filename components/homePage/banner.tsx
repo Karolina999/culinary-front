@@ -4,7 +4,7 @@ import { Col, Container, Row } from "react-bootstrap";
 
 const Banner = () => {
   return (
-    <>
+    <div className={styles.relativeLg}>
       <div className={styles.image}></div>
       <div className={styles.banner}>
         <Container className="text-white caladea-font">
@@ -27,7 +27,7 @@ const Banner = () => {
           </Row>
         </Container>
       </div>
-    </>
+    </div>
   );
 };
 
