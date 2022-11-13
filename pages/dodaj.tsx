@@ -15,25 +15,23 @@ const Dodaj = () => {
   ];
   // ,[Photo]
   const schema = yup.object().shape({
-    // title: yup.string().required("To pole jest wymagane"),
-    // recipeType: yup.string().required("To pole jest wymagane"),
-    // level: yup.string().required("To pole jest wymagane"),
-    // people: yup.string().required("To pole jest wymagane"),
+    title: yup.string().required("To pole jest wymagane"),
+    recipeType: yup.string().required("To pole jest wymagane"),
+    level: yup.string().required("To pole jest wymagane"),
+    people: yup.string().required("To pole jest wymagane"),
     time: yup.string().required("To pole jest wymagane"),
     productFromRecipes: yup.array().of(
       yup.object().shape({
-        unit: yup
-          .number()
-          .min(0, "To pole jest wymagane")
-          .required("To pole jest wymagane"),
-        // ingredientId: yup.string().required("To pole jest wymagane"),
-        // quantity: yup.string().required("To pole jest wymagane"),
-        // unit: yup.string(),
+        unit: yup.number().required("To pole jest wymagane"),
         ingredientId: yup.string().required("To pole jest wymagane"),
-        quantity: yup
-          .number()
-          .min(1, "To pole jest wymagane")
-          .required("To pole jest wymagane"),
+        quantity: yup.number().required("To pole jest wymagane"),
+      })
+    ),
+    steps: yup.array().of(
+      yup.object().shape({
+        stepNumber: yup.number().required("To pole jest wymagane"),
+        description: yup.string().required("To pole jest wymagane"),
+        photo: yup.string(),
       })
     ),
   });
@@ -58,6 +56,10 @@ const Dodaj = () => {
                 { unit: "", ingredientId: "", quantity: "" },
                 { unit: "", ingredientId: "", quantity: "" },
               ],
+              steps: [
+                { stepNumber: "", description: "", photo: "" },
+                { stepNumber: "", description: "", photo: "" },
+              ],
             }}
           >
             {({ handleSubmit, handleChange, values, errors }) => (
@@ -73,7 +75,11 @@ const Dodaj = () => {
                   values={values.productFromRecipes}
                   handleChange={handleChange}
                 />
-                {/* <Steps /> */}
+                <Steps
+                  errors={errors.steps}
+                  values={values.steps}
+                  handleChange={handleChange}
+                />
                 {/* <AddImage /> */}
                 <Button type="submit">Dodaj przepis</Button>
               </Form>

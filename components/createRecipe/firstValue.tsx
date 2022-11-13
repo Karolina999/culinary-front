@@ -31,9 +31,7 @@ const FirstValue = ({ handleChange, values, errors }: FirstValueProps) => {
           onChange={handleChange}
           isInvalid={!!errors.recipeType}
         >
-          <option selected value="">
-            Wybierz kategorię
-          </option>
+          <option value="">Wybierz kategorię</option>
           <option value="1">Śniadanie</option>
         </Form.Select>
         <Form.Control.Feedback type="invalid">
@@ -48,9 +46,7 @@ const FirstValue = ({ handleChange, values, errors }: FirstValueProps) => {
           onChange={handleChange}
           isInvalid={!!errors.level}
         >
-          <option selected value="">
-            Wybierz stopień trudności
-          </option>
+          <option value="">Wybierz stopień trudności</option>
           <option value="0">Łatwy</option>
           <option value="1">Średni</option>
           <option value="2">Trudny</option>
@@ -67,9 +63,7 @@ const FirstValue = ({ handleChange, values, errors }: FirstValueProps) => {
           onChange={handleChange}
           isInvalid={!!errors.people}
         >
-          <option selected value="">
-            Wybierz liczbę osób
-          </option>
+          <option value="">Wybierz liczbę osób</option>
           <option value="1">1</option>
         </Form.Select>
         <Form.Control.Feedback type="invalid">
@@ -84,9 +78,7 @@ const FirstValue = ({ handleChange, values, errors }: FirstValueProps) => {
           onChange={handleChange}
           isInvalid={!!errors.time}
         >
-          <option selected value="">
-            Wybierz czas przygotowania
-          </option>
+          <option value="">Wybierz czas przygotowania</option>
           <option value="0">15 minut</option>
         </Form.Select>
         <Form.Control.Feedback type="invalid">

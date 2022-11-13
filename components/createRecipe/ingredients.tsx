@@ -23,22 +23,21 @@ const Ingredients = ({
   handleChange,
 }: IngredientsProps) => {
   const { setFieldValue } = useFormikContext();
-  console.log(values);
   return (
     <div>
-      <Form.Group className="mb-4">
+      <Form.Group>
         <Form.Label className="bold">Składniki</Form.Label>
         <FieldArray
           name="productFromRecipes"
-          render={(arrayHelper) => (
+          render={({ insert, remove }) => (
             <div>
               {values.map((value, index) => (
-                <div>
+                <div key={index}>
                   <Row className="mb-4 pb-md-0">
                     <Col xs={12} lg={7} className="mb-2 mb-lg-0">
                       <SelectList
                         options={options}
-                        placeholder="np. Pomidory"
+                        placeholder="np. Pomidor"
                         name={`productFromRecipes.${index}.ingredientId`}
                         error={
                           errors && errors[index] && errors[index].ingredientId
@@ -64,14 +63,10 @@ const Ingredients = ({
                               !!errors[index].quantity
                             }
                           />
-                          {/* <small className="pt-1 text-danger">
-                            {errors && errors[index] && errors[index].quantity}
-                          </small> */}
                         </Col>
                         <Col>
                           <Form.Select
                             name={`productFromRecipes.${index}.unit`}
-                            // value={values[index].unit}
                             onChange={(event) => {
                               const selectName = `productFromRecipes.${index}.unit`;
                               setFieldValue(selectName, event.target.value);
@@ -88,9 +83,7 @@ const Ingredients = ({
                           <Button
                             variant="link"
                             className="px-0"
-                            onClick={() =>
-                              values.length > 1 && arrayHelper.remove(index)
-                            }
+                            onClick={() => values.length > 1 && remove(index)}
                           >
                             <BsTrashFill
                               style={{ fontSize: "22px" }}
@@ -108,7 +101,7 @@ const Ingredients = ({
                   variant="success"
                   className="ms-auto"
                   onClick={() =>
-                    arrayHelper.insert(values.length + 1, {
+                    insert(values.length + 1, {
                       unit: "",
                       ingredientId: "",
                       quantity: "",
