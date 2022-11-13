@@ -21,7 +21,7 @@ const Ustawienia = () => {
       <div className={`${styles.background}`}>
         <Container className="py-5 my-5">
           <Row className="justify-content-center">
-            <Col md={6} className="mt-sm-5 mt-md-0">
+            <Col md={10} lg={6} className="mt-sm-5 mt-md-0">
               <h3 className="bold pt-sm-5 pt-md-0 mt-5 mt-md-0">
                 Ustawienia konta
               </h3>

@@ -57,10 +57,7 @@ const Dodaj = () => {
                 { unit: "", ingredientId: "", quantity: "" },
                 { unit: "", ingredientId: "", quantity: "" },
               ],
-              steps: [
-                { stepNumber: 1, description: "", photo: "" },
-                { stepNumber: 2, description: "", photo: "" },
-              ],
+              steps: [{ stepNumber: 1, description: "", photo: "" }],
               photo: "",
             }}
           >
@@ -84,7 +81,11 @@ const Dodaj = () => {
                 />
                 <AddImage name="photo" value={values.photo} />
                 <div className="d-grid d-md-flex">
-                  <Button type="submit" className="ms-md-auto">
+                  <Button
+                    type="submit"
+                    className="ms-md-auto"
+                    variant="success"
+                  >
                     Dodaj przepis
                   </Button>
                 </div>

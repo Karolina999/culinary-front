@@ -16,7 +16,7 @@ const LogIn = () => {
     <div className={styles.background}>
       <Container className="py-5 my-5">
         <Row className="justify-content-center">
-          <Col md={6}>
+          <Col md={10} lg={6}>
             <h3 className="bold text-center pb-5 pt-sm-5 pt-md-0 mt-5 mt-md-0">
               Logowanie
             </h3>
