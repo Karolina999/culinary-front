@@ -11,7 +11,7 @@ const AddImage = ({ name, value }: AddImageProps) => {
   return (
     <div className="pb-4">
       <Form.Label className="bold">
-        Dodaj zdjęcie{" "}
+        Zdjęcie{" "}
         <Form.Text style={{ fontWeight: "normal" }}>(opcjonalnie)</Form.Text>
       </Form.Label>
       <Row>

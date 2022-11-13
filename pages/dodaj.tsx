@@ -83,7 +83,11 @@ const Dodaj = () => {
                   handleChange={handleChange}
                 />
                 <AddImage name="photo" value={values.photo} />
-                <Button type="submit">Dodaj przepis</Button>
+                <div className="d-grid d-md-flex">
+                  <Button type="submit" className="ms-md-auto">
+                    Dodaj przepis
+                  </Button>
+                </div>
               </Form>
             )}
           </Formik>
