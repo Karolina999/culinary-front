@@ -15,25 +15,25 @@ const Dodaj = () => {
   ];
   // ,[Photo]
   const schema = yup.object().shape({
-    title: yup.string().required("To pole jest wymagane"),
-    recipeType: yup.string().required("To pole jest wymagane"),
-    level: yup.string().required("To pole jest wymagane"),
-    people: yup.string().required("To pole jest wymagane"),
-    time: yup.string().required("To pole jest wymagane"),
-    productFromRecipes: yup.array().of(
-      yup.object().shape({
-        unit: yup.number().required("To pole jest wymagane"),
-        ingredientId: yup.string().required("To pole jest wymagane"),
-        quantity: yup.number().required("To pole jest wymagane"),
-      })
-    ),
-    steps: yup.array().of(
-      yup.object().shape({
-        stepNumber: yup.number().required("To pole jest wymagane"),
-        description: yup.string().required("To pole jest wymagane"),
-        photo: yup.string(),
-      })
-    ),
+    // title: yup.string().required("To pole jest wymagane"),
+    // recipeType: yup.string().required("To pole jest wymagane"),
+    // level: yup.string().required("To pole jest wymagane"),
+    // people: yup.string().required("To pole jest wymagane"),
+    // time: yup.string().required("To pole jest wymagane"),
+    // productFromRecipes: yup.array().of(
+    //   yup.object().shape({
+    //     unit: yup.number().required("To pole jest wymagane"),
+    //     ingredientId: yup.string().required("To pole jest wymagane"),
+    //     quantity: yup.number().required("To pole jest wymagane"),
+    //   })
+    // ),
+    // steps: yup.array().of(
+    //   yup.object().shape({
+    //     stepNumber: yup.number().required("To pole jest wymagane"),
+    //     description: yup.string().required("To pole jest wymagane"),
+    //     photo: yup.string(),
+    //   })
+    // ),
   });
   return (
     <div>
@@ -41,7 +41,7 @@ const Dodaj = () => {
         <Col xs={12} lg={10} xxl={9}>
           <h3 className="bold pb-4">Dodaj przepis</h3>
           <Formik
-            onSubmit={(values) => console.log(values.productFromRecipes)}
+            onSubmit={(values) => console.log(values.steps)}
             validateOnBlur={false}
             validateOnChange={false}
             validationSchema={schema}

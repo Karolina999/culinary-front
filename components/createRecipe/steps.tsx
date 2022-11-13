@@ -1,7 +1,8 @@
-import { FieldArray, useFormikContext } from "formik";
-import React, { useEffect } from "react";
+import { FieldArray } from "formik";
+import React, { useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { BsTrashFill } from "react-icons/bs";
+import UploadImage from "./uploadImage";
 
 interface StepsProps {
   errors: any;
@@ -10,10 +11,7 @@ interface StepsProps {
 }
 
 const Steps = ({ errors, values, handleChange }: StepsProps) => {
-  const { setFieldValue } = useFormikContext();
-  useEffect(() => {
-    console.log("test");
-  });
+  const [showAddImage, setShowAddImage] = useState(-1);
   return (
     <FieldArray
       name="steps"
@@ -46,7 +44,20 @@ const Steps = ({ errors, values, handleChange }: StepsProps) => {
                   <Col xs={12} md="auto">
                     <Row className="pt-2 pt-md-0">
                       <Col xs="auto" className="ms-auto">
-                        <Button variant="success">Dodaj zdjęcie</Button>
+                        <Button
+                          variant="success"
+                          onClick={() =>
+                            showAddImage === index
+                              ? setShowAddImage(-1)
+                              : setShowAddImage(index)
+                          }
+                        >
+                          {showAddImage === index
+                            ? "Zamknij zdjęcie"
+                            : values[index].photo
+                            ? "Zmień zdjęcie"
+                            : "Dodaj zdjęcie"}
+                        </Button>
                       </Col>
                       <Col xs="auto">
                         <Button
@@ -63,6 +74,17 @@ const Steps = ({ errors, values, handleChange }: StepsProps) => {
                     </Row>
                   </Col>
                 </Row>
+                {showAddImage === index && (
+                  <Row className="pt-3">
+                    <Col md={9} lg={6}>
+                      <UploadImage
+                        onClick={(e) => e.preventDefault()}
+                        name={`steps.${index}.photo`}
+                        value={values[index].photo}
+                      />
+                    </Col>
+                  </Row>
+                )}
               </div>
             ))}
           </Form.Group>

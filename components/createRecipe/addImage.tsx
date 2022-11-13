@@ -11,7 +11,7 @@ const AddImage = () => {
       </Form.Label>
       <Row>
         <Col md={9} lg={6}>
-          <UploadImage onClick={(e) => e.preventDefault()} />
+          {/* <UploadImage onClick={(e) => e.preventDefault()} /> */}
         </Col>
       </Row>
     </div>

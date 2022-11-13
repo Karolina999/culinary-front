@@ -1,12 +1,16 @@
+import { useFormikContext } from "formik";
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 
 interface UploadImageProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  name: string;
+  value: any;
 }
 
-const UploadImage = ({ onClick }: UploadImageProps) => {
+const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
+  const { setFieldValue } = useFormikContext();
   const [images, setImages] = useState<ImageListType>([]);
   const onChange = (imageList: any, addUpdateIndex: any) => {
     // data for submit
@@ -17,8 +21,12 @@ const UploadImage = ({ onClick }: UploadImageProps) => {
     if (images.length > 1) {
       //   const newImage: ImageListType = images[1];
       setImages([images[1]]);
+      setFieldValue(name, images[0]);
     }
-    console.log(images);
+    if (images.length === 0) {
+      setImages([value]);
+      // console.log(value);
+    }
   }, [images]);
   return (
     <div>
