@@ -2,22 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { classNames } from "primereact/utils";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-// import { ProductService } from "../service/ProductService";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
-import { FileUpload } from "primereact/fileupload";
-import { Rating } from "primereact/rating";
 import { Toolbar } from "primereact/toolbar";
-import { InputTextarea } from "primereact/inputtextarea";
-import { RadioButton } from "primereact/radiobutton";
-import { InputNumber } from "primereact/inputnumber";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { Col, Container, Row } from "react-bootstrap";
-// import "./DataTableDemo.css";
+import { Col, Row } from "react-bootstrap";
 
 const Lista = () => {
-  const title = "Lista zakupów";
+  const title = "Zakupy na urodziny";
   let emptyProduct = {
     id: null,
     unit: "",
@@ -29,45 +22,45 @@ const Lista = () => {
   const [products, setProducts] = useState([
     {
       id: 1,
-      unit: "kg",
-      ingredientName: "Nam1",
-      ingredientCategory: "Category1",
-      quantity: "1",
+      unit: "szt.",
+      ingredientName: "Marchewka",
+      ingredientCategory: "Warzywa",
+      quantity: "2",
     },
     {
       id: 2,
       unit: "szt.",
-      ingredientName: "Nam2",
-      ingredientCategory: "Category2",
-      quantity: "2",
+      ingredientName: "Banany",
+      ingredientCategory: "Owoce",
+      quantity: "5",
     },
     {
       id: 3,
-      unit: "szczypta",
-      ingredientName: "3ing",
-      ingredientCategory: "Category3",
-      quantity: "2",
+      unit: "kg",
+      ingredientName: "Płatki owsiane",
+      ingredientCategory: "Produkty sypkie",
+      quantity: "3",
     },
     {
       id: 4,
-      unit: "szt.",
-      ingredientName: "3ing",
-      ingredientCategory: "Category3",
-      quantity: "2",
+      unit: "kg",
+      ingredientName: "Mąka",
+      ingredientCategory: "Produkty sypkie",
+      quantity: "1",
     },
     {
       id: 5,
       unit: "ml",
-      ingredientName: "4ing",
-      ingredientCategory: "Category1",
-      quantity: "2",
+      ingredientName: "Mleko",
+      ingredientCategory: "Nabiał",
+      quantity: "500",
     },
     {
       id: 6,
-      unit: "kg",
-      ingredientName: "Nam6",
-      ingredientCategory: "Category2",
-      quantity: "6",
+      unit: "szt.",
+      ingredientName: "Ser",
+      ingredientCategory: "Nabiał",
+      quantity: "1",
     },
   ]);
   const [productDialog, setProductDialog] = useState(false);
@@ -101,19 +94,26 @@ const Lista = () => {
   const rightToolbarTemplate = () => {
     return (
       <React.Fragment>
-        <Button
-          label="New"
-          icon="pi pi-plus"
-          className="p-button-success mr-2"
-          onClick={openNew}
-        />
-        <Button
-          label="Delete"
-          icon="pi pi-trash"
-          className="p-button-danger"
-          onClick={confirmDeleteSelected}
-          disabled={!selectedProducts || !selectedProducts.length}
-        />
+        <Row>
+          <Col className="pe-0">
+            <Button
+              label="Dodaj"
+              icon="pi pi-plus"
+              className="p-button-success bg-success border-success mr-2"
+              onClick={openNew}
+            />
+          </Col>
+          <Col>
+            <Button
+              label="Usuń"
+              icon="pi pi-trash"
+              className="p-button-danger bg-danger border-danger"
+              onClick={confirmDeleteSelected}
+              disabled={!selectedProducts || !selectedProducts.length}
+            />
+          </Col>
+        </Row>
+
         {/* <FileUpload
           mode="basic"
           name="demo[]"
@@ -135,13 +135,12 @@ const Lista = () => {
   };
   const header = (
     <div className="table-header">
-      <h5 className="mx-0 my-1">Manage Products</h5>
       <span className="p-input-icon-left">
         <i className="pi pi-search" />
         <InputText
           type="search"
           onInput={(e) => setGlobalFilter(e.target.value)}
-          placeholder="Search..."
+          placeholder="Wyszukaj..."
         />
       </span>
     </div>
@@ -273,16 +272,22 @@ const Lista = () => {
   const actionBodyTemplate = (rowData: any) => {
     return (
       <React.Fragment>
-        <Button
-          icon="pi pi-pencil"
-          className="p-button-rounded p-button-success mr-2"
-          onClick={() => editProduct(rowData)}
-        />
-        <Button
-          icon="pi pi-trash"
-          className="p-button-rounded p-button-warning"
-          onClick={() => confirmDeleteProduct(rowData)}
-        />
+        <Row>
+          <Col xs={6} className="pe-0 me-0">
+            <Button
+              icon="pi pi-pencil"
+              className="p-button-rounded p-button-success bg-success border-success mr-2"
+              onClick={() => editProduct(rowData)}
+            />
+          </Col>
+          <Col xs={6} className="ps-0 ms-0">
+            <Button
+              icon="pi pi-trash"
+              className="p-button-rounded p-button-danger bg-danger border-danger"
+              onClick={() => confirmDeleteProduct(rowData)}
+            />
+          </Col>
+        </Row>
       </React.Fragment>
     );
   };
@@ -295,13 +300,13 @@ const Lista = () => {
   };
 
   return (
-    <Row className="py-4 justify-content-center">
-      <Col xs={12} md={8}>
+    <Row className="py-md-4 mx-0 justify-content-center spicesBg">
+      <Col xs={12} md={10} lg={8} className="px-0">
         <div className="datatable-crud-demo">
           <Toast ref={toast} />
-          <div className="card">
+          <div className="card p-3">
             <Toolbar
-              className="mb-4"
+              className="mb-3"
               left={leftToolbarTemplate}
               right={rightToolbarTemplate}
             ></Toolbar>
@@ -382,74 +387,6 @@ const Lista = () => {
                 <small className="p-error">Name is required.</small>
               )}
             </div>
-            {/* <div className="field">
-            <label className="mb-3">Category</label>
-            <div className="formgrid grid">
-              <div className="field-radiobutton col-6">
-                <RadioButton
-                  inputId="category1"
-                  name="category"
-                  value="Accessories"
-                  onChange={onCategoryChange}
-                  checked={product.category === "Accessories"}
-                />
-                <label htmlFor="category1">Accessories</label>
-              </div>
-              <div className="field-radiobutton col-6">
-                <RadioButton
-                  inputId="category2"
-                  name="category"
-                  value="Clothing"
-                  onChange={onCategoryChange}
-                  checked={product.category === "Clothing"}
-                />
-                <label htmlFor="category2">Clothing</label>
-              </div>
-              <div className="field-radiobutton col-6">
-                <RadioButton
-                  inputId="category3"
-                  name="category"
-                  value="Electronics"
-                  onChange={onCategoryChange}
-                  checked={product.category === "Electronics"}
-                />
-                <label htmlFor="category3">Electronics</label>
-              </div>
-              <div className="field-radiobutton col-6">
-                <RadioButton
-                  inputId="category4"
-                  name="category"
-                  value="Fitness"
-                  onChange={onCategoryChange}
-                  checked={product.category === "Fitness"}
-                />
-                <label htmlFor="category4">Fitness</label>
-              </div>
-            </div>
-          </div> */}
-
-            {/* <div className="formgrid grid">
-            <div className="field col">
-              <label htmlFor="price">Price</label>
-              <InputNumber
-                id="price"
-                value={product.price}
-                onValueChange={(e) => onInputNumberChange(e, "price")}
-                mode="currency"
-                currency="USD"
-                locale="en-US"
-              />
-            </div>
-            <div className="field col">
-              <label htmlFor="quantity">Quantity</label>
-              <InputNumber
-                id="quantity"
-                value={product.quantity}
-                onValueChange={(e) => onInputNumberChange(e, "quantity")}
-                integeronly
-              />
-            </div>
-          </div> */}
           </Dialog>
           <Dialog
             visible={deleteProductDialog}
