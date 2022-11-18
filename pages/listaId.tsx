@@ -72,7 +72,6 @@ const Lista = () => {
   const [globalFilter, setGlobalFilter] = useState(null);
   const toast = useRef(null);
   const dt = useRef(null);
-  // const productService = new ProductService();
 
   const openNew = () => {
     setProduct(emptyProduct);
@@ -139,7 +138,9 @@ const Lista = () => {
         <i className="pi pi-search" />
         <InputText
           type="search"
-          onInput={(e) => setGlobalFilter(e.target.value)}
+          onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setGlobalFilter(e.target.value)
+          }
           placeholder="Wyszukaj..."
         />
       </span>

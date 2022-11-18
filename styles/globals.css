@@ -94,5 +94,11 @@ body {
   background-image: url("../public/spices.jpg");
   background-size: cover;
   background-repeat: no-repeat;
-  min-height: 92vh;
+  min-height: 93vh;
+}
+
+@media screen and (max-width: 767px){
+  .h93 {
+    min-height: 93vh;
+  }
 }
