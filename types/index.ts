@@ -24,6 +24,7 @@ export * from './productFromPlanner';
 export * from './productFromPlannerDto';
 export * from './productFromRecipe';
 export * from './productFromRecipeDto';
+export * from './ratingDto';
 export * from './recipe';
 export * from './recipeDto';
 export * from './recipeType';
