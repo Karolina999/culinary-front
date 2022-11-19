@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
-import Footer from "../components/footer";
+import React from "react";
 import Banner from "../components/homePage/banner";
 import Category from "../components/homePage/category";
 import PopularRecipes from "../components/homePage/popularRecipes";
-import Topbar from "../components/topbar";
 
 function Home() {
   return (
