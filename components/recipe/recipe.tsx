@@ -10,62 +10,28 @@ import {
 import { AiFillSignal } from "react-icons/ai";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
+import { ProductFromRecipe, RatingDto, Recipe, Step, User } from "../../types";
+import { UnitPluar } from "../../frontType/unit";
 
-const Recipe = () => {
-  const star = 3.2;
+interface RecipeComponentProps {
+  recipe: Recipe;
+  steps: Step[];
+  rating: RatingDto;
+  author: User;
+  products: ProductFromRecipe[];
+}
+
+const RecipeComponent = ({
+  recipe,
+  steps,
+  rating,
+  author,
+  products,
+}: RecipeComponentProps) => {
+  const star = rating.rating;
   const halfStar = !Number.isInteger(star);
-  const fillStar = Math.floor(star);
+  const fillStar = Math.floor(star ? star : 0);
   const regStar = halfStar ? 5 - fillStar - 1 : 5 - fillStar;
-  const user = "Jan Kowalski";
-  const recipe = {
-    title: "Pierogi ruskie",
-    time: "2 godz",
-    people: 10,
-    photo: "/banner.jpg",
-    level: 3,
-  };
-  const steps = [
-    {
-      stepNumber: 1,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nulla magna, porta non sapien et, lobortis porta massa. Suspendisse ac dignissim leo, eu varius eros. Sed lectus mi, egestas ac auctor id, semper ac nulla. Nullam malesuada ullamcorper nisl a auctor. Donec fermentum fermentum ligula eu facilisis.",
-      photo: "",
-    },
-    {
-      stepNumber: 2,
-      description:
-        "Nulla vitae enim molestie, finibus lorem sit amet, laoreet turpis. Donec ac velit vulputate, convallis ligula ultrices, posuere ipsum. ",
-      photo: "",
-    },
-    {
-      stepNumber: 3,
-      description:
-        " Phasellus mollis, tellus eu luctus molestie, nibh tellus fermentum ipsum, non bibendum sem quam sit amet urna. Nulla ultricies enim sem,",
-      photo: "",
-    },
-  ];
-  const products = [
-    {
-      name: "Łsosoś",
-      amount: 3,
-      unit: "szczytpa",
-    },
-    {
-      name: "Mąka",
-      amount: 5,
-      unit: "kg",
-    },
-    {
-      name: "Cukier",
-      amount: 1,
-      unit: "kg",
-    },
-    {
-      name: "Sól",
-      amount: 1,
-      unit: "łyżeczka",
-    },
-  ];
   return (
     <Container className="pt-lg-5">
       <Row>
@@ -74,7 +40,9 @@ const Recipe = () => {
             <h1 className="caladea-font display-5 bold mt-auto">
               {recipe.title}
             </h1>
-            <p className="text-secondary">Autor: {user}</p>
+            <p className="text-secondary">
+              Autor: {author.firstName} {author.lastName}
+            </p>
           </div>
           <div className="mt-auto">
             <div className="pb-3" style={{ fontSize: "18px" }}>
@@ -90,7 +58,13 @@ const Recipe = () => {
                   style={{ fontSize: "22px" }}
                   className="me-2 mb-0 mt-1"
                 />
-                <p className="my-0">{recipe.level}</p>
+                <p className="my-0">
+                  {recipe.level === 0
+                    ? "łatwy"
+                    : recipe.level === 1
+                    ? "średni"
+                    : "trundy"}
+                </p>
               </div>
               <div className="d-flex my-0">
                 <BsFillPersonFill
@@ -104,23 +78,30 @@ const Recipe = () => {
               className="d-flex text-warning "
               style={{ alignItems: "start" }}
             >
-              {[...Array(fillStar)].map((x) => (
-                <FaStar style={{ fontSize: "25px" }} />
+              {[...Array(fillStar)].map((x, index) => (
+                <FaStar style={{ fontSize: "25px" }} key={index} />
               ))}
               {halfStar && <FaStarHalfAlt style={{ fontSize: "25px" }} />}
-              {[...Array(regStar)].map((x) => (
-                <FaRegStar style={{ fontSize: "25px" }} />
+              {[...Array(regStar)].map((x, index) => (
+                <FaRegStar style={{ fontSize: "25px" }} key={index} />
               ))}
               <p className="ps-2 text-dark" style={{ fontSize: "18px" }}>
-                {star}/5 z 124 recenzji
+                {star}/5 z {rating.numberOfReviews} recenzji
               </p>
             </div>
             <div className="pt-2 d-grid gap-2 d-xl-flex">
-              <Button variant="danger">
+              <Button
+                variant="danger"
+                style={{ paddingTop: "11px", paddingBottom: "11px" }}
+              >
                 <CgNotes className="mb-1 me-2" style={{ fontSize: "22px" }} />
                 Dodaj do listy
               </Button>
-              <Button variant="danger" className="d-inline">
+              <Button
+                variant="danger"
+                className="d-inline"
+                style={{ paddingTop: "11px", paddingBottom: "11px" }}
+              >
                 <BsCalendarPlus
                   className="mb-1 me-2"
                   style={{ fontSize: "22px" }}
@@ -129,8 +110,11 @@ const Recipe = () => {
               </Button>
             </div>
             <div className="pt-2 d-grid gap-2 d-xl-flex">
-              <Button variant="danger">
-                <BsHeart className="mb-1 me-2" style={{ fontSize: "20px" }} />
+              <Button
+                variant="danger"
+                style={{ paddingTop: "11px", paddingBottom: "11px" }}
+              >
+                <BsHeart className="me-2" style={{ fontSize: "20px" }} />
                 Dodaj do ulubionych
               </Button>
             </div>
@@ -161,30 +145,34 @@ const Recipe = () => {
       <Row className="pt-4 mt-lg-3">
         <Col xs={12} lg={5} className="pb-4 pb-lg-0 pe-xl-5">
           <h3 className="caladea-font bold mt-auto">Składniki</h3>
-          {products.map((product) => (
-            <div className="d-flex pe-lg-2 pb-1">
+          {products.map((product, index) => (
+            <div className="d-flex pe-lg-2 pb-1" key={index}>
               <Col
                 xs="auto"
                 className="align-self-end me-2"
                 style={{ fontWeight: "500" }}
               >
-                {product.name}
+                {product.ingredient?.name}
               </Col>
-              <div className="dotted-border align-self-start mb-1"></div>
+              <div
+                className="dotted-border align-self-start"
+                style={{ marginBottom: "7px" }}
+              ></div>
               <Col
                 xs="auto"
                 className="align-self-end ms-2 me-xl-4"
                 style={{ fontWeight: "500" }}
               >
-                {product.amount} {product.unit}
+                {/* {product.ingredient?.amount} {UnitPluar(product.ingredient.amount, (product.ingredient.unit)} */}
+                {product.unit && UnitPluar(1, product.unit)}
               </Col>
             </div>
           ))}
         </Col>
         <Col className="px-lg-0">
           <h3 className="caladea-font bold mt-auto">Przygotowanie</h3>
-          {steps.map((step) => (
-            <Row className="pt-3">
+          {steps.map((step, index) => (
+            <Row className="pt-3" key={index}>
               <Col xs={12} lg={step.photo ? 8 : 12}>
                 <h5>Krok {step.stepNumber}</h5>
                 <p>{step.description}</p>
@@ -207,4 +195,4 @@ const Recipe = () => {
   );
 };
 
-export default Recipe;
+export default RecipeComponent;

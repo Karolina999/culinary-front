@@ -38,12 +38,12 @@ const AddComment = () => {
       <div className="w-100">
         <Form>
           <div className="d-flex text-warning" style={{ alignItems: "start" }}>
-            {[...Array(fillStar)].map((x) => (
-              <FaStar style={{ fontSize: "22px" }} />
+            {[...Array(fillStar)].map((x, index) => (
+              <FaStar style={{ fontSize: "22px" }} key={index} />
             ))}
             {halfStar && <FaStarHalfAlt style={{ fontSize: "22px" }} />}
-            {[...Array(regStar)].map((x) => (
-              <FaRegStar style={{ fontSize: "22px" }} />
+            {[...Array(regStar)].map((x, index) => (
+              <FaRegStar style={{ fontSize: "22px" }} key={index} />
             ))}
           </div>
           <div style={{ width: "98%", display: "block" }}>

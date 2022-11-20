@@ -19,6 +19,7 @@ export interface Recipe {
   people?: number;
   photo?: string | null;
   recipeType?: RecipeType;
+  ownerId?: number;
   owner?: User;
   watchers?: User[] | null;
   watchedRecipes?: WatchedRecipe[] | null;

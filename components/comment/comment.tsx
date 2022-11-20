@@ -1,22 +1,20 @@
 import React from "react";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
+import { UserComment } from "../../types";
 
-const Comment = () => {
+interface CommentProps {
+  comment: UserComment;
+}
+
+const Comment = ({ comment }: CommentProps) => {
   const user = {
     firstName: "Jan",
     lastName: "Kowalski",
     imageUrl: "",
   };
-  const comment = {
-    rating: 4,
-    commentText: "Lorem ipsum dolor sit",
-    date: "4 lutego 2022",
-    firstName: "John",
-    lastName: "Nowak",
-  };
   const star = comment.rating;
   const halfStar = !Number.isInteger(star);
-  const fillStar = Math.floor(star);
+  const fillStar = Math.floor(star ? star : 0);
   const regStar = halfStar ? 5 - fillStar - 1 : 5 - fillStar;
   return (
     <div className="d-flex">
@@ -29,20 +27,18 @@ const Comment = () => {
       </div>
       <div>
         <div className="d-flex text-warning" style={{ alignItems: "start" }}>
-          {[...Array(fillStar)].map((x) => (
-            <FaStar style={{ fontSize: "22px" }} />
+          {[...Array(fillStar)].map((x, index) => (
+            <FaStar style={{ fontSize: "22px" }} key={index} />
           ))}
           {halfStar && <FaStarHalfAlt style={{ fontSize: "22px" }} />}
-          {[...Array(regStar)].map((x) => (
-            <FaRegStar style={{ fontSize: "22px" }} />
+          {[...Array(regStar)].map((x, index) => (
+            <FaRegStar style={{ fontSize: "22px" }} key={index} />
           ))}
           <p className="ps-2 text-secondary">
-            {comment.firstName} {comment.lastName}
+            {user.firstName} {user.lastName}
           </p>
         </div>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam molestie
-        euismod risus sed iaculis. Interdum et malesuada fames ac ante ipsum
-        primis in faucibus.
+        {comment.commentText}
       </div>
     </div>
   );

@@ -15,4 +15,5 @@ export interface RecipeDto {
   people?: number;
   photo?: string | null;
   recipeType?: RecipeType;
+  ownerId?: number;
 }

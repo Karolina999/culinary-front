@@ -5,8 +5,11 @@
  * OpenAPI spec version: 1.0
  */
 import type { Unit } from './unit';
+import type { Ingredient } from './ingredient';
 
 export interface ProductFromRecipeDto {
   id?: number;
   unit?: Unit;
+  ingredientId?: number;
+  ingredient?: Ingredient;
 }

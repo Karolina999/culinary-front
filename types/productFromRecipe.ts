@@ -11,6 +11,7 @@ import type { Recipe } from './recipe';
 export interface ProductFromRecipe {
   id?: number;
   unit?: Unit;
+  ingredientId?: number;
   ingredient?: Ingredient;
   recipe?: Recipe;
 }
