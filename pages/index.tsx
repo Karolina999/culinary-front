@@ -20,17 +20,6 @@ export async function getStaticProps() {
   const res = await fetch("https://localhost:7193/api/Recipe");
   const recipes = await res.json();
 
-  // let ratings: number[] = [];
-  // recipes.map(async (recipe: Recipe) => {
-  // const resRating = await fetch(
-  //   `https://localhost:7193/api/Recipe/${recipe.id}/rating`
-  // );
-  //   const rating: number = await resRating.json();
-  //   ratings.push(rating);
-  //   console.log("map");
-  //   console.log(rating);
-  // });
-
   return {
     props: {
       topbarTransparent: true,
