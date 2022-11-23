@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 import styles from "../styles/login.module.css";
 import { UserLoginDto } from "../types";
 import { loginUser } from "../services/user";
+import router from "next/router";
 
 const LogIn = () => {
   const [isError, setIsError] = useState("");
-  const schema = yup.object().shape({
-    login: yup
-      .string()
-      .required("To pole jest wymagane")
-      .email("Nieprawidłowy adres email"),
-    password: yup.string().required("To pole jest wymagane"),
-  });
+  const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit = async (values: UserLoginDto) => {
+    setIsLoading(true);
     await loginUser(values)
       .then((res) => {
         localStorage.setItem("jwt", res?.headers?.jwt);
@@ -23,6 +20,7 @@ const LogIn = () => {
         window.location.href = "/";
       })
       .catch((err) => {
+        setIsLoading(false);
         if (err?.data?.detail.includes("Wrong password or login"))
           setIsError("Zły login lub hasło");
         else {
@@ -30,6 +28,14 @@ const LogIn = () => {
         }
       });
   };
+
+  const schema = yup.object().shape({
+    login: yup
+      .string()
+      .required("To pole jest wymagane")
+      .email("Nieprawidłowy adres email"),
+    password: yup.string().required("To pole jest wymagane"),
+  });
   return (
     <div className={styles.background}>
       <Container className="py-5 my-5">
@@ -88,7 +94,11 @@ const LogIn = () => {
                       className="mt-3"
                       onClick={() => setIsError("")}
                     >
-                      Zaloguj się
+                      {isLoading ? (
+                        <Spinner animation="border" variant="light" size="sm" />
+                      ) : (
+                        "Zaloguj się"
+                      )}
                     </Button>
                   </div>
                 </Form>
@@ -96,7 +106,14 @@ const LogIn = () => {
             </Formik>
             <div className="pt-5 text-center">
               <h5>Nie posiadasz konta?</h5>
-              <p className="cursor-pointer">Zarejestruj się</p>
+              <p
+                className="cursor-pointer"
+                onClick={() =>
+                  router.push("/rejestracja", "", { scroll: true })
+                }
+              >
+                Zarejestruj się
+              </p>
             </div>
           </Col>
         </Row>

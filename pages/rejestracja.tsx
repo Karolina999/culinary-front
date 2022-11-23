@@ -1,10 +1,32 @@
-import React from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 import styles from "../styles/login.module.css";
+import { User, UserDto } from "../types";
+import { registerUser } from "../services/user";
 
 const Rejestracja = () => {
+  const [isError, setIsError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmit = async (values: UserDto) => {
+    setIsLoading(true);
+    await registerUser(values)
+      .then((res) => {
+        window.location.href = "/login";
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+        if (err?.data?.detail.includes("There is a user with this e-mail"))
+          setIsError("Konto o tym adresie email już istenieje");
+        else {
+          setIsError("Wystąpił błąd");
+        }
+      });
+  };
+
   const schema = yup.object().shape({
     firstName: yup.string().required("To pole jest wymagane"),
     lastName: yup.string().required("To pole jest wymagane"),
@@ -27,12 +49,13 @@ const Rejestracja = () => {
               validateOnBlur={false}
               validateOnChange={false}
               validationSchema={schema}
-              onSubmit={console.log}
+              onSubmit={(values) => onSubmit(values)}
               initialValues={{
                 firstName: "",
                 lastName: "",
                 email: "",
                 password: "",
+                imageUrl: "",
               }}
             >
               {({ handleSubmit, handleChange, values, errors }) => (
@@ -91,9 +114,21 @@ const Rejestracja = () => {
                       {errors.password}
                     </Form.Control.Feedback>
                   </Form.Group>
+                  <div className="pb-2">
+                    <small className="text-danger">{isError}</small>
+                  </div>
                   <div className="d-grid">
-                    <Button variant="danger" type="submit" className="mt-3">
-                      Zaloguj się
+                    <Button
+                      variant="danger"
+                      type="submit"
+                      className="mt-3"
+                      onClick={() => setIsError("")}
+                    >
+                      {isLoading ? (
+                        <Spinner animation="border" variant="light" size="sm" />
+                      ) : (
+                        "Zarejestruj się"
+                      )}
                     </Button>
                   </div>
                 </Form>
