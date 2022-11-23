@@ -17,7 +17,6 @@ const Rejestracja = () => {
         window.location.href = "/login";
       })
       .catch((err) => {
-        console.log(err);
         setIsLoading(false);
         if (err?.data?.detail.includes("There is a user with this e-mail"))
           setIsError("Konto o tym adresie email już istenieje");
@@ -42,7 +41,7 @@ const Rejestracja = () => {
       <Container className="py-5">
         <Row className="justify-content-center">
           <Col md={10} lg={6}>
-            <h3 className="bold text-center pb-5 pt-sm-5 pt-lg-0 mt-5 mt-lg-0">
+            <h3 className="bold text-center pb-5 pt-sm-5 pt-lg-3 mt-5 mt-lg-0">
               Rejestracja
             </h3>
             <Formik

@@ -19,18 +19,14 @@ import { RadioButton } from "primereact/radiobutton";
 import { InputNumber } from "primereact/inputnumber";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
+import { getUserShoppingLists } from "../services/user";
 
 const Listy = () => {
   let emptyList = {
     id: "",
     title: "",
   };
-  const [lists, setLists] = useState([
-    { id: "0", title: "Zakupy na święta" },
-    { id: "1", title: "Zupa pomidorowa" },
-    { id: "2", title: "Lorem ipsum" },
-    { id: "3", title: "Dla Tomka" },
-  ]);
+  const [lists, setLists] = useState([]);
   const [listDialog, setListDialog] = useState(false);
   const [deleteListDialog, setDeleteListDialog] = useState(false);
   const [deleteListsDialog, setDeleteListsDialog] = useState(false);
@@ -40,6 +36,19 @@ const Listy = () => {
   const [globalFilter, setGlobalFilter] = useState("");
   const toast = useRef<any>(null);
   const dt = useRef(null);
+
+  useEffect(() => {
+    const fetchLists = async () => {
+      await getUserShoppingLists()
+        .then((res) => {
+          setLists(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    fetchLists();
+  }, []);
 
   const openNew = () => {
     setList(emptyList);
@@ -132,7 +141,7 @@ const Listy = () => {
   const leftToolbarTemplate = () => {
     return (
       <React.Fragment>
-        <h3>Listy zakupów</h3>
+        <h3>Twoje listy zakupów</h3>
       </React.Fragment>
     );
   };
@@ -286,8 +295,6 @@ const Listy = () => {
       />
     </React.Fragment>
   );
-  console.log("testowaie global");
-  console.log("a" + globalFilter + "a");
   return (
     <div>
       <Row className="py-md-4 mx-0 justify-content-center spicesBg">
@@ -302,38 +309,46 @@ const Listy = () => {
                 right={rightToolbarTemplate}
               ></Toolbar>
               {/* Listy zakupów */}
-              <DataTable
-                ref={dt}
-                value={lists}
-                selection={selectedLists}
-                onSelectionChange={(e) => setSelectedLists(e.value)}
-                dataKey="id"
-                paginator
-                rows={10}
-                rowsPerPageOptions={[5, 10, 25]}
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="{first} - {last} z {totalRecords} list zakupów"
-                globalFilter={globalFilter}
-                header={header}
-                responsiveLayout="scroll"
-              >
-                <Column
-                  selectionMode="multiple"
-                  headerStyle={{ width: "3rem" }}
-                  exportable={false}
-                ></Column>
-                <Column
-                  field="title"
-                  header="Lista"
-                  sortable
-                  style={{ width: "100%" }}
-                ></Column>
-                <Column
-                  body={actionBodyTemplate}
-                  exportable={false}
-                  style={{ minWidth: "150px" }}
-                ></Column>
-              </DataTable>
+              {lists.length > 0 ? (
+                <DataTable
+                  ref={dt}
+                  value={lists}
+                  selection={selectedLists}
+                  onSelectionChange={(e) => setSelectedLists(e.value)}
+                  dataKey="id"
+                  paginator
+                  rows={10}
+                  rowsPerPageOptions={[5, 10, 25]}
+                  paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                  currentPageReportTemplate="{first} - {last} z {totalRecords} list zakupów"
+                  globalFilter={globalFilter}
+                  header={header}
+                  responsiveLayout="scroll"
+                >
+                  <Column
+                    selectionMode="multiple"
+                    headerStyle={{ width: "3rem" }}
+                    exportable={false}
+                  ></Column>
+                  <Column
+                    field="title"
+                    header="Lista"
+                    sortable
+                    style={{ width: "100%" }}
+                  ></Column>
+                  <Column
+                    body={actionBodyTemplate}
+                    exportable={false}
+                    style={{ minWidth: "150px" }}
+                  ></Column>
+                </DataTable>
+              ) : (
+                <h5 className="py-5 my-5 text-center w-75 mx-auto">
+                  Nie masz żadnych list zakupów.
+                  <br />
+                  Wciśnij w przycisk dodaj aby stworzyć nową listę.
+                </h5>
+              )}
             </div>
           </div>
           {/* Dodawanie i edytowanie nowej listy */}

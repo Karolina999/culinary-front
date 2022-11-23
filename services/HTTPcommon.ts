@@ -1,11 +1,11 @@
 import axios from "axios";
-import navigationService from "./NavigationService";
+import router from "next/router";
 
 var client = axios.create({
   baseURL: "https://localhost:7193/api",
   headers: {
     "Content-Type": "application/json",
-    Authorization: `${
+    Authorization: `Bearer ${
       typeof window !== "undefined" && localStorage.getItem("jwt")
     }`,
   },
@@ -19,14 +19,15 @@ const request = (options: any) => {
   const onError = (error: any) => {
     if (error.response) {
       if (error.response.status === 401) {
-        navigationService.navigation("/login");
+        router.push(`/login`, "", { scroll: true });
+        // navigationService.navigation("/login");
         localStorage.removeItem("jwt");
       } else if (error.response.status === 403) {
+        router.push(`/login`, "", { scroll: true });
         // navigationService.navigation("/Error403");
-        navigationService.navigation("/login");
       } else if (error.response.status === 404) {
+        router.push(`/login`, "", { scroll: true });
         // navigationService.navigation("/Error404");
-        navigationService.navigation("/login");
       }
     }
     return Promise.reject(error.response || error.message);
