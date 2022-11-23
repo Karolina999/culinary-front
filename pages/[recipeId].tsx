@@ -62,7 +62,7 @@ export async function getStaticProps({
   );
   const recipe = await resRecipe.json();
 
-  if (!recipe || recipe.errors) {
+  if (!recipe || recipe.status) {
     return {
       notFound: true,
     };

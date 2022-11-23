@@ -199,14 +199,15 @@ const Listy = () => {
 
   const header = (
     <div className="table-header">
-      <span className="p-input-icon-left">
+      <span className="p-input-icon-left" style={{ width: "100%" }}>
         <i className="pi pi-search" />
         <InputText
           type="search"
           onInput={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setGlobalFilter(e.target.value)
+            setGlobalFilter(e.target.value ? e.target.value : "")
           }
           placeholder="Wyszukaj..."
+          style={{ width: "100%" }}
         />
       </span>
     </div>
@@ -285,7 +286,8 @@ const Listy = () => {
       />
     </React.Fragment>
   );
-
+  console.log("testowaie global");
+  console.log("a" + globalFilter + "a");
   return (
     <div>
       <Row className="py-md-4 mx-0 justify-content-center spicesBg">

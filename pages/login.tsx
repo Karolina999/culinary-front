@@ -1,17 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 import styles from "../styles/login.module.css";
+import { UserLoginDto } from "../types";
+import { loginUser } from "../services/user";
 
 const LogIn = () => {
+  const [isError, setIsError] = useState("");
   const schema = yup.object().shape({
-    email: yup
+    login: yup
       .string()
       .required("To pole jest wymagane")
       .email("Nieprawidłowy adres email"),
     password: yup.string().required("To pole jest wymagane"),
   });
+  const onSubmit = async (values: UserLoginDto) => {
+    await loginUser(values)
+      .then((res) => {
+        localStorage.setItem("jwt", res?.headers?.jwt);
+        localStorage.setItem("user", JSON.stringify(res?.data));
+        window.location.href = "/";
+      })
+      .catch((err) => {
+        if (err?.data?.detail.includes("Wrong password or login"))
+          setIsError("Zły login lub hasło");
+        else {
+          setIsError("Wystąpił błąd");
+        }
+      });
+  };
   return (
     <div className={styles.background}>
       <Container className="py-5 my-5">
@@ -24,9 +42,9 @@ const LogIn = () => {
               validateOnBlur={false}
               validateOnChange={false}
               validationSchema={schema}
-              onSubmit={console.log}
+              onSubmit={(values) => onSubmit(values)}
               initialValues={{
-                email: "",
+                login: "",
                 password: "",
               }}
             >
@@ -36,13 +54,13 @@ const LogIn = () => {
                     <Form.Label>Email</Form.Label>
                     <Form.Control
                       placeholder="example@gmail.com"
-                      name="email"
-                      value={values.email}
+                      name="login"
+                      value={values.login}
                       onChange={handleChange}
-                      isInvalid={!!errors.email}
+                      isInvalid={!!errors.login}
                     />
                     <Form.Control.Feedback type="invalid">
-                      {errors.email}
+                      {errors.login}
                     </Form.Control.Feedback>
                   </Form.Group>
 
@@ -60,8 +78,16 @@ const LogIn = () => {
                       {errors.password}
                     </Form.Control.Feedback>
                   </Form.Group>
+                  <div className="pb-2">
+                    <small className="text-danger">{isError}</small>
+                  </div>
                   <div className="d-grid">
-                    <Button variant="danger" type="submit" className="mt-3">
+                    <Button
+                      variant="danger"
+                      type="submit"
+                      className="mt-3"
+                      onClick={() => setIsError("")}
+                    >
                       Zaloguj się
                     </Button>
                   </div>
