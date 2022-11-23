@@ -12,6 +12,8 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { ProductFromRecipe, RatingDto, Recipe, Step, User } from "../../types";
 import { UnitPluar } from "../../frontType/unit";
+import { Level } from "../../frontType/level";
+import { polishPlural } from "../../frontType/polishPlural";
 
 interface RecipeComponentProps {
   recipe: Recipe;
@@ -47,31 +49,39 @@ const RecipeComponent = ({
           <div className="mt-auto">
             <div className="pb-3" style={{ fontSize: "18px" }}>
               <div className="d-flex my-0">
-                <BsFillAlarmFill
-                  style={{ fontSize: "22px" }}
-                  className="me-2 mb-0 mt-1"
-                />
+                <div style={{ width: "30px" }}>
+                  <BsFillAlarmFill
+                    style={{ fontSize: "22px" }}
+                    className="me-2 mb-1"
+                  />
+                </div>
                 <p className="my-0">{recipe.time}</p>
               </div>
               <div className="d-flex my-0">
-                <AiFillSignal
-                  style={{ fontSize: "22px" }}
-                  className="me-2 mb-0 mt-1"
-                />
-                <p className="my-0">
-                  {recipe.level === 0
-                    ? "łatwy"
-                    : recipe.level === 1
-                    ? "średni"
-                    : "trundy"}
-                </p>
+                <div style={{ width: "30px" }}>
+                  <AiFillSignal
+                    style={{ fontSize: "22px" }}
+                    className="me-2 mb-1"
+                  />
+                </div>
+                <p className="my-0">{Level[recipe.level ? recipe.level : 0]}</p>
               </div>
               <div className="d-flex my-0">
-                <BsFillPersonFill
-                  style={{ fontSize: "23px" }}
-                  className="me-2 mb-0 mt-1"
-                />
-                <p className="my-0">{recipe.people} osób</p>
+                <div style={{ width: "30px" }}>
+                  <BsFillPersonFill
+                    style={{ fontSize: "23px" }}
+                    className="me-2 mb-1"
+                  />
+                </div>
+                <p className="my-0">
+                  {recipe.people}{" "}
+                  {polishPlural(
+                    "osoba",
+                    "osoby",
+                    "osób",
+                    recipe.people ? recipe.people : 0
+                  )}
+                </p>
               </div>
             </div>
             <div
@@ -163,8 +173,9 @@ const RecipeComponent = ({
                 className="align-self-end ms-2 me-xl-4"
                 style={{ fontWeight: "500" }}
               >
-                {/* {product.ingredient?.amount} {UnitPluar(product.ingredient.amount, (product.ingredient.unit)} */}
-                {product.unit && UnitPluar(1, product.unit)}
+                {product.amount}{" "}
+                {product.unit &&
+                  UnitPluar(product.amount ? product.amount : 0, product.unit)}
               </Col>
             </div>
           ))}

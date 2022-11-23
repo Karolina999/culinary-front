@@ -11,6 +11,7 @@ import type { ShoppingList } from './shoppingList';
 export interface ProductFromList {
   id?: number;
   unit?: Unit;
+  amount?: number;
   ingredient?: Ingredient;
   shoppingList?: ShoppingList;
 }

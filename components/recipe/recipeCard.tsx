@@ -6,6 +6,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { RatingDto, Recipe } from "../../types";
 import Link from "next/link";
 import router from "next/router";
+import { Level } from "../../frontType/level";
 
 interface RecipeProps {
   recipe: Recipe;
@@ -66,11 +67,7 @@ const RecipeCard = ({ recipe, star }: RecipeProps) => {
           <p className="ps-2 pe-2 mb-2">{recipe.time}</p>
           <AiFillSignal style={{ fontSize: "18px" }} />
           <p className="ps-1 pe-2 mb-2">
-            {recipe.level === 0
-              ? "łatwy"
-              : recipe.level === 1
-              ? "średni"
-              : "trudny"}
+            {Level[recipe.level ? recipe.level : 0]}
           </p>
           <BsFillPersonFill style={{ fontSize: "20px" }} />
           <p className="ps-1 pe-2 mb-2">{recipe.people}</p>

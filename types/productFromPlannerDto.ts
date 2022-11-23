@@ -9,4 +9,5 @@ import type { Unit } from './unit';
 export interface ProductFromPlannerDto {
   id?: number;
   unit?: Unit;
+  amount?: number;
 }

@@ -1,3 +1,5 @@
+import { polishPlural } from "./polishPlural";
+
 export const Unit = [
   "gram",
   "kilogram",
@@ -121,23 +123,4 @@ export function UnitPluar(amount: number, unit: number) {
     UnitPluarArray[unit].pluralGenitive,
     amount
   );
-}
-
-function polishPlural(
-  singularNominativ: string,
-  pluralNominativ: string,
-  pluralGenitive: string,
-  value: number
-) {
-  if (value === 1) {
-    return singularNominativ;
-  } else if (
-    value % 10 >= 2 &&
-    value % 10 <= 4 &&
-    (value % 100 < 10 || value % 100 >= 20)
-  ) {
-    return pluralNominativ;
-  } else {
-    return pluralGenitive;
-  }
 }

@@ -11,6 +11,7 @@ import type { Planner } from './planner';
 export interface ProductFromPlanner {
   id?: number;
   unit?: Unit;
+  amount?: number;
   ingredient?: Ingredient;
   planner?: Planner;
 }

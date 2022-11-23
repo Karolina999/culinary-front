@@ -10,6 +10,7 @@ import type { Ingredient } from './ingredient';
 export interface ProductFromRecipeDto {
   id?: number;
   unit?: Unit;
+  amount?: number;
   ingredientId?: number;
   ingredient?: Ingredient;
 }
