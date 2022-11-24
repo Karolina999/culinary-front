@@ -1,29 +1,24 @@
-import { Row, Col } from "react-bootstrap";
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  RefObject,
-  ClassAttributes,
-} from "react";
+import { Row, Col, Spinner } from "react-bootstrap";
+import React, { useState, useEffect, useRef } from "react";
 import { classNames } from "primereact/utils";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
-import { FileUpload } from "primereact/fileupload";
-import { Rating } from "primereact/rating";
 import { Toolbar } from "primereact/toolbar";
-import { InputTextarea } from "primereact/inputtextarea";
-import { RadioButton } from "primereact/radiobutton";
-import { InputNumber } from "primereact/inputnumber";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { getUserShoppingLists } from "../services/user";
+import {
+  deleteShoppingList,
+  deleteShoppingLists,
+  postShoppingList,
+  putShoppingList,
+} from "../services/shoppingList";
 
 const Listy = () => {
   let emptyList = {
-    id: "",
+    id: 0,
     title: "",
   };
   const [lists, setLists] = useState([]);
@@ -36,17 +31,20 @@ const Listy = () => {
   const [globalFilter, setGlobalFilter] = useState("");
   const toast = useRef<any>(null);
   const dt = useRef(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchLists = async () => {
+    await getUserShoppingLists()
+      .then((res) => {
+        setLists(res);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
-    const fetchLists = async () => {
-      await getUserShoppingLists()
-        .then((res) => {
-          setLists(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
     fetchLists();
   }, []);
 
@@ -97,34 +95,64 @@ const Listy = () => {
     return id;
   };
 
-  const saveList = () => {
+  const saveList = async () => {
     setSubmitted(true);
 
     if (list.title.trim()) {
       let _lists = [...lists];
       let _list = { ...list };
       if (list.id) {
-        const index = findIndexById(list.id);
+        // Edytowanie listy
+        // const index = findIndexById(list.id);
 
-        _lists[index] = _list;
-        toast.current.show({
-          severity: "success",
-          summary: "Powodzenie",
-          detail: "Lista została zaktualizowana",
-          life: 3000,
-        });
+        await putShoppingList(_list)
+          .then((res) => {
+            toast.current.show({
+              severity: "success",
+              summary: "Powodzenie",
+              detail: "Lista została pomyślnie zaktualizowana",
+              life: 3000,
+            });
+          })
+          .catch((err) => {
+            toast.current.show({
+              severity: "error",
+              summary: "Błąd",
+              detail: "Lista nie została pomyślnie zaktualizowana",
+              life: 3000,
+            });
+          });
+        await fetchLists();
+
+        // _lists[index] = _list;
+        // toast.current.show({
+        //   severity: "success",
+        //   summary: "Powodzenie",
+        //   detail: "Lista została pomyślnie zaktualizowana",
+        //   life: 3000,
+        // });
+        // setLists(_lists);
       } else {
-        _list.id = createId();
-        _lists.push(_list);
-        toast.current.show({
-          severity: "success",
-          summary: "Powodzenie",
-          detail: "Lista została pomyślnie utworzona",
-          life: 3000,
-        });
+        await postShoppingList({ title: _list.title })
+          .then((res) => {
+            toast.current.show({
+              severity: "success",
+              summary: "Powodzenie",
+              detail: "Lista została pomyślnie utworzona",
+              life: 3000,
+            });
+          })
+          .catch((err) => {
+            toast.current.show({
+              severity: "error",
+              summary: "Błąd",
+              detail: "Lista nie została pomyślnie utworzona",
+              life: 3000,
+            });
+          });
+        await fetchLists();
       }
 
-      setLists(_lists);
       setListDialog(false);
       setList(emptyList);
     }
@@ -154,30 +182,51 @@ const Listy = () => {
     setDeleteListsDialog(false);
   };
 
-  const deleteList = () => {
-    let _lists = lists.filter((val) => val.id !== list.id);
-    setLists(_lists);
+  const deleteList = async () => {
+    await deleteShoppingList(list.id)
+      .then((res) => {
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Lista została pomyślnie usunięta",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Lista nie została pomyślnie usunięta",
+          life: 3000,
+        });
+      });
+    await fetchLists();
     setDeleteListDialog(false);
     setList(emptyList);
-    toast.current.show({
-      severity: "success",
-      summary: "Powodzenie",
-      detail: "Lista została usunięta",
-      life: 3000,
-    });
   };
 
-  const deleteSelectedLists = () => {
-    let _lists = lists.filter((val) => !selectedLists.includes(val));
-    setLists(_lists);
+  const deleteSelectedLists = async () => {
+    const listsId = selectedLists.map((l: any) => l.id);
+    await deleteShoppingLists(listsId)
+      .then((res) => {
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Listy zostały pomyślnie usunięte",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Listy nie zostały pomyślnie usunięte",
+          life: 3000,
+        });
+      });
+    await fetchLists();
     setDeleteListsDialog(false);
     setSelectedLists(null);
-    toast.current.show({
-      severity: "success",
-      summary: "Powodzenie",
-      detail: "Listy zostały usunięte",
-      life: 3000,
-    });
   };
 
   const rightToolbarTemplate = () => {
@@ -309,45 +358,55 @@ const Listy = () => {
                 right={rightToolbarTemplate}
               ></Toolbar>
               {/* Listy zakupów */}
-              {lists.length > 0 ? (
-                <DataTable
-                  ref={dt}
-                  value={lists}
-                  selection={selectedLists}
-                  onSelectionChange={(e) => setSelectedLists(e.value)}
-                  dataKey="id"
-                  paginator
-                  rows={10}
-                  rowsPerPageOptions={[5, 10, 25]}
-                  paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                  currentPageReportTemplate="{first} - {last} z {totalRecords} list zakupów"
-                  globalFilter={globalFilter}
-                  header={header}
-                  responsiveLayout="scroll"
-                >
-                  <Column
-                    selectionMode="multiple"
-                    headerStyle={{ width: "3rem" }}
-                    exportable={false}
-                  ></Column>
-                  <Column
-                    field="title"
-                    header="Lista"
-                    sortable
-                    style={{ width: "100%" }}
-                  ></Column>
-                  <Column
-                    body={actionBodyTemplate}
-                    exportable={false}
-                    style={{ minWidth: "150px" }}
-                  ></Column>
-                </DataTable>
+              {loading ? (
+                <Spinner
+                  animation="border"
+                  variant="success"
+                  className="mx-auto my-5"
+                />
               ) : (
-                <h5 className="py-5 my-5 text-center w-75 mx-auto">
-                  Nie masz żadnych list zakupów.
-                  <br />
-                  Wciśnij w przycisk dodaj aby stworzyć nową listę.
-                </h5>
+                <>
+                  {lists.length > 0 ? (
+                    <DataTable
+                      ref={dt}
+                      value={lists}
+                      selection={selectedLists}
+                      onSelectionChange={(e) => setSelectedLists(e.value)}
+                      dataKey="id"
+                      paginator
+                      rows={10}
+                      rowsPerPageOptions={[5, 10, 25]}
+                      paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                      currentPageReportTemplate="{first} - {last} z {totalRecords} list zakupów"
+                      globalFilter={globalFilter}
+                      header={header}
+                      responsiveLayout="scroll"
+                    >
+                      <Column
+                        selectionMode="multiple"
+                        headerStyle={{ width: "3rem" }}
+                        exportable={false}
+                      ></Column>
+                      <Column
+                        field="title"
+                        header="Lista"
+                        sortable
+                        style={{ width: "100%" }}
+                      ></Column>
+                      <Column
+                        body={actionBodyTemplate}
+                        exportable={false}
+                        style={{ minWidth: "150px" }}
+                      ></Column>
+                    </DataTable>
+                  ) : (
+                    <h5 className="py-5 my-5 text-center w-75 mx-auto">
+                      Nie masz żadnych list zakupów.
+                      <br />
+                      Wciśnij w przycisk dodaj aby stworzyć nową listę.
+                    </h5>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -403,6 +462,7 @@ const Listy = () => {
               )}
             </div>
           </Dialog>
+          {/* Usuwanie kilku list */}
           <Dialog
             visible={deleteListsDialog}
             style={{ width: "450px" }}

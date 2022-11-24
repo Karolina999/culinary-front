@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { GiCook, GiShoppingCart } from "react-icons/gi";
 import { BsSearch } from "react-icons/bs";
@@ -10,6 +10,14 @@ interface TopbarProps {
 }
 
 const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
+  const [user, setUser] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("jwt")) {
+      setUser(true);
+    }
+  }, []);
+
   return (
     <Navbar
       collapseOnSelect
@@ -52,15 +60,17 @@ const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
                 <BsSearch style={{ fontSize: "25px", color: "white" }} />
                 <p className="px-2 pt-1 text-white d-lg-none">Znajdź przepis</p>
               </Nav.Link>
-              <Nav.Link
-                href="/"
-                onClick={() => {
-                  localStorage.removeItem("jwt");
-                  localStorage.removeItem("user");
-                }}
-              >
-                Wyloguj się
-              </Nav.Link>
+              {user && (
+                <Nav.Link
+                  href="/"
+                  onClick={() => {
+                    localStorage.removeItem("jwt");
+                    localStorage.removeItem("user");
+                  }}
+                >
+                  Wyloguj się
+                </Nav.Link>
+              )}
             </div>
             <Button
               variant="danger"
