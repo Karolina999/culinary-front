@@ -1,4 +1,5 @@
 import { Row, Col, Spinner } from "react-bootstrap";
+import { Button as BButton } from "react-bootstrap";
 import React, { useState, useEffect, useRef } from "react";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
@@ -15,13 +16,18 @@ import DeleteListsDialog from "../components/shoppingLists/deleteListsDialog";
 import DeleteListDialog from "../components/shoppingLists/deleteListDialog";
 import AddOrEditListDialog from "../components/shoppingLists/addOrEditListDialog";
 import ListsDataTable from "../components/shoppingLists/listsDataTable";
+import router from "next/router";
+import { ShoppingListDto } from "../types";
 
 const Listy = () => {
   let emptyList = {
     id: 0,
     title: "",
   };
-  const [lists, setLists] = useState([]);
+  const [lists, setLists] = useState<ShoppingListDto[] | undefined>([]);
+  const [filterLists, setFilterLists] = useState<ShoppingListDto[] | undefined>(
+    []
+  );
   const [listDialog, setListDialog] = useState(false);
   const [deleteListDialog, setDeleteListDialog] = useState(false);
   const [deleteListsDialog, setDeleteListsDialog] = useState(false);
@@ -47,6 +53,13 @@ const Listy = () => {
   useEffect(() => {
     fetchLists();
   }, []);
+
+  useEffect(() => {
+    lists &&
+      setFilterLists(
+        lists.filter((l) => l.title?.toLowerCase().includes(globalFilter))
+      );
+  }, [globalFilter, lists]);
 
   const openNew = () => {
     setList(emptyList);
@@ -75,6 +88,7 @@ const Listy = () => {
 
   const saveList = async () => {
     setSubmitted(true);
+    if (list.title.length > 50) return;
 
     if (list.title.trim()) {
       let _list = { ...list };
@@ -240,22 +254,45 @@ const Listy = () => {
   const actionBodyTemplate = (rowData: any) => {
     return (
       <React.Fragment>
-        <Row>
-          <Col xs={6} className="pe-0 me-0">
+        <div className="d-flex justify-content-between">
+          {/* <div>
             <Button
               icon="pi pi-pencil"
               className="p-button-rounded p-button-success bg-success border-success mr-2"
               onClick={() => editList(rowData)}
             />
-          </Col>
-          <Col xs={6} className="ps-0 ms-0">
+          </div> */}
+          <div className="px-2">
+            <Button
+              icon="pi pi-file-edit"
+              className="p-button-rounded p-button-success bg-success border-success mr-2"
+              onClick={() =>
+                router.push(`/lista/${rowData.id}`, "", { scroll: true })
+              }
+            />
+          </div>
+          <div>
             <Button
               icon="pi pi-trash"
               className="p-button-rounded p-button-danger bg-danger border-danger"
               onClick={() => confirmDeleteList(rowData)}
             />
-          </Col>
-        </Row>
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  };
+
+  const editTitleBodyTemplate = (rowData: any) => {
+    return (
+      <React.Fragment>
+        <BButton
+          variant="link"
+          className="px-0 mx-0"
+          onClick={() => editList(rowData)}
+        >
+          <i className="pi pi-pencil"></i>
+        </BButton>
       </React.Fragment>
     );
   };
@@ -331,15 +368,15 @@ const Listy = () => {
                   variant="success"
                   className="mx-auto my-5"
                 />
-              ) : lists.length > 0 ? (
+              ) : lists && lists.length > 0 ? (
                 <ListsDataTable
                   dt={dt}
-                  lists={lists}
+                  lists={filterLists}
                   selectedLists={selectedLists}
                   setSelectedLists={setSelectedLists}
-                  globalFilter={globalFilter}
                   header={header}
                   actionBodyTemplate={actionBodyTemplate}
+                  editTitleBodyTemplate={editTitleBodyTemplate}
                 />
               ) : (
                 <h5 className="py-5 my-5 text-center w-75 mx-auto">

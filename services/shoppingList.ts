@@ -29,3 +29,17 @@ export const deleteShoppingLists = (shoppingListsId: number[]) => {
     data: shoppingListsId,
   }).then((res) => res.body);
 };
+
+export const getShoppingList = (shoppingListId: any) => {
+  return http({
+    method: "GET",
+    url: `/ShoppingList/${shoppingListId}`,
+  }).then((res) => res.data);
+};
+
+export const getShoppingListProducts = (shoppingListId: any) => {
+  return http({
+    method: "GET",
+    url: `/ShoppingList/${shoppingListId}/products`,
+  }).then((res) => res.data);
+};

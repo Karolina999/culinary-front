@@ -49,6 +49,11 @@ const AddOrEditListDialog = ({
         {submitted && !list.title && (
           <small className="p-error">To pole jest wymagane</small>
         )}
+        {submitted && list.title.length > 50 && (
+          <small className="p-error">
+            To pole może mieć maksymalnie 50 znaków.
+          </small>
+        )}
       </div>
     </Dialog>
   );

@@ -18,6 +18,8 @@
     "eslint": "8.26.0",
     "eslint-config-next": "13.0.2",
     "formik": "^2.2.9",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.5.25",
     "next": "13.0.2",
     "orval": "^6.10.3",
     "primeicons": "^6.0.1",

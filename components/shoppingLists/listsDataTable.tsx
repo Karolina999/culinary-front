@@ -1,15 +1,16 @@
 import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+import { ShoppingListDto } from "../../types";
 
 interface ListsDataTableProps {
   dt: React.MutableRefObject<null>;
-  lists: { id: number; title: string }[];
+  lists: ShoppingListDto[] | undefined;
   selectedLists: { id: number; title: string }[];
   setSelectedLists: React.Dispatch<any>;
-  globalFilter: any;
   header: React.ReactElement<any, any>;
   actionBodyTemplate: (rowData: any) => JSX.Element;
+  editTitleBodyTemplate: (rowData: any) => JSX.Element;
 }
 
 const ListsDataTable = ({
@@ -17,9 +18,9 @@ const ListsDataTable = ({
   lists,
   selectedLists,
   setSelectedLists,
-  globalFilter,
   header,
   actionBodyTemplate,
+  editTitleBodyTemplate,
 }: ListsDataTableProps) => {
   return (
     <DataTable
@@ -33,14 +34,18 @@ const ListsDataTable = ({
       rowsPerPageOptions={[5, 10, 25]}
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       currentPageReportTemplate="{first} - {last} z {totalRecords} list zakupów"
-      globalFilter={globalFilter}
       header={header}
       responsiveLayout="scroll"
+      emptyMessage="Nie znaleziono list zakupów."
     >
       <Column
         selectionMode="multiple"
         headerStyle={{ width: "3rem" }}
         exportable={false}
+      ></Column>
+      <Column
+        body={editTitleBodyTemplate}
+        style={{ maxWidth: "30px" }}
       ></Column>
       <Column
         field="title"
