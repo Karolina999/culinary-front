@@ -10,17 +10,28 @@ interface Option {
 interface SelectProps {
   options: Option[];
   placeholder: string;
-  name: string;
+  name?: string;
   error: boolean;
+  onChange?: (value: any) => void;
 }
 
-const SelectList = ({ options, placeholder, name, error }: SelectProps) => {
-  const { setFieldValue } = useFormikContext();
+const SelectList = ({
+  options,
+  placeholder,
+  name,
+  error,
+  onChange,
+}: SelectProps) => {
+  const formik = useFormikContext();
   const [selectedOption, setSelectedOption] = useState(null);
   const [focus, setFocus] = useState(false);
   function handleChange(e: any) {
     setSelectedOption(e?.value);
-    setFieldValue(name, e?.value);
+    name
+      ? formik.setFieldValue(name, e?.value)
+      : onChange && e
+      ? onChange(e.value)
+      : onChange("");
   }
   const style = {
     control: () => ({
@@ -28,6 +39,7 @@ const SelectList = ({ options, placeholder, name, error }: SelectProps) => {
       width: "100%",
     }),
   };
+
   return (
     <div>
       <Select
@@ -40,6 +52,9 @@ const SelectList = ({ options, placeholder, name, error }: SelectProps) => {
         onBlur={() => setFocus(false)}
         onFocus={() => setFocus(true)}
         styles={style}
+        noOptionsMessage={({ inputValue }) =>
+          inputValue ? "Nie znaleziono: " + inputValue : "Nie znaleziono"
+        }
         className={
           error
             ? focus

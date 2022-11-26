@@ -22,6 +22,7 @@
     "jspdf-autotable": "^3.5.25",
     "next": "13.0.2",
     "orval": "^6.10.3",
+    "pdfmake": "^0.2.6",
     "primeicons": "^6.0.1",
     "primereact": "^8.7.2",
     "react": "18.2.0",

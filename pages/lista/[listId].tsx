@@ -1,9 +1,11 @@
 import { Toast } from "primereact/toast";
 import React, { useRef, useState, useEffect } from "react";
+import { classNames } from "primereact/utils";
 import {
   getShoppingList,
   getShoppingListProducts,
 } from "../../services/shoppingList";
+import { getIngredients } from "../../services/ingredients";
 import { Col, Row, Spinner } from "react-bootstrap";
 import { Toolbar } from "primereact/toolbar";
 import { Button } from "primereact/button";
@@ -14,6 +16,10 @@ import { Column } from "primereact/column";
 import { UnitPluar } from "../../frontType/unit";
 import { IngredientCategory } from "../../frontType/ingredientCategory";
 import { exportPdf } from "../../pdf/exportPdf";
+import ListDataTable from "../../components/shoppingList/listDataTable";
+import { Dialog } from "primereact/dialog";
+import AddOrEditProductDialog from "../../components/shoppingList/addOrEditProductDialog";
+import { postProductFromList } from "../../services/productFromList";
 
 interface ListaProps {
   listId: string;
@@ -22,13 +28,15 @@ interface ListaProps {
 const Lista = ({ listId }: ListaProps) => {
   const title = "Zakupy na urodziny";
   let emptyProduct = {
-    amount: "",
     id: null,
     unit: "",
+    amount: "",
+    ingredientId: 0,
+    shoppingListId: listId,
   };
-  let ingredientId = null;
   const [list, setList] = useState<ShoppingList | undefined>(undefined);
   const [products, setProducts] = useState<ProductFromList[]>([]);
+  const [ingredients, setIngredients] = useState([]);
   const [productDialog, setProductDialog] = useState(false);
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
@@ -38,7 +46,7 @@ const Lista = ({ listId }: ListaProps) => {
   );
   const [submitted, setSubmitted] = useState(false);
   const [globalFilter, setGlobalFilter] = useState("");
-  const toast = useRef(null);
+  const toast = useRef<any>(null);
   const dt = useRef(null);
   const [loading, setLoading] = useState(true);
 
@@ -63,33 +71,99 @@ const Lista = ({ listId }: ListaProps) => {
       });
   };
 
+  const fetchIngredients = async () => {
+    await getIngredients()
+      .then((res) => {
+        setIngredients(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     fetchList();
     fetchProducts();
+    fetchIngredients();
   }, []);
 
-  // const exportPdf = () => {
-  //   const test = products.map((p) => {
-  //     const t = {
-  //       name: p?.ingredient?.name,
-  //       amount: p.amount + " " + p.unit,
-  //       category: p.ingredient?.ingredientCategory,
-  //     };
-  //     return t;
-  //   });
-  //   const doc = new jsPDF();
-  //   // doc.addFont("Montserrat.ttf", "Montserrat", "normal");
-  //   // doc.setFont("Montserrat");
-  //   autoTable(doc, {
-  //     head: [["Produkt", "Ilosc", "Kategoria"]],
-  //     body: test.map((p) => {
-  //       return [p.name, p.amount, p.category];
-  //     }),
-  //     // styles: { font: "courier" },
-  //     theme: "plain",
-  //   });
-  //   doc.save(`${list?.title}.pdf`);
-  // };
+  const openNew = () => {
+    setProduct(emptyProduct);
+    setSubmitted(false);
+    setProductDialog(true);
+  };
+
+  const hideDialog = () => {
+    setSubmitted(false);
+    setProductDialog(false);
+  };
+
+  const saveProduct = async () => {
+    setSubmitted(true);
+    let _product = { ...product };
+    if (
+      !(
+        _product.ingredientId > 0 &&
+        _product.unit.length > 0 &&
+        Number(_product.amount) > 0
+      )
+    ) {
+      return;
+    }
+    if (_product.id) {
+      console.log("edytuj");
+    } else {
+      //postProductFromList
+      await postProductFromList(_product.ingredientId, listId, {
+        unit: Number(_product.unit),
+        amount: Number(_product.amount),
+      })
+        .then((res) => {
+          toast.current.show({
+            severity: "success",
+            summary: "Powodzenie",
+            detail: "Produkt został dodany",
+            life: 3000,
+          });
+        })
+        .catch((err) => {
+          toast.current.show({
+            severity: "error",
+            summary: "Błąd",
+            detail: "Produkt nie zostałdodany",
+            life: 3000,
+          });
+        });
+      await fetchProducts();
+    }
+    setProductDialog(false);
+    setProduct(emptyProduct);
+  };
+
+  const onInputChange = (value: any, name: any) => {
+    const val = value || "";
+    let _product = { ...product };
+    _product[`${name}`] = val;
+
+    setProduct(_product);
+  };
+
+  const productDialogFooter = (
+    <React.Fragment>
+      <Button
+        label="Anuluj"
+        icon="pi pi-times"
+        className="p-button-text"
+        onClick={hideDialog}
+      />
+      <Button
+        label="Zapisz"
+        icon="pi pi-check"
+        className="p-button-text"
+        onClick={saveProduct}
+      />
+    </React.Fragment>
+  );
 
   const leftToolbarTemplate = () => {
     return (
@@ -107,8 +181,8 @@ const Lista = ({ listId }: ListaProps) => {
             <Button
               label="Dodaj"
               icon="pi pi-plus"
-              className="p-button-success bg-success border-success mr-2"
-              // onClick={openNew}
+              className="p-button-success bg-success border-succes"
+              onClick={openNew}
             />
           </Col>
           <Col className="px-0">
@@ -117,6 +191,7 @@ const Lista = ({ listId }: ListaProps) => {
               icon="pi pi-trash"
               className="p-button-danger bg-danger border-danger"
               // onClick={confirmDeleteSelected}
+              disabled={!selectedProducts || !selectedProducts.length}
             />
           </Col>
           <Col>
@@ -126,6 +201,7 @@ const Lista = ({ listId }: ListaProps) => {
               onClick={() => exportPdf(products, list)}
               className="p-button-warning mr-2"
               data-pr-tooltip="PDF"
+              disabled={products.length < 1}
             />
           </Col>
         </Row>
@@ -178,7 +254,6 @@ const Lista = ({ listId }: ListaProps) => {
   };
 
   const categoryBodyTemplate = (rowData: ProductFromList) => {
-    console.log(rowData);
     const category =
       IngredientCategory[rowData?.ingredient?.ingredientCategory!];
     return category;
@@ -203,59 +278,29 @@ const Lista = ({ listId }: ListaProps) => {
                 className="mx-auto my-5"
               />
             ) : (
-              <DataTable
-                ref={dt}
-                value={products}
-                selection={selectedProducts}
-                onSelectionChange={(e: any) => setSelectedProducts(e.value)}
-                dataKey="id"
-                paginator
-                rows={10}
-                rowsPerPageOptions={[5, 10, 25]}
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                currentPageReportTemplate="{first}-{last} z {totalRecords} produktów"
+              <ListDataTable
+                dt={dt}
+                products={products}
+                selectedProducts={selectedProducts}
+                setSelectedProducts={setSelectedProducts}
                 globalFilter={globalFilter}
                 header={header}
-                responsiveLayout="scroll"
-                emptyMessage="Nie znaleziono produktów."
-              >
-                <Column
-                  selectionMode="multiple"
-                  headerStyle={{ width: "3rem" }}
-                  exportable={false}
-                ></Column>
-                <Column
-                  field="ingredient.name"
-                  header="Produkt"
-                  sortable
-                  style={{ width: "100%" }}
-                ></Column>
-                <Column
-                  field="amount"
-                  header=""
-                  sortable
-                  className="text-end"
-                  style={{ width: "10px" }}
-                ></Column>
-                <Column
-                  body={unitBodyTemplate}
-                  header=""
-                  sortable
-                  style={{ width: "10px" }}
-                ></Column>
-                <Column
-                  body={categoryBodyTemplate}
-                  header="Kategoria"
-                  sortable
-                ></Column>
-                <Column
-                  body={actionBodyTemplate}
-                  exportable={false}
-                  style={{ minWidth: "150px" }}
-                ></Column>
-              </DataTable>
+                unitBodyTemplate={unitBodyTemplate}
+                categoryBodyTemplate={categoryBodyTemplate}
+                actionBodyTemplate={actionBodyTemplate}
+              />
             )}
           </div>
+          {/* Dodawanie i edytowanie */}
+          <AddOrEditProductDialog
+            productDialog={productDialog}
+            productDialogFooter={productDialogFooter}
+            hideDialog={hideDialog}
+            product={product}
+            onInputChange={onInputChange}
+            submitted={submitted}
+            ingredients={ingredients}
+          />
         </div>
       </Col>
     </Row>
@@ -276,19 +321,6 @@ export async function getStaticProps({
 }: {
   params: { listId: string };
 }) {
-  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
-
-  // const resList = await fetch(
-  //   `https://localhost:7193/api/ShoppingList/${params.listId}`
-  // );
-  // const list = await resList.json();
-
-  // if (!list || list.status) {
-  //   return {
-  //     notFound: true,
-  //   };
-  // }
-
   const listId = params.listId;
 
   return {
