@@ -18,6 +18,7 @@ import AddOrEditListDialog from "../components/shoppingLists/addOrEditListDialog
 import ListsDataTable from "../components/shoppingLists/listsDataTable";
 import router from "next/router";
 import { ShoppingListDto } from "../types";
+import { BreadCrumb } from "primereact/breadcrumb";
 
 const Listy = () => {
   let emptyList = {
@@ -57,7 +58,9 @@ const Listy = () => {
   useEffect(() => {
     lists &&
       setFilterLists(
-        lists.filter((l) => l.title?.toLowerCase().includes(globalFilter))
+        lists.filter((l) =>
+          l.title?.toLowerCase().includes(globalFilter.toLowerCase())
+        )
       );
   }, [globalFilter, lists]);
 
@@ -255,13 +258,6 @@ const Listy = () => {
     return (
       <React.Fragment>
         <div className="d-flex justify-content-between">
-          {/* <div>
-            <Button
-              icon="pi pi-pencil"
-              className="p-button-rounded p-button-success bg-success border-success mr-2"
-              onClick={() => editList(rowData)}
-            />
-          </div> */}
           <div className="px-2">
             <Button
               icon="pi pi-file-edit"
@@ -355,6 +351,12 @@ const Listy = () => {
           <div className="datatable-crud-demo">
             <Toast ref={toast} />
             <div className="card p-3 h93">
+              <BreadCrumb
+                model={[{ label: "Listy zakupów", url: "" }]}
+                home={{ icon: "pi pi-home", url: "/" }}
+                className="px-1"
+                style={{ border: "none" }}
+              />
               {/* Dodaj, usuń */}
               <Toolbar
                 className="mb-3"

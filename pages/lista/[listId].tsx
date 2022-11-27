@@ -1,6 +1,5 @@
 import { Toast } from "primereact/toast";
 import React, { useRef, useState, useEffect } from "react";
-import { classNames } from "primereact/utils";
 import {
   getShoppingList,
   getShoppingListProducts,
@@ -10,20 +9,21 @@ import { Col, Row, Spinner } from "react-bootstrap";
 import { Toolbar } from "primereact/toolbar";
 import { Button } from "primereact/button";
 import { ProductFromList, ShoppingList, ShoppingListDto } from "../../types";
-import { DataTable } from "primereact/datatable";
 import { InputText } from "primereact/inputtext";
-import { Column } from "primereact/column";
 import { UnitPluar } from "../../frontType/unit";
 import { IngredientCategory } from "../../frontType/ingredientCategory";
 import { exportPdf } from "../../pdf/exportPdf";
 import ListDataTable from "../../components/shoppingList/listDataTable";
-import { Dialog } from "primereact/dialog";
+import { BreadCrumb } from "primereact/breadcrumb";
 import AddOrEditProductDialog from "../../components/shoppingList/addOrEditProductDialog";
 import {
   deleteProductFromList,
+  deleteProductsFromList,
   postProductFromList,
   putProductFromList,
 } from "../../services/productFromList";
+import DeleteProductDialog from "../../components/shoppingList/deleteProductDialog";
+import DeleteProductsDialog from "../../components/shoppingList/deleteProductsDialog";
 
 interface ListaProps {
   listId: string;
@@ -40,6 +40,7 @@ const Lista = ({ listId }: ListaProps) => {
   };
   const [list, setList] = useState<ShoppingList | undefined>(undefined);
   const [products, setProducts] = useState<ProductFromList[]>([]);
+  const [filterProducts, setFilterProducts] = useState<ProductFromList[]>([]);
   const [ingredients, setIngredients] = useState([]);
   const [productDialog, setProductDialog] = useState(false);
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
@@ -91,6 +92,15 @@ const Lista = ({ listId }: ListaProps) => {
     fetchIngredients();
   }, []);
 
+  useEffect(() => {
+    products &&
+      setFilterProducts(
+        products.filter((p) =>
+          p.ingredient?.name?.toLowerCase().includes(globalFilter.toLowerCase())
+        )
+      );
+  }, [globalFilter, products]);
+
   const openNew = () => {
     setProduct(emptyProduct);
     setSubmitted(false);
@@ -112,7 +122,6 @@ const Lista = ({ listId }: ListaProps) => {
         Number(_product.amount) > 0
       )
     ) {
-      console.log(_product);
       return;
     }
     if (_product.id) {
@@ -196,27 +205,16 @@ const Lista = ({ listId }: ListaProps) => {
     setDeleteProductsDialog(false);
   };
 
-  const deleteSelectedProducts = () => {
-    // let _products = products.filter((val) => !selectedProducts?.includes(val));
-    // setProducts(_products);
-    setDeleteProductsDialog(false);
-    // setSelectedProducts(null);
-    // toast.current.show({
-    //   severity: "success",
-    //   summary: "Successful",
-    //   detail: "Products Deleted",
-    //   life: 3000,
-    // });
-  };
-
-  const deleteProduct = async () => {
-    console.log(product.id);
-    await deleteProductFromList(product.id)
+  const deleteSelectedProducts = async () => {
+    const productsId = selectedProducts.map((p) => {
+      return p.id;
+    });
+    await deleteProductsFromList(productsId)
       .then((res) => {
         toast.current.show({
           severity: "success",
           summary: "Powodzenie",
-          detail: "Produkt został zedytowany",
+          detail: "Produkty zostały usunięte",
           life: 3000,
         });
       })
@@ -224,7 +222,31 @@ const Lista = ({ listId }: ListaProps) => {
         toast.current.show({
           severity: "error",
           summary: "Błąd",
-          detail: "Produkt nie został zedytowany",
+          detail: "Produkty nie zostały usunięte",
+          life: 3000,
+        });
+      });
+    await fetchProducts();
+
+    setDeleteProductsDialog(false);
+    setSelectedProducts([]);
+  };
+
+  const deleteProduct = async () => {
+    await deleteProductFromList(product.id)
+      .then((res) => {
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Produkt został usunięty",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Produkt nie został usunięty",
           life: 3000,
         });
       });
@@ -388,6 +410,15 @@ const Lista = ({ listId }: ListaProps) => {
         <div className="datatable-crud-demo">
           <Toast ref={toast} />
           <div className="card p-3 h93">
+            <BreadCrumb
+              model={[
+                { label: "Listy zakupów", url: "/listy" },
+                { label: `${list ? list.title : "Lista zakupów"}`, url: "" },
+              ]}
+              home={{ icon: "pi pi-home", url: "/" }}
+              className="px-1"
+              style={{ border: "none" }}
+            />
             {/* Dodaj, usuń */}
             <Toolbar
               className="mb-3"
@@ -403,10 +434,9 @@ const Lista = ({ listId }: ListaProps) => {
             ) : (
               <ListDataTable
                 dt={dt}
-                products={products}
+                products={filterProducts}
                 selectedProducts={selectedProducts}
                 setSelectedProducts={setSelectedProducts}
-                globalFilter={globalFilter}
                 header={header}
                 unitBodyTemplate={unitBodyTemplate}
                 categoryBodyTemplate={categoryBodyTemplate}
@@ -424,47 +454,20 @@ const Lista = ({ listId }: ListaProps) => {
             submitted={submitted}
             ingredients={ingredients}
           />
-          {/* Usuwanie */}
-          <Dialog
-            visible={deleteProductDialog}
-            style={{ width: "450px" }}
-            header="Confirm"
-            modal
-            footer={deleteProductDialogFooter}
-            onHide={hideDeleteProductDialog}
-          >
-            <div className="confirmation-content">
-              <i
-                className="pi pi-exclamation-triangle mr-3"
-                style={{ fontSize: "2rem" }}
-              />
-              {product && (
-                <span className="ps-2">
-                  Czy na pewno chcesz usunąc ten produkt?
-                </span>
-              )}
-            </div>
-          </Dialog>
-          <Dialog
-            visible={deleteProductsDialog}
-            style={{ width: "450px" }}
-            header="Confirm"
-            modal
-            footer={deleteProductsDialogFooter}
-            onHide={hideDeleteProductsDialog}
-          >
-            <div className="confirmation-content">
-              <i
-                className="pi pi-exclamation-triangle mr-3"
-                style={{ fontSize: "2rem" }}
-              />
-              {product && (
-                <span className="ps-2">
-                  Jesteś pewny że chcesz usunąć zaznaczone produkty?
-                </span>
-              )}
-            </div>
-          </Dialog>
+          {/* Usuwanie produktu */}
+          <DeleteProductDialog
+            deleteProductDialog={deleteProductDialog}
+            deleteProductDialogFooter={deleteProductDialogFooter}
+            hideDeleteProductDialog={hideDeleteProductDialog}
+            product={product}
+          />
+          {/* Usuwanie produktów */}
+          <DeleteProductsDialog
+            deleteProductsDialog={deleteProductsDialog}
+            deleteProductsDialogFooter={deleteProductsDialogFooter}
+            hideDeleteProductsDialog={hideDeleteProductsDialog}
+            product={product}
+          />
         </div>
       </Col>
     </Row>

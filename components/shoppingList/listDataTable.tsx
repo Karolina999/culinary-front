@@ -7,7 +7,6 @@ const ListDataTable = ({
   products,
   selectedProducts,
   setSelectedProducts,
-  globalFilter,
   header,
   unitBodyTemplate,
   categoryBodyTemplate,
@@ -25,7 +24,6 @@ const ListDataTable = ({
       rowsPerPageOptions={[5, 10, 25]}
       paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       currentPageReportTemplate="{first}-{last} z {totalRecords} produktów"
-      globalFilter={globalFilter}
       header={header}
       responsiveLayout="scroll"
       emptyMessage="Nie znaleziono produktów."

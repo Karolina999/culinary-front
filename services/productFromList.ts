@@ -27,3 +27,11 @@ export const deleteProductFromList = (productId: any) => {
     data: productId,
   }).then((res) => res.body);
 };
+
+export const deleteProductsFromList = (productsId: any[]) => {
+  return http({
+    method: "DELETE",
+    url: "https://localhost:7193/api/ProductFromList/productsFromList",
+    data: productsId,
+  }).then((res) => res.body);
+};
