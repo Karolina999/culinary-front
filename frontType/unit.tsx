@@ -10,7 +10,7 @@ export const Unit = [
   "dekagram",
   "litr",
   "pęczek",
-  "opakowaie",
+  "opakowanie",
   "mililitr",
   "łyżeczka",
   "ziarno",

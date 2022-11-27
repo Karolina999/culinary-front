@@ -11,3 +11,19 @@ export const postProductFromList = (
     data: data,
   }).then((res) => res.body);
 };
+
+export const putProductFromList = (productId: any, data: any) => {
+  return http({
+    method: "PUT",
+    url: `https://localhost:7193/api/ProductFromList/${productId}`,
+    data: data,
+  }).then((res) => res.body);
+};
+
+export const deleteProductFromList = (productId: any) => {
+  return http({
+    method: "DELETE",
+    url: `https://localhost:7193/api/ProductFromList/${productId}`,
+    data: productId,
+  }).then((res) => res.body);
+};

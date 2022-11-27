@@ -49,6 +49,7 @@ const AddOrEditProductDialog = ({
               placeholder="np. Pomidor"
               error={submitted && !product.ingredientId}
               onChange={(value) => onInputChange(value, "ingredientId")}
+              value={product.ingredientId}
             />
             {submitted && !product.ingredientId && (
               <small className="p-error">To pole jest wymagane.</small>
@@ -59,10 +60,11 @@ const AddOrEditProductDialog = ({
           <Form.Label>Ilość</Form.Label>
           <Form.Control
             type="number"
-            placeholder="1"
+            placeholder="np. 1"
             min={1}
             onChange={(e) => onInputChange(e.target.value, "amount")}
             isInvalid={submitted && (!product.amount || product.amount < 1)}
+            value={product.amount}
           />
           {submitted && !product.amount && (
             <small className="p-error">To pole jest wymagane.</small>
@@ -79,10 +81,11 @@ const AddOrEditProductDialog = ({
                 return { label: u, value: index.toString() };
               })}
               placeholder="np. kilogram"
-              error={submitted && !product.unit}
+              error={submitted && !product.unit && product.unit !== 0}
               onChange={(value) => onInputChange(value, "unit")}
+              value={product.unit}
             />
-            {submitted && !product.unit && (
+            {submitted && !product.unit && product.unit !== 0 && (
               <small className="p-error">To pole jest wymagane.</small>
             )}
           </Form.Group>

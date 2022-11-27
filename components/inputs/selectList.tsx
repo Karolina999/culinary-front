@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
 interface Option {
@@ -13,6 +13,7 @@ interface SelectProps {
   name?: string;
   error: boolean;
   onChange?: (value: any) => void;
+  value?: any;
 }
 
 const SelectList = ({
@@ -21,14 +22,16 @@ const SelectList = ({
   name,
   error,
   onChange,
+  value,
 }: SelectProps) => {
-  const formik = useFormikContext();
+  // const formik = useFormikContext();
   const [selectedOption, setSelectedOption] = useState(null);
   const [focus, setFocus] = useState(false);
   function handleChange(e: any) {
     setSelectedOption(e?.value);
     name
-      ? formik.setFieldValue(name, e?.value)
+      ? // ? formik.setFieldValue(name, e?.value)
+        console.log("add fromik!")
       : onChange && e
       ? onChange(e.value)
       : onChange("");
@@ -47,6 +50,9 @@ const SelectList = ({
         isClearable
         isSearchable
         options={options}
+        value={
+          value || value === 0 ? options.filter((o) => o.value == value) : null
+        }
         defaultValue={selectedOption}
         onChange={handleChange}
         onBlur={() => setFocus(false)}

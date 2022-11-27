@@ -19,7 +19,11 @@ import { exportPdf } from "../../pdf/exportPdf";
 import ListDataTable from "../../components/shoppingList/listDataTable";
 import { Dialog } from "primereact/dialog";
 import AddOrEditProductDialog from "../../components/shoppingList/addOrEditProductDialog";
-import { postProductFromList } from "../../services/productFromList";
+import {
+  deleteProductFromList,
+  postProductFromList,
+  putProductFromList,
+} from "../../services/productFromList";
 
 interface ListaProps {
   listId: string;
@@ -104,16 +108,38 @@ const Lista = ({ listId }: ListaProps) => {
     if (
       !(
         _product.ingredientId > 0 &&
-        _product.unit.length > 0 &&
+        _product.unit !== "" &&
         Number(_product.amount) > 0
       )
     ) {
+      console.log(_product);
       return;
     }
     if (_product.id) {
-      console.log("edytuj");
+      await putProductFromList(_product.id, {
+        id: Number(_product.id),
+        unit: Number(_product.unit),
+        amount: Number(_product.amount),
+        ingredientId: Number(_product.ingredientId),
+      })
+        .then((res) => {
+          toast.current.show({
+            severity: "success",
+            summary: "Powodzenie",
+            detail: "Produkt został zedytowany",
+            life: 3000,
+          });
+        })
+        .catch((err) => {
+          toast.current.show({
+            severity: "error",
+            summary: "Błąd",
+            detail: "Produkt nie został zedytowany",
+            life: 3000,
+          });
+        });
+      await fetchProducts();
     } else {
-      //postProductFromList
       await postProductFromList(_product.ingredientId, listId, {
         unit: Number(_product.unit),
         amount: Number(_product.amount),
@@ -130,7 +156,7 @@ const Lista = ({ listId }: ListaProps) => {
           toast.current.show({
             severity: "error",
             summary: "Błąd",
-            detail: "Produkt nie zostałdodany",
+            detail: "Produkt nie został dodany",
             life: 3000,
           });
         });
@@ -146,6 +172,64 @@ const Lista = ({ listId }: ListaProps) => {
     _product[`${name}`] = val;
 
     setProduct(_product);
+  };
+
+  const editProduct = (product: any) => {
+    setProduct({ ...product });
+    setProductDialog(true);
+  };
+
+  const confirmDeleteProduct = (product: any) => {
+    setProduct(product);
+    setDeleteProductDialog(true);
+  };
+
+  const hideDeleteProductDialog = () => {
+    setDeleteProductDialog(false);
+  };
+
+  const confirmDeleteSelected = () => {
+    setDeleteProductsDialog(true);
+  };
+
+  const hideDeleteProductsDialog = () => {
+    setDeleteProductsDialog(false);
+  };
+
+  const deleteSelectedProducts = () => {
+    // let _products = products.filter((val) => !selectedProducts?.includes(val));
+    // setProducts(_products);
+    setDeleteProductsDialog(false);
+    // setSelectedProducts(null);
+    // toast.current.show({
+    //   severity: "success",
+    //   summary: "Successful",
+    //   detail: "Products Deleted",
+    //   life: 3000,
+    // });
+  };
+
+  const deleteProduct = async () => {
+    console.log(product.id);
+    await deleteProductFromList(product.id)
+      .then((res) => {
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Produkt został zedytowany",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Produkt nie został zedytowany",
+          life: 3000,
+        });
+      });
+    await fetchProducts();
+    setDeleteProductDialog(false);
   };
 
   const productDialogFooter = (
@@ -168,7 +252,9 @@ const Lista = ({ listId }: ListaProps) => {
   const leftToolbarTemplate = () => {
     return (
       <React.Fragment>
-        <h3>{list?.title}</h3>
+        <Row style={{ minWidth: "25vw" }}>
+          <h3>{list?.title}</h3>
+        </Row>
       </React.Fragment>
     );
   };
@@ -176,25 +262,27 @@ const Lista = ({ listId }: ListaProps) => {
   const rightToolbarTemplate = () => {
     return (
       <React.Fragment>
-        <Row>
-          <Col>
+        <Row className="mx-auto ps-2 ps-sm-0">
+          <Col xs={12} sm="auto">
             <Button
               label="Dodaj"
               icon="pi pi-plus"
-              className="p-button-success bg-success border-succes"
+              className="p-button-success bg-success border-success"
               onClick={openNew}
+              style={{ width: "100%" }}
             />
           </Col>
-          <Col className="px-0">
+          <Col xs={12} sm="auto" className="px-sm-0 py-2 py-sm-0">
             <Button
               label="Usuń"
               icon="pi pi-trash"
               className="p-button-danger bg-danger border-danger"
-              // onClick={confirmDeleteSelected}
+              onClick={confirmDeleteSelected}
               disabled={!selectedProducts || !selectedProducts.length}
+              style={{ width: "100%" }}
             />
           </Col>
-          <Col>
+          <Col xs={12} sm="auto">
             <Button
               label="PDF"
               icon="pi pi-file-pdf"
@@ -202,6 +290,7 @@ const Lista = ({ listId }: ListaProps) => {
               className="p-button-warning mr-2"
               data-pr-tooltip="PDF"
               disabled={products.length < 1}
+              style={{ width: "100%" }}
             />
           </Col>
         </Row>
@@ -233,20 +322,54 @@ const Lista = ({ listId }: ListaProps) => {
             <Button
               icon="pi pi-pencil"
               className="p-button-rounded p-button-success bg-success border-success mr-2"
-              // onClick={() => editProduct(rowData)}
+              onClick={() => editProduct(rowData)}
             />
           </Col>
           <Col xs={6} className="ps-0 ms-0">
             <Button
               icon="pi pi-trash"
               className="p-button-rounded p-button-danger bg-danger border-danger"
-              // onClick={() => confirmDeleteProduct(rowData)}
+              onClick={() => confirmDeleteProduct(rowData)}
             />
           </Col>
         </Row>
       </React.Fragment>
     );
   };
+
+  const deleteProductDialogFooter = (
+    <React.Fragment>
+      <Button
+        label="Nie"
+        icon="pi pi-times"
+        className="p-button-text"
+        onClick={hideDeleteProductDialog}
+      />
+      <Button
+        label="Tak"
+        icon="pi pi-check"
+        className="p-button-text"
+        onClick={deleteProduct}
+      />
+    </React.Fragment>
+  );
+
+  const deleteProductsDialogFooter = (
+    <React.Fragment>
+      <Button
+        label="Nie"
+        icon="pi pi-times"
+        className="p-button-text"
+        onClick={hideDeleteProductsDialog}
+      />
+      <Button
+        label="Tak"
+        icon="pi pi-check"
+        className="p-button-text"
+        onClick={deleteSelectedProducts}
+      />
+    </React.Fragment>
+  );
 
   const unitBodyTemplate = (rowData: ProductFromList) => {
     const pluar = UnitPluar(rowData.amount!, rowData.unit!);
@@ -301,6 +424,47 @@ const Lista = ({ listId }: ListaProps) => {
             submitted={submitted}
             ingredients={ingredients}
           />
+          {/* Usuwanie */}
+          <Dialog
+            visible={deleteProductDialog}
+            style={{ width: "450px" }}
+            header="Confirm"
+            modal
+            footer={deleteProductDialogFooter}
+            onHide={hideDeleteProductDialog}
+          >
+            <div className="confirmation-content">
+              <i
+                className="pi pi-exclamation-triangle mr-3"
+                style={{ fontSize: "2rem" }}
+              />
+              {product && (
+                <span className="ps-2">
+                  Czy na pewno chcesz usunąc ten produkt?
+                </span>
+              )}
+            </div>
+          </Dialog>
+          <Dialog
+            visible={deleteProductsDialog}
+            style={{ width: "450px" }}
+            header="Confirm"
+            modal
+            footer={deleteProductsDialogFooter}
+            onHide={hideDeleteProductsDialog}
+          >
+            <div className="confirmation-content">
+              <i
+                className="pi pi-exclamation-triangle mr-3"
+                style={{ fontSize: "2rem" }}
+              />
+              {product && (
+                <span className="ps-2">
+                  Jesteś pewny że chcesz usunąć zaznaczone produkty?
+                </span>
+              )}
+            </div>
+          </Dialog>
         </div>
       </Col>
     </Row>
