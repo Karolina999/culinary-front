@@ -47,12 +47,18 @@ const ListDataTable = ({
         style={{ width: "10px" }}
       ></Column>
       <Column
+        field="unit"
         body={unitBodyTemplate}
         header=""
         sortable
         style={{ width: "10px" }}
       ></Column>
-      <Column body={categoryBodyTemplate} header="Kategoria" sortable></Column>
+      <Column
+        field="ingredient.ingredientCategory"
+        body={categoryBodyTemplate}
+        header="Kategoria"
+        sortable
+      ></Column>
       <Column
         body={actionBodyTemplate}
         exportable={false}

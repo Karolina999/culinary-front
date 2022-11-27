@@ -10,4 +10,5 @@ export interface ProductFromListDto {
   id?: number;
   unit?: Unit;
   amount?: number;
+  ingredientId?: number;
 }

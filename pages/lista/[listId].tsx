@@ -93,10 +93,17 @@ const Lista = ({ listId }: ListaProps) => {
   }, []);
 
   useEffect(() => {
+    console.log(products);
     products &&
       setFilterProducts(
-        products.filter((p) =>
-          p.ingredient?.name?.toLowerCase().includes(globalFilter.toLowerCase())
+        products.filter(
+          (p) =>
+            p.ingredient?.name
+              ?.toLowerCase()
+              .includes(globalFilter.toLowerCase()) ||
+            IngredientCategory[p.ingredient?.ingredientCategory]
+              .toLowerCase()
+              .includes(globalFilter.toLowerCase())
         )
       );
   }, [globalFilter, products]);
@@ -284,27 +291,27 @@ const Lista = ({ listId }: ListaProps) => {
   const rightToolbarTemplate = () => {
     return (
       <React.Fragment>
-        <Row className="mx-auto ps-2 ps-sm-0">
-          <Col xs={12} sm="auto">
+        <Row>
+          <Col xs={5} sm="auto">
             <Button
               label="Dodaj"
               icon="pi pi-plus"
               className="p-button-success bg-success border-success"
               onClick={openNew}
-              style={{ width: "100%" }}
+              // style={{ width: "100%" }}
             />
           </Col>
-          <Col xs={12} sm="auto" className="px-sm-0 py-2 py-sm-0">
+          <Col xs={5} sm="auto" className="px-sm-0">
             <Button
               label="Usuń"
               icon="pi pi-trash"
               className="p-button-danger bg-danger border-danger"
               onClick={confirmDeleteSelected}
               disabled={!selectedProducts || !selectedProducts.length}
-              style={{ width: "100%" }}
+              // style={{ width: "100%" }}
             />
           </Col>
-          <Col xs={12} sm="auto">
+          <Col xs={5} sm="auto" className="py-2 py-sm-0">
             <Button
               label="PDF"
               icon="pi pi-file-pdf"
@@ -312,7 +319,7 @@ const Lista = ({ listId }: ListaProps) => {
               className="p-button-warning mr-2"
               data-pr-tooltip="PDF"
               disabled={products.length < 1}
-              style={{ width: "100%" }}
+              // style={{ width: "100%" }}
             />
           </Col>
         </Row>
@@ -416,7 +423,7 @@ const Lista = ({ listId }: ListaProps) => {
                 { label: `${list ? list.title : "Lista zakupów"}`, url: "" },
               ]}
               home={{ icon: "pi pi-home", url: "/" }}
-              className="px-1"
+              className="px-1 mb-2"
               style={{ border: "none" }}
             />
             {/* Dodaj, usuń */}

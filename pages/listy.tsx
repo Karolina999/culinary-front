@@ -354,7 +354,7 @@ const Listy = () => {
               <BreadCrumb
                 model={[{ label: "Listy zakupów", url: "" }]}
                 home={{ icon: "pi pi-home", url: "/" }}
-                className="px-1"
+                className="px-1 mb-2"
                 style={{ border: "none" }}
               />
               {/* Dodaj, usuń */}
