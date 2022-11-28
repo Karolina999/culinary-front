@@ -14,7 +14,7 @@ const PopularRecipes = ({ popularRecipes }: PopularRecipesProps) => {
       <Row>
         {popularRecipes.map((recipe) => (
           <Col md={6} lg={4} xl={3} className="pb-3">
-            <RecipeCard recipe={recipe} star={3.5} />
+            <RecipeCard recipe={recipe} />
           </Col>
         ))}
       </Row>

@@ -1,19 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
-import FirstValue from "../components/createRecipe/firstValue";
-import Ingredients from "../components/createRecipe/ingredients";
-import Steps from "../components/createRecipe/steps";
-import AddImage from "../components/createRecipe/addImage";
+import FirstValue from "../../components/createRecipe/firstValue";
+import Ingredients from "../../components/createRecipe/ingredients";
+import Steps from "../../components/createRecipe/steps";
+import AddImage from "../../components/createRecipe/addImage";
 import { Formik } from "formik";
 import * as yup from "yup";
+import { getIngredients } from "../../services/ingredients";
+import { postRecipe } from "../../services/recipe";
 
 const Dodaj = () => {
-  const options = [
-    { value: "0", label: "Chocolate" },
-    { value: "1", label: "Strawberry" },
-    { value: "2", label: "Vanilla" },
-  ];
-  // ,[Photo]
+  const [options, setOptions] = useState([]);
+
+  const fetchIngredients = async () => {
+    await getIngredients()
+      .then((res) => {
+        const ingredients = res.map((ingredient: any) => {
+          return { label: ingredient.name, value: ingredient.id.toString() };
+        });
+        setOptions(ingredients);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    fetchIngredients();
+  }, []);
+
   const schema = yup.object().shape({
     title: yup.string().required("To pole jest wymagane"),
     recipeType: yup.string().required("To pole jest wymagane"),
@@ -24,7 +39,7 @@ const Dodaj = () => {
       yup.object().shape({
         unit: yup.number().required("To pole jest wymagane"),
         ingredientId: yup.string().required("To pole jest wymagane"),
-        quantity: yup.number().required("To pole jest wymagane"),
+        amount: yup.string().required("To pole jest wymagane"),
       })
     ),
     steps: yup.array().of(
@@ -36,13 +51,52 @@ const Dodaj = () => {
     ),
     photo: yup.object(),
   });
+
+  const onSubmit = async (values: any) => {
+    const productFromRecipes = values.productFromRecipes.map((product: any) => {
+      return {
+        unit: Number(product.unit),
+        amount: Number(product.amount),
+        ingredientId: Number(product.ingredientId),
+      };
+    });
+    const steps = values.steps.map((step: any) => {
+      return {
+        stepNumber: Number(step.stepNumber),
+        description: step.description,
+        photo: "",
+      };
+    });
+
+    const recipe = {
+      title: values.title,
+      level: Number(values.level),
+      time: values.time,
+      people: Number(values.people),
+      photo: "",
+      recipeType: Number(values.recipeType),
+      products: productFromRecipes,
+      steps: steps,
+    };
+
+    console.log(recipe);
+    await postRecipe(recipe)
+      .then((res) => {
+        console.log("tak");
+      })
+      .catch((err) => {
+        console.log("nie");
+        console.log(err);
+      });
+  };
+
   return (
     <div>
       <Container className="py-5 d-flex justify-content-center">
         <Col xs={12} lg={10} xxl={9}>
           <h3 className="bold pb-4">Dodaj przepis</h3>
           <Formik
-            onSubmit={(values) => console.log(values)}
+            onSubmit={(values) => onSubmit(values)}
             validateOnBlur={false}
             validateOnChange={false}
             validationSchema={schema}
@@ -53,9 +107,9 @@ const Dodaj = () => {
               people: "",
               time: "",
               productFromRecipes: [
-                { unit: "", ingredientId: "", quantity: "" },
-                { unit: "", ingredientId: "", quantity: "" },
-                { unit: "", ingredientId: "", quantity: "" },
+                { unit: "", ingredientId: "", amount: "" },
+                { unit: "", ingredientId: "", amount: "" },
+                { unit: "", ingredientId: "", amount: "" },
               ],
               steps: [{ stepNumber: 1, description: "", photo: "" }],
               photo: "",

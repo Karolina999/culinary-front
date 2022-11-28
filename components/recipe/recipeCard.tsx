@@ -10,9 +10,8 @@ import { Level } from "../../frontType/level";
 
 interface RecipeProps {
   recipe: Recipe;
-  star: number;
 }
-const RecipeCard = ({ recipe, star }: RecipeProps) => {
+const RecipeCard = ({ recipe }: RecipeProps) => {
   const [halfStar, setHalfStar] = useState(false);
   const [fillStar, setFillStar] = useState(0);
   const [regStar, setRegStar] = useState(5);

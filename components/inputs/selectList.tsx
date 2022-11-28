@@ -24,14 +24,13 @@ const SelectList = ({
   onChange,
   value,
 }: SelectProps) => {
-  // const formik = useFormikContext();
+  const formik = useFormikContext();
   const [selectedOption, setSelectedOption] = useState(null);
   const [focus, setFocus] = useState(false);
   function handleChange(e: any) {
     setSelectedOption(e?.value);
     name
-      ? // ? formik.setFieldValue(name, e?.value)
-        console.log("add fromik!")
+      ? formik.setFieldValue(name, e?.value)
       : onChange && e
       ? onChange(e.value)
       : onChange("");

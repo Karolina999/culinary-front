@@ -1,5 +1,8 @@
 import React from "react";
 import { Form } from "react-bootstrap";
+import SelectList from "../inputs/selectList";
+import { Category } from "../../frontType/category";
+import { Level } from "../../frontType/level";
 
 interface FirstValueProps {
   handleChange: any;
@@ -25,65 +28,62 @@ const FirstValue = ({ handleChange, values, errors }: FirstValueProps) => {
       </Form.Group>
       <Form.Group className="mb-4">
         <Form.Label className="bold">Kategoria</Form.Label>
-        <Form.Select
+        <SelectList
+          options={Category.map((c, index) => {
+            return { label: c, value: index.toString() };
+          })}
+          placeholder="np. Zupy"
           name="recipeType"
+          error={!!errors.recipeType}
           value={values.recipeType}
-          onChange={handleChange}
-          isInvalid={!!errors.recipeType}
-        >
-          <option value="">Wybierz kategorię</option>
-          <option value="1">Śniadanie</option>
-        </Form.Select>
-        <Form.Control.Feedback type="invalid">
-          {errors.recipeType}
-        </Form.Control.Feedback>
+        />
+        <small className="pt-1 text-danger">{errors.recipeType}</small>
       </Form.Group>
       <Form.Group className="mb-4">
         <Form.Label className="bold">Stopień trudności</Form.Label>
-        <Form.Select
+        <SelectList
+          options={Level.map((c, index) => {
+            return { label: c, value: index.toString() };
+          })}
+          placeholder="np. Ławty"
           name="level"
+          error={!!errors.level}
           value={values.level}
-          onChange={handleChange}
-          isInvalid={!!errors.level}
-        >
-          <option value="">Wybierz stopień trudności</option>
-          <option value="0">Łatwy</option>
-          <option value="1">Średni</option>
-          <option value="2">Trudny</option>
-        </Form.Select>
-        <Form.Control.Feedback type="invalid">
-          {errors.level}
-        </Form.Control.Feedback>
+        />
+        <small className="pt-1 text-danger">{errors.level}</small>
       </Form.Group>
       <Form.Group className="mb-4">
         <Form.Label className="bold">Liczba osób</Form.Label>
-        <Form.Select
+        <SelectList
+          options={[...Array(10)].map((a, index) => {
+            return {
+              label: (index + 1).toString(),
+              value: (index + 1).toString(),
+            };
+          })}
+          placeholder="np. 2"
           name="people"
+          error={!!errors.people}
           value={values.people}
-          onChange={handleChange}
-          isInvalid={!!errors.people}
-        >
-          <option value="">Wybierz liczbę osób</option>
-          <option value="1">1</option>
-        </Form.Select>
-        <Form.Control.Feedback type="invalid">
-          {errors.people}
-        </Form.Control.Feedback>
+        />
+        <small className="pt-1 text-danger">{errors.people}</small>
       </Form.Group>
       <Form.Group className="mb-4">
         <Form.Label className="bold">Czas przygotowania</Form.Label>
-        <Form.Select
+        <SelectList
+          options={[
+            { label: "15 min", value: "15 min" },
+            { label: "30 min", value: "30 min" },
+            { label: "45 min", value: "45 min" },
+            { label: "60 min", value: "60 min" },
+            { label: "90 min", value: "90 min" },
+          ]}
+          placeholder="np. 15 min"
           name="time"
+          error={!!errors.time}
           value={values.time}
-          onChange={handleChange}
-          isInvalid={!!errors.time}
-        >
-          <option value="">Wybierz czas przygotowania</option>
-          <option value="0">15 minut</option>
-        </Form.Select>
-        <Form.Control.Feedback type="invalid">
-          {errors.time}
-        </Form.Control.Feedback>
+        />
+        <small className="pt-1 text-danger">{errors.time}</small>
       </Form.Group>
     </div>
   );

@@ -3,6 +3,7 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { BsTrashFill } from "react-icons/bs";
 import SelectList from "../inputs/selectList";
 import { FieldArray, useFormikContext } from "formik";
+import { Unit } from "../../frontType/unit";
 
 interface Option {
   value: string;
@@ -12,7 +13,7 @@ interface Option {
 interface IngredientsProps {
   options: Option[];
   errors: any;
-  values: { unit: string; ingredientId: string; quantity: string }[];
+  values: { unit: string; ingredientId: string; amount: string }[];
   handleChange: any;
 }
 
@@ -42,6 +43,7 @@ const Ingredients = ({
                         error={
                           errors && errors[index] && errors[index].ingredientId
                         }
+                        value={value.ingredientId}
                       />
                       <small className="pt-1 text-danger">
                         {errors && errors[index] && errors[index].ingredientId}
@@ -53,31 +55,27 @@ const Ingredients = ({
                           <Form.Control
                             type="number"
                             placeholder="1"
-                            name={`productFromRecipes.${index}.quantity`}
+                            name={`productFromRecipes.${index}.amount`}
                             min={1}
-                            value={values[index].quantity}
+                            value={values[index].amount}
                             onChange={handleChange}
                             isInvalid={
-                              errors &&
-                              errors[index] &&
-                              !!errors[index].quantity
+                              errors && errors[index] && !!errors[index].amount
                             }
                           />
                         </Col>
                         <Col>
-                          <Form.Select
+                          <SelectList
+                            options={Unit.map((u, index) => {
+                              return { label: u, value: index.toString() };
+                            })}
+                            placeholder="np. litr"
                             name={`productFromRecipes.${index}.unit`}
-                            onChange={(event) => {
-                              const selectName = `productFromRecipes.${index}.unit`;
-                              setFieldValue(selectName, event.target.value);
-                            }}
-                            isInvalid={
+                            error={
                               errors && errors[index] && !!errors[index].unit
                             }
-                          >
-                            <option value="">Default select</option>
-                            <option value={0}>Szczypta</option>
-                          </Form.Select>
+                            value={value.unit}
+                          />
                         </Col>
                         <Col xs="auto">
                           <Button
@@ -104,7 +102,7 @@ const Ingredients = ({
                     insert(values.length + 1, {
                       unit: "",
                       ingredientId: "",
-                      quantity: "",
+                      amount: "",
                     })
                   }
                 >

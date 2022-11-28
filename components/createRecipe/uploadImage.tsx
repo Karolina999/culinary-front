@@ -68,7 +68,7 @@ const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
                   : "Kliknij lub przeciągnij aby zmienić zdjęcie"}
                 {images.length === 0 ? (
                   <img
-                    src="./recipe.jpg"
+                    src="../recipe.jpg"
                     alt=""
                     style={{
                       height: "250px",
@@ -122,7 +122,7 @@ const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
       <div className="mt-1">
         <Form.Text>
           Możesz dodać zdjęcie w formacie:
-          <strong>.png .jpg .jpeg .bpm</strong>
+          <strong> .png .jpg .jpeg .bpm</strong>
           {/* o maksymalnym rozmiarze{" "} <strong>5 MB</strong> */}
         </Form.Text>
       </div>
