@@ -76,6 +76,7 @@ body {
 }
 
 .selectStyle {
+  background-color: white;
   display: flex;
   border: 1px solid #cccccc;
   border-radius: 7px;

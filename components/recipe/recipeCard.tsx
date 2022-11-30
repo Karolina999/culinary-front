@@ -35,7 +35,6 @@ const RecipeCard = ({ recipe }: RecipeProps) => {
     }
     fetchRating();
   }, []);
-  console.log(fillStar);
 
   return (
     <div
