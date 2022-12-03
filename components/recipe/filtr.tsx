@@ -1,32 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import MultipleSelect from "../inputs/multipleSelect";
 import { Category } from "../../frontType/category";
 import { Level } from "../../frontType/level";
 import { BsSearch } from "react-icons/bs";
+import { Divider } from "primereact/divider";
+import Image from "next/image";
 
 interface FiltrProps {
   setCategories: any;
   setLevels: any;
   setPeople: any;
+  searchTitle?: string;
 }
 
-const Filtr = ({ setCategories, setLevels, setPeople }: FiltrProps) => {
+const Filtr = ({
+  setCategories,
+  setLevels,
+  setPeople,
+  searchTitle,
+}: FiltrProps) => {
+  const [title, setTitle] = useState(searchTitle ? searchTitle : "");
   return (
-    <div className="rounded p-5" style={{ background: "#F6F6F6" }}>
+    <div>
       <Container>
-        <h3 className="pb-3 text-center ">
-          Wyszukaj przepis z{" "}
-          <span className="caladea-font bold">Daily Cooking</span>{" "}
-        </h3>
+        <Divider align="center" className="mt-0">
+          <div className="d-flex">
+            <img
+              src="/spirals.png"
+              style={{ width: "50px", height: "50px", opacity: "0.2" }}
+            />
+            <h3 className="pt-2 px-2">
+              Wyszukaj przepis z{" "}
+              <span className="caladea-font bold">Daily Cooking</span>{" "}
+            </h3>
+            <img
+              src="/spirals.png"
+              style={{
+                width: "50px",
+                height: "50px",
+                opacity: "0.2",
+                transform: "scaleX(-1)",
+              }}
+            />
+          </div>
+        </Divider>
         <Row>
           <InputGroup>
             <Form.Control
               placeholder="Wyszukaj potrawy..."
               name="title"
               size="lg"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  window.location.href = `/przepisy/szukaj/${title}`;
+                }
+              }}
             />
-            <Button size="lg" variant="success">
+            <Button
+              size="lg"
+              variant="success"
+              onClick={() => {
+                window.location.href = `/przepisy/szukaj/${title}`;
+              }}
+            >
               <BsSearch style={{ fontSize: "25px" }} />
             </Button>
           </InputGroup>

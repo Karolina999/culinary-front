@@ -25,6 +25,16 @@ const MultipleSelect = ({
       display: "flex",
       width: "100%",
     }),
+    multiValue: (styles: any) => ({
+      ...styles,
+      borderRadius: "8px",
+      backgroundColor: "transparent",
+      border: "1px solid #157347",
+    }),
+    multiValueRemove: (styles: any) => ({
+      ...styles,
+      borderRadius: "0px 7px 7px 0px",
+    }),
   };
   return (
     <div>
@@ -42,9 +52,6 @@ const MultipleSelect = ({
             })
           )
         }
-        //   value={value || value === 0 ? options.filter((o) => o.value == value) : null}
-        //   defaultValue={selectedOption}
-        //   onChange={handleChange}
         onBlur={() => setFocus(false)}
         onFocus={() => setFocus(true)}
         styles={style}

@@ -74,12 +74,12 @@ const RecipeCard = ({ recipe }: RecipeProps) => {
           className="d-flex text-warning px-2"
           style={{ alignItems: "start" }}
         >
-          {[...Array(fillStar)].map((x) => (
-            <FaStar style={{ fontSize: "18px" }} />
+          {[...Array(fillStar)].map((x, index) => (
+            <FaStar style={{ fontSize: "18px" }} key={index} />
           ))}
           {halfStar && <FaStarHalfAlt style={{ fontSize: "18px" }} />}
-          {[...Array(regStar)].map((x) => (
-            <FaRegStar style={{ fontSize: "18px" }} />
+          {[...Array(regStar)].map((x, index) => (
+            <FaRegStar style={{ fontSize: "18px" }} key={index} />
           ))}
           <p className="ps-2 text-dark" style={{ fontSize: "14px" }}>
             {rating}/5 z {numberOfReviews} recenzji
