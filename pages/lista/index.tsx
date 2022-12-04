@@ -5,19 +5,19 @@ import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import { Toolbar } from "primereact/toolbar";
 import { InputText } from "primereact/inputtext";
-import { getUserShoppingLists } from "../services/user";
+import { getUserShoppingLists } from "../../services/user";
 import {
   deleteShoppingList,
   deleteShoppingLists,
   postShoppingList,
   putShoppingList,
-} from "../services/shoppingList";
-import DeleteListsDialog from "../components/shoppingLists/deleteListsDialog";
-import DeleteListDialog from "../components/shoppingLists/deleteListDialog";
-import AddOrEditListDialog from "../components/shoppingLists/addOrEditListDialog";
-import ListsDataTable from "../components/shoppingLists/listsDataTable";
+} from "../../services/shoppingList";
+import DeleteListsDialog from "../../components/shoppingLists/deleteListsDialog";
+import DeleteListDialog from "../../components/shoppingLists/deleteListDialog";
+import AddOrEditListDialog from "../../components/shoppingLists/addOrEditListDialog";
+import ListsDataTable from "../../components/shoppingLists/listsDataTable";
 import router from "next/router";
-import { ShoppingListDto } from "../types";
+import { ShoppingListDto } from "../../types";
 import { BreadCrumb } from "primereact/breadcrumb";
 
 const Listy = () => {
