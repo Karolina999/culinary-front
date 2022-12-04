@@ -1,6 +1,6 @@
 import React from "react";
-import RecipeComponent from "../components/recipe/recipe";
-import Comments from "../components/comment/comments";
+import RecipeComponent from "../../components/recipe/recipe";
+import Comments from "../../components/comment/comments";
 import {
   ProductFromRecipe,
   RatingDto,
@@ -8,7 +8,7 @@ import {
   Step,
   User,
   UserComment,
-} from "../types";
+} from "../../types";
 
 interface ShowRecipeProps {
   recipe: Recipe;

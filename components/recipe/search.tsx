@@ -9,7 +9,7 @@ const Search = ({ recipes, title }: { recipes: Recipe[]; title?: string }) => {
   const [filtrRecipes, setFiltrRecipes] = useState<Recipe[]>([]);
   const [paginationRecipes, setPaginationRecipes] = useState<Recipe[]>([]);
   const [basicFirst, setBasicFirst] = useState(0);
-  const [basicRows, setBasicRows] = useState(2);
+  const [basicRows, setBasicRows] = useState(16);
 
   const [categories, setCategories] = useState<string[]>([]);
   const [levels, setLevels] = useState<string[]>([]);
@@ -86,7 +86,7 @@ const Search = ({ recipes, title }: { recipes: Recipe[]; title?: string }) => {
         />
       </Row>
 
-      <Container>
+      <Container className="pt-4">
         {filtrRecipes.length > 0 ? (
           <Row>
             {paginationRecipes.map((recipe, index) => (
@@ -104,7 +104,7 @@ const Search = ({ recipes, title }: { recipes: Recipe[]; title?: string }) => {
             rows={basicRows}
             totalRecords={filtrRecipes.length}
             template={template}
-            rowsPerPageOptions={[2, 16, 32, 64]}
+            rowsPerPageOptions={[16, 32, 64]}
             onPageChange={onBasicPageChange}
           />
         </Row>

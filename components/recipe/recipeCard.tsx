@@ -38,7 +38,9 @@ const RecipeCard = ({ recipe }: RecipeProps) => {
 
   return (
     <div
-      onClick={() => router.push(`/${recipe.id}`, "", { scroll: true })}
+      onClick={() =>
+        router.push(`/przepisy/${recipe.id}`, "", { scroll: true })
+      }
       className="cursor-pointer"
     >
       <div style={{ width: "250px" }} className="mx-auto caladea-font shadow ">

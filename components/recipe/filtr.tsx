@@ -30,7 +30,7 @@ const Filtr = ({
               src="/spirals.png"
               style={{ width: "50px", height: "50px", opacity: "0.2" }}
             />
-            <h3 className="pt-2 px-2">
+            <h3 className="pt-2 px-2 text-center">
               Wyszukaj przepis z{" "}
               <span className="caladea-font bold">Daily Cooking</span>{" "}
             </h3>
@@ -112,6 +112,7 @@ const Filtr = ({
             </Form.Group>
           </Col>
         </Row>
+        <Divider className="mb-0 mt-5 "></Divider>
       </Container>
     </div>
   );
