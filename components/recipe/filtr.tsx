@@ -28,7 +28,7 @@ const Filtr = ({
           <div className="d-flex">
             <img
               src="/spirals.png"
-              style={{ width: "50px", height: "50px", opacity: "0.2" }}
+              style={{ width: "50px", height: "50px", opacity: "0.16" }}
             />
             <h3 className="pt-2 px-2 text-center">
               Wyszukaj przepis z{" "}
@@ -70,7 +70,7 @@ const Filtr = ({
             </Button>
           </InputGroup>
         </Row>
-        <h5 className="bold pt-3 mb-0">Filtry</h5>
+        <h5 className="pt-3 mb-0">Filtry</h5>
         <Row>
           <Col xs={12} xl={6} className="pt-2">
             <Form.Group>
