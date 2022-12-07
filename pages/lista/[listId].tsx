@@ -419,7 +419,7 @@ const Lista = ({ listId }: ListaProps) => {
           <div className="card p-3 h93">
             <BreadCrumb
               model={[
-                { label: "Listy zakupów", url: "/listy" },
+                { label: "Listy zakupów", url: "/lista" },
                 { label: `${list ? list.title : "Lista zakupów"}`, url: "" },
               ]}
               home={{ icon: "pi pi-home", url: "/" }}

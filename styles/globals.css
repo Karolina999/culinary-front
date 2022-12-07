@@ -105,6 +105,8 @@ body {
 }
 
 .mypanel .p-panel-content {
-  background-color: red !important;
-  display: none
+  display: none;
+}
+.mypanel2 .p-panel-content {
+  padding: 0;
 }
