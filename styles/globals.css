@@ -103,3 +103,8 @@ body {
     min-height: 93vh;
   }
 }
+
+.mypanel .p-panel-content {
+  background-color: red !important;
+  display: none
+}
