@@ -5,8 +5,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface ShoppingListDto {
-  id?: number;
-  title?: string | null;
-  userId?: number;
-}
+export type GetApiRecipeIncludesParams = { title?: string };

@@ -5,18 +5,14 @@
  * OpenAPI spec version: 1.0
  */
 
-export type RecipeType = typeof RecipeType[keyof typeof RecipeType];
+export type MealTypes = typeof MealTypes[keyof typeof MealTypes];
 
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
-export const RecipeType = {
+export const MealTypes = {
   '0': 0,
   '1': 1,
   '2': 2,
   '3': 3,
   '4': 4,
-  '5': 5,
-  '6': 6,
-  '7': 7,
-  '8': 8,
 } as const;

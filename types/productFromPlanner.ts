@@ -7,11 +7,14 @@
 import type { Unit } from './unit';
 import type { Ingredient } from './ingredient';
 import type { Planner } from './planner';
+import type { MealTypes } from './mealTypes';
 
 export interface ProductFromPlanner {
   id?: number;
   unit?: Unit;
   amount?: number;
+  ingredientId?: number;
   ingredient?: Ingredient;
   planner?: Planner;
+  mealType?: MealTypes;
 }

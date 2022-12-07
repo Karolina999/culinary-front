@@ -9,5 +9,6 @@ import type { User } from './user';
 export interface ShoppingList {
   id?: number;
   title?: string | null;
+  userId?: number;
   user?: User;
 }

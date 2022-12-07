@@ -5,11 +5,10 @@
  * OpenAPI spec version: 1.0
  */
 import type { Unit } from './unit';
-import type { MealTypes } from './mealTypes';
 
-export interface ProductFromPlannerDto {
+export interface ProductFromRecipeCreateDto {
   id?: number;
   unit?: Unit;
   amount?: number;
-  mealType?: MealTypes;
+  ingredientId?: number;
 }
