@@ -5,3 +5,11 @@ export const postRecipe = (data: any) => {
     (res) => res.body
   );
 };
+
+export const getRecipe = () => {
+  return http({ method: "GET", url: "/Recipe" }).then((res) => res.data);
+};
+
+export const getPopularRecipe = () => {
+  return http({ method: "GET", url: "/Recipe" }).then((res) => res.data);
+};

@@ -108,5 +108,20 @@ body {
   display: none;
 }
 .mypanel2 .p-panel-content {
-  padding: 0;
+  padding: 0 !important;
+}
+
+.custom .p-scrollpanel-bar {
+  background-color: #b7b7b788 !important;
+  opacity: 0.8 !important;
+  transition: background-color .3s !important;
+}
+
+.custom .p-scrollpanel-bar:hover {
+  background-color: #b7b7b7 !important;
+  opacity: 0.8 !important;
+}
+
+.p-tabview-selected * {
+  color: #107e71 !important;
 }

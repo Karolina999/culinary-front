@@ -1,16 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Card, Container, Spinner } from "react-bootstrap";
 import { Button } from "primereact/button";
 import { Panel } from "primereact/panel";
 import { Ripple } from "primereact/ripple";
 import { GetPlannerDto, GetProductFromPlannerDto, Recipe } from "../../types";
-import { getPlanner } from "../../services/planner";
+import { deletePlanner, getPlanner, postPlanner } from "../../services/planner";
 import Products from "../../components/planner/products";
 import Meals from "../../components/planner/melas";
 import { Toolbar } from "primereact/toolbar";
 import { Calendar } from "primereact/calendar";
 import { addLocale } from "primereact/api";
 import { Dialog } from "primereact/dialog";
+import { template } from "../../components/planner/template";
+import { Toast } from "primereact/toast";
+import AddDialog from "../../components/planner/addDialog";
+import { postPlannerRecipe } from "../../services/plannerRecipe";
 
 const Index = () => {
   const mealType = [
@@ -20,28 +24,104 @@ const Index = () => {
     "Przekąska",
     "Kolacja",
   ];
+  const toast = useRef<any>(null);
   const [loading, setLoading] = useState(true);
   const [date, setDate] = useState<Date>(new Date());
-  const [isOpen, setIsOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [mealTypeAdd, setMealTypeAdd] = useState(-1);
   const [planner, setPlanner] = useState<GetPlannerDto | undefined | null>(
     undefined
   );
   const [plannerMeals, setPlannerMeals] = useState<
-    { type: number; recipes: any[] | undefined }[]
-  >([]);
+    { type: number; recipes: any[] | undefined }[] | undefined
+  >(undefined);
   const [plannerProducts, setPlannerProducts] = useState<
-    { type: number; products: GetProductFromPlannerDto[] | undefined }[]
-  >([]);
+    | { type: number; products: GetProductFromPlannerDto[] | undefined }[]
+    | undefined
+  >(undefined);
 
   const fetchPlanner = async () => {
     await getPlanner(date.toJSON().slice(0, 10))
       .then((res) => {
-        console.log("res");
-        console.log(res);
         setPlanner(res);
       })
       .catch((err) => {
         setPlanner(undefined);
+      });
+  };
+
+  const addPlanner = async () => {
+    setLoading(true);
+    const postDate = {
+      date: date.toJSON().slice(0, 10),
+    };
+    await postPlanner(postDate)
+      .then(async (res) => {
+        await fetchPlanner();
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Planner został dodany",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Planner nie został dodany",
+          life: 3000,
+        });
+      });
+    setLoading(false);
+  };
+
+  const delPlanner = async () => {
+    setLoading(true);
+    await deletePlanner(planner?.id!)
+      .then(async (res) => {
+        await fetchPlanner();
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Planner został usunięty",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Planner nie został usunięty",
+          life: 3000,
+        });
+      });
+    setLoading(false);
+  };
+
+  const addMeal = async (
+    recipeId: number,
+    plannerId: number,
+    mealType: number
+  ) => {
+    await postPlannerRecipe(recipeId, plannerId, mealType)
+      .then(async (res) => {
+        await fetchPlanner();
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Posiłek został dodany",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Posiłek nie został dodany",
+          life: 3000,
+        });
       });
   };
 
@@ -58,7 +138,6 @@ const Index = () => {
 
   useEffect(() => {
     setLoading(true);
-    console.log("ue");
     if (planner) {
       const filtrMeals = mealType.map((mealType, index) => {
         const type = index;
@@ -80,45 +159,6 @@ const Index = () => {
     setLoading(false);
   }, [planner]);
 
-  const template = (
-    options: any,
-    mealName: string,
-    toggle: boolean,
-    mealsLength: number | undefined,
-    productsLength: number | undefined
-  ) => {
-    const toggleIcon = options.collapsed
-      ? "pi pi-chevron-down text-dark"
-      : "pi pi-chevron-up text-dark";
-    const className = `${options.className} justify-content-between`;
-    const titleClassName = `${options.titleClassName} pl-1`;
-
-    return (
-      <div className={className}>
-        <div onClick={options.onTogglerClick} className="cursor-pointer w-100">
-          <div onClick={options.onTogglerClick} className="d-flex">
-            <span className={`${titleClassName} my-2`}>{mealName}</span>
-            <div className={options.togglerClassName}>
-              {toggle && <span className={toggleIcon}></span>}
-              <Ripple />
-            </div>
-          </div>
-          <small className="text-secondary d-flex">
-            <div className="pe-2">przepisy: {mealsLength}</div>
-            <div>produtkty: {productsLength}</div>
-          </small>
-        </div>
-        <div>
-          <Button
-            icon="pi pi-plus"
-            className="p-button-rounded p-button-success bg-success border-success"
-            style={{ width: "40px", height: "40px" }}
-          />
-        </div>
-      </div>
-    );
-  };
-
   const rightToolbarTemplate = () => {
     return (
       <React.Fragment>
@@ -127,7 +167,7 @@ const Index = () => {
             <Button
               icon="pi pi-calendar"
               className="p-button-warning"
-              onClick={() => setIsOpen(true)}
+              onClick={() => setIsCalendarOpen(true)}
             />
           </div>
           <div>
@@ -135,6 +175,7 @@ const Index = () => {
               icon="pi pi-trash"
               className="p-button-danger bg-danger border-danger"
               disabled={!planner}
+              onClick={() => delPlanner()}
             />
           </div>
         </div>
@@ -195,6 +236,7 @@ const Index = () => {
 
   return (
     <Container className="py-5" style={{ minHeight: "92vh" }}>
+      <Toast ref={toast} />
       <Toolbar
         className="mb-3"
         left={
@@ -239,24 +281,36 @@ const Index = () => {
                   template(
                     e,
                     mealType,
-                    plannerMeals[index].recipes?.length !== 0 ||
-                      plannerProducts[index].products?.length !== 0,
-                    plannerMeals[index].recipes?.length,
-                    plannerProducts[index].products?.length
+                    (plannerMeals &&
+                      plannerMeals[index].recipes?.length !== 0) ||
+                      (plannerProducts &&
+                        plannerProducts[index].products?.length !== 0)
+                      ? true
+                      : false,
+                    plannerMeals ? plannerMeals[index].recipes?.length : 0,
+                    plannerProducts
+                      ? plannerProducts[index].products?.length
+                      : 0,
+                    setIsAddOpen,
+                    setMealTypeAdd,
+                    index
                   )
                 }
                 collapsed={true}
                 toggleable
                 className={`py-1 mypanel2 ${
+                  plannerMeals &&
                   plannerMeals[index].recipes?.length === 0 &&
+                  plannerProducts &&
                   plannerProducts[index].products?.length === 0 &&
                   "mypanel"
                 }`}
               >
-                {plannerProducts[index].products?.length !== 0 && (
-                  <Products products={plannerProducts[index].products} />
-                )}
-                {plannerMeals[index].recipes?.length !== 0 && (
+                {plannerProducts &&
+                  plannerProducts[index].products?.length !== 0 && (
+                    <Products products={plannerProducts[index].products} />
+                  )}
+                {plannerMeals && plannerMeals[index].recipes?.length !== 0 && (
                   <Meals recipes={plannerMeals[index].recipes} />
                 )}
               </Panel>
@@ -272,14 +326,15 @@ const Index = () => {
                 label="Dodaj planner"
                 icon="pi pi-plus"
                 className="p-button-success bg-success border-success"
+                onClick={() => addPlanner()}
               />
             </>
           }
         ></Toolbar>
       )}
       <Dialog
-        visible={isOpen}
-        onHide={() => setIsOpen(false)}
+        visible={isCalendarOpen}
+        onHide={() => setIsCalendarOpen(false)}
         closable={false}
         dismissableMask
         headerStyle={{ backgroundColor: "transparent", padding: "0" }}
@@ -289,14 +344,21 @@ const Index = () => {
           value={date}
           onChange={(e) => {
             let calendarDate = new Date(e.value);
-            calendarDate.setMinutes(e.value.getMinutes() + 90);
+            calendarDate.setMinutes(calendarDate.getMinutes() + 90);
             setDate(calendarDate);
-            setIsOpen(false);
+            setIsCalendarOpen(false);
           }}
           inline
           locale="pl"
         />
       </Dialog>
+      <AddDialog
+        isOpen={isAddOpen}
+        setIsOpen={setIsAddOpen}
+        plannerId={planner?.id!}
+        mealType={mealTypeAdd}
+        addMeal={addMeal}
+      />
     </Container>
   );
 };
