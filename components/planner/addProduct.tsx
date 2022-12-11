@@ -4,15 +4,17 @@ import * as yup from "yup";
 import { Form } from "react-bootstrap";
 import SelectList from "../inputs/selectList";
 import { getIngredients } from "../../services/ingredients";
-import { IngredientDto } from "../../types";
+import { GetProductFromPlannerDto, IngredientDto } from "../../types";
 import { Unit } from "../../frontType/unit";
 import { Button } from "primereact/button";
 
 interface AddProductProps {
   setIsOpen: any;
-  plannerId: number;
+  plannerId?: number;
   mealType: number;
-  addProduct: any;
+  addProduct?: any;
+  editProduct?: any;
+  product?: GetProductFromPlannerDto;
 }
 
 const AddProduct = ({
@@ -20,6 +22,8 @@ const AddProduct = ({
   plannerId,
   mealType,
   addProduct,
+  editProduct,
+  product,
 }: AddProductProps) => {
   const [ingredients, setIngredients] = useState<
     { label: string; value: string }[]
@@ -58,13 +62,18 @@ const AddProduct = ({
             amount: Number(values.amount),
             mealType: mealType,
           };
-          addProduct(Number(values.ingredientId), plannerId, data);
+          product
+            ? editProduct(product.id, Number(values.ingredientId), {
+                ...data,
+                id: product.id,
+              })
+            : addProduct(Number(values.ingredientId), plannerId, data);
           setIsOpen(false);
         }}
         initialValues={{
-          ingredientId: "",
-          unit: "",
-          amount: "",
+          ingredientId: product ? product?.ingredientId?.toString() : "",
+          unit: product ? product?.unit?.toString() : "",
+          amount: product ? product?.amount?.toString() : "",
         }}
       >
         {({ handleSubmit, values, errors, handleChange }) => (

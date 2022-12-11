@@ -18,7 +18,13 @@ import {
   deletePlannerRecipe,
   postPlannerRecipe,
 } from "../../services/plannerRecipe";
-import { postProductFromPlanner } from "../../services/productFromPlanner";
+import {
+  deleteProductFromPlanner,
+  postProductFromPlanner,
+  putProductFromPlanner,
+} from "../../services/productFromPlanner";
+import EditDialog from "../../components/planner/editDialog";
+import styles from "../../styles/planner.module.css";
 
 const Index = () => {
   const mealType = [
@@ -33,6 +39,7 @@ const Index = () => {
   const [date, setDate] = useState<Date>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [mealTypeAdd, setMealTypeAdd] = useState(-1);
   const [planner, setPlanner] = useState<GetPlannerDto | undefined | null>(
     undefined
@@ -44,6 +51,7 @@ const Index = () => {
     | { type: number; products: GetProductFromPlannerDto[] | undefined }[]
     | undefined
   >(undefined);
+  const [productToEdit, setProductToEdit] = useState<any>(null);
 
   const fetchPlanner = async () => {
     await getPlanner(date.toJSON().slice(0, 10))
@@ -103,6 +111,31 @@ const Index = () => {
         });
       });
     setLoading(false);
+  };
+
+  const editProduct = async (
+    productId: number,
+    ingredientId: number,
+    data: any
+  ) => {
+    await putProductFromPlanner(productId, ingredientId, data)
+      .then(async (res) => {
+        await fetchPlanner();
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Produkt został zedytowany",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Produkt nie został zedytowany",
+          life: 3000,
+        });
+      });
   };
 
   const addProduct = async (
@@ -171,6 +204,27 @@ const Index = () => {
           severity: "error",
           summary: "Błąd",
           detail: "Posiłek nie został usunięty",
+          life: 3000,
+        });
+      });
+  };
+
+  const delProduct = async (productId: number) => {
+    await deleteProductFromPlanner(productId)
+      .then(async (res) => {
+        await fetchPlanner();
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Produkt został usunięty",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Produkt nie został usunięty",
           life: 3000,
         });
       });
@@ -285,138 +339,157 @@ const Index = () => {
   };
 
   return (
-    <Container className="py-5" style={{ minHeight: "92vh" }}>
-      <Toast ref={toast} />
-      <Toolbar
-        className="mb-3"
-        left={
-          <div className="d-flex align-items-center">
-            <Button
-              icon="pi pi-chevron-left"
-              className="p-button-rounded p-button-text p-button-plain p-button-sm"
-              onClick={() => changeDate(-1)}
-            />
-            <span className="mx-2 bold">
-              {date.toLocaleDateString("pl-PL", {
-                weekday: "long",
-                year: "numeric",
-                month: "long",
-                day: "numeric",
+    <div className={`${styles.background}`}>
+      <Container className="py-5" style={{ minHeight: "92vh" }}>
+        <div className={`rounded p-4 ${styles.cardColor}`}>
+          <Toast ref={toast} />
+          <Toolbar
+            className="mb-3"
+            left={
+              <div className="d-flex align-items-center">
+                <Button
+                  icon="pi pi-chevron-left"
+                  className="p-button-rounded p-button-text p-button-plain p-button-sm"
+                  onClick={() => changeDate(-1)}
+                />
+                <span
+                  className="mx-2 bold cursor-pointer"
+                  onClick={() => setIsCalendarOpen(true)}
+                >
+                  {date.toLocaleDateString("pl-PL", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+                <Button
+                  icon="pi pi-chevron-right"
+                  className="p-button-rounded p-button-text p-button-plain p-button-sm"
+                  onClick={() => changeDate(1)}
+                />
+              </div>
+            }
+            right={rightToolbarTemplate}
+          />
+          {loading ? (
+            <div className="d-flex">
+              <Spinner
+                animation="border"
+                variant="success"
+                className="mx-auto my-5"
+              />
+            </div>
+          ) : planner ? (
+            <>
+              {mealType.map((mealType, index) => {
+                return (
+                  <Panel
+                    key={index}
+                    headerTemplate={(e) =>
+                      template(
+                        e,
+                        mealType,
+                        (plannerMeals &&
+                          plannerMeals[index].plannerRecipes?.length !== 0) ||
+                          (plannerProducts &&
+                            plannerProducts[index].products?.length !== 0)
+                          ? true
+                          : false,
+                        plannerMeals
+                          ? plannerMeals[index].plannerRecipes?.length
+                          : 0,
+                        plannerProducts
+                          ? plannerProducts[index].products?.length
+                          : 0,
+                        setIsAddOpen,
+                        setMealTypeAdd,
+                        index
+                      )
+                    }
+                    collapsed={true}
+                    toggleable
+                    className={`py-1 mypanel2 ${
+                      plannerMeals &&
+                      plannerMeals[index].plannerRecipes?.length === 0 &&
+                      plannerProducts &&
+                      plannerProducts[index].products?.length === 0 &&
+                      "mypanel"
+                    }`}
+                  >
+                    {plannerProducts &&
+                      plannerProducts[index].products?.length !== 0 && (
+                        <Products
+                          products={plannerProducts[index].products}
+                          setIsOpen={setIsEditOpen}
+                          setProductToEdit={setProductToEdit}
+                          delProduct={delProduct}
+                        />
+                      )}
+                    {plannerMeals &&
+                      plannerMeals[index].plannerRecipes?.length !== 0 && (
+                        <Meals
+                          plannerRecipes={plannerMeals[index].plannerRecipes}
+                          delMeal={delMeal}
+                        />
+                      )}
+                  </Panel>
+                );
               })}
-            </span>
-            <Button
-              icon="pi pi-chevron-right"
-              className="p-button-rounded p-button-text p-button-plain p-button-sm"
-              onClick={() => changeDate(1)}
+            </>
+          ) : (
+            <Toolbar
+              className="p-5 d-flex justify-content-center"
+              left={
+                <>
+                  <Button
+                    label="Dodaj planner"
+                    icon="pi pi-plus"
+                    className="p-button-success bg-success border-success"
+                    onClick={() => addPlanner()}
+                  />
+                </>
+              }
+            ></Toolbar>
+          )}
+          <Dialog
+            visible={isCalendarOpen}
+            onHide={() => setIsCalendarOpen(false)}
+            closable={false}
+            dismissableMask
+            headerStyle={{ backgroundColor: "transparent", padding: "0" }}
+            contentStyle={{ backgroundColor: "transparent", padding: "0" }}
+          >
+            <Calendar
+              value={date}
+              onChange={(e) => {
+                let calendarDate = new Date(e.value);
+                calendarDate.setMinutes(calendarDate.getMinutes() + 90);
+                setDate(calendarDate);
+                setIsCalendarOpen(false);
+              }}
+              inline
+              locale="pl"
             />
-          </div>
-        }
-        right={rightToolbarTemplate}
-      />
-      {loading ? (
-        <div className="d-flex">
-          <Spinner
-            animation="border"
-            variant="success"
-            className="mx-auto my-5"
+          </Dialog>
+          <AddDialog
+            isOpen={isAddOpen}
+            setIsOpen={setIsAddOpen}
+            plannerId={planner?.id!}
+            mealType={mealTypeAdd}
+            addMeal={addMeal}
+            addProduct={addProduct}
+          />
+          <EditDialog
+            isOpen={isEditOpen}
+            setIsOpen={setIsEditOpen}
+            plannerId={planner?.id!}
+            editProduct={editProduct}
+            product={productToEdit}
           />
         </div>
-      ) : planner ? (
-        <>
-          {mealType.map((mealType, index) => {
-            return (
-              <Panel
-                key={index}
-                headerTemplate={(e) =>
-                  template(
-                    e,
-                    mealType,
-                    (plannerMeals &&
-                      plannerMeals[index].plannerRecipes?.length !== 0) ||
-                      (plannerProducts &&
-                        plannerProducts[index].products?.length !== 0)
-                      ? true
-                      : false,
-                    plannerMeals
-                      ? plannerMeals[index].plannerRecipes?.length
-                      : 0,
-                    plannerProducts
-                      ? plannerProducts[index].products?.length
-                      : 0,
-                    setIsAddOpen,
-                    setMealTypeAdd,
-                    index
-                  )
-                }
-                collapsed={true}
-                toggleable
-                className={`py-1 mypanel2 ${
-                  plannerMeals &&
-                  plannerMeals[index].plannerRecipes?.length === 0 &&
-                  plannerProducts &&
-                  plannerProducts[index].products?.length === 0 &&
-                  "mypanel"
-                }`}
-              >
-                {plannerProducts &&
-                  plannerProducts[index].products?.length !== 0 && (
-                    <Products products={plannerProducts[index].products} />
-                  )}
-                {plannerMeals &&
-                  plannerMeals[index].plannerRecipes?.length !== 0 && (
-                    <Meals
-                      plannerRecipes={plannerMeals[index].plannerRecipes}
-                      delMeal={delMeal}
-                    />
-                  )}
-              </Panel>
-            );
-          })}
-        </>
-      ) : (
-        <Toolbar
-          className="p-5 d-flex justify-content-center"
-          left={
-            <>
-              <Button
-                label="Dodaj planner"
-                icon="pi pi-plus"
-                className="p-button-success bg-success border-success"
-                onClick={() => addPlanner()}
-              />
-            </>
-          }
-        ></Toolbar>
-      )}
-      <Dialog
-        visible={isCalendarOpen}
-        onHide={() => setIsCalendarOpen(false)}
-        closable={false}
-        dismissableMask
-        headerStyle={{ backgroundColor: "transparent", padding: "0" }}
-        contentStyle={{ backgroundColor: "transparent", padding: "0" }}
-      >
-        <Calendar
-          value={date}
-          onChange={(e) => {
-            let calendarDate = new Date(e.value);
-            calendarDate.setMinutes(calendarDate.getMinutes() + 90);
-            setDate(calendarDate);
-            setIsCalendarOpen(false);
-          }}
-          inline
-          locale="pl"
-        />
-      </Dialog>
-      <AddDialog
-        isOpen={isAddOpen}
-        setIsOpen={setIsAddOpen}
-        plannerId={planner?.id!}
-        mealType={mealTypeAdd}
-        addMeal={addMeal}
-        addProduct={addProduct}
-      />
-    </Container>
+      </Container>
+    </div>
   );
 };
 

@@ -44,14 +44,13 @@ const Melas = ({ plannerRecipes, delMeal }: MealsProps) => {
       </React.Fragment>
     );
   };
-  console.log(plannerRecipes);
   return (
     <>
       <DataTable value={plannerRecipes} responsiveLayout="scroll">
         <Column
           field="recipe.title"
           body={titleBodyTemplate}
-          header="Przepis"
+          header="Posiłek"
           sortable
           style={{ width: "100%" }}
         ></Column>

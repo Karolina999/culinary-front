@@ -28,7 +28,7 @@ export const template = (
           </div>
         </div>
         <small className="text-secondary d-flex">
-          <div className="pe-2">przepisy: {mealsLength}</div>
+          <div className="pe-2">posiłek: {mealsLength}</div>
           <div>produtkty: {productsLength}</div>
         </small>
       </div>

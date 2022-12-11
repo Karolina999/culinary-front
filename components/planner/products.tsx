@@ -9,9 +9,17 @@ import { Button } from "primereact/button";
 
 interface ProductsProps {
   products: GetProductFromPlannerDto[] | undefined;
+  setIsOpen: any;
+  setProductToEdit: any;
+  delProduct: any;
 }
 
-const Products = ({ products }: ProductsProps) => {
+const Products = ({
+  products,
+  setIsOpen,
+  setProductToEdit,
+  delProduct,
+}: ProductsProps) => {
   const unitBodyTemplate = (rowData: GetProductFromPlannerDto) => {
     const pluar = UnitPluar(rowData.amount!, rowData.unit!);
     return pluar;
@@ -19,7 +27,6 @@ const Products = ({ products }: ProductsProps) => {
   const categoryBodyTemplate = (rowData: GetProductFromPlannerDto) => {
     const category =
       IngredientCategory[rowData?.ingredient?.ingredientCategory!];
-    console.log(category);
     return category;
   };
   const actionBodyTemplate = (rowData: any) => {
@@ -30,10 +37,15 @@ const Products = ({ products }: ProductsProps) => {
             icon="pi pi-pencil"
             className="p-button-rounded p-button-success p-button-text text-success"
             aria-label="Search"
+            onClick={() => {
+              setIsOpen(true);
+              setProductToEdit(rowData);
+            }}
           />
           <Button
             icon="pi pi-times"
             className="p-button-rounded p-button-text p-button-plain"
+            onClick={() => delProduct(rowData.id)}
           />
         </Row>
       </React.Fragment>
@@ -42,7 +54,12 @@ const Products = ({ products }: ProductsProps) => {
   return (
     <>
       <DataTable value={products} responsiveLayout="scroll">
-        <Column field="ingredient.name" header="Produkt" sortable></Column>
+        <Column
+          field="ingredient.name"
+          header="Produkt"
+          sortable
+          style={{ width: "100%" }}
+        ></Column>
         <Column
           field="amount"
           header=""
@@ -66,7 +83,7 @@ const Products = ({ products }: ProductsProps) => {
         <Column
           body={actionBodyTemplate}
           exportable={false}
-          style={{ width: "100%" }}
+          style={{ minWidth: "150px" }}
         ></Column>
       </DataTable>
     </>

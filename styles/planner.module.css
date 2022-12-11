@@ -1,0 +1,14 @@
+@media screen and (min-width: 769px){
+    .background {
+        background: linear-gradient(-10deg, rgb(181, 181, 181) 0%, #ffffff1b 10%), url("../public/background.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        
+    }
+
+    
+}
+.cardColor{
+    background-color: #f1f2f4e0;
+}

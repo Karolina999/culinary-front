@@ -41,7 +41,7 @@ const AddDialog = ({
         <TabPanel
           header={
             <>
-              <TbSoup /> Potrawy
+              <TbSoup /> Posiłek
             </>
           }
         >
