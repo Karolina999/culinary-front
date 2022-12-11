@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
-import { GiCook, GiShoppingCart } from "react-icons/gi";
+import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { GiCook } from "react-icons/gi";
 import { BsSearch } from "react-icons/bs";
 import { CgNotes } from "react-icons/cg";
 
@@ -42,37 +42,82 @@ const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
               transparentNav ? "navTransparentOpen pt-5 mt-1 pb-3 px-2" : ""
             }
           >
-            {/* <Nav.Link href="">More deets</Nav.Link> */}
             <div className="d-lg-flex px-2 pt-4 py-lg-0">
-              <Nav.Link href="" className="d-flex">
-                <GiShoppingCart style={{ fontSize: "30px", color: "white" }} />
-                <p className="px-2 pt-1 text-white d-lg-none">Listy zakupów</p>
+              <Nav.Link href="/lista" className="d-flex">
+                <CgNotes style={{ fontSize: "30px" }} />
+                <p className="px-2 pt-1 d-lg-none">Listy zakupów</p>
               </Nav.Link>
-              <Nav.Link href="" className="d-flex">
-                <CgNotes style={{ fontSize: "30px", color: "white" }} />
-                <p className="px-2 pt-1 text-white d-lg-none">Listy zakupów</p>
+              <Nav.Link href="/przepisy/szukaj" className="d-flex">
+                <BsSearch style={{ fontSize: "25px" }} />
+                <p className="px-2 pt-1 d-lg-none">Znajdź przepis</p>
               </Nav.Link>
-              <Nav.Link href="" className="d-flex">
-                <GiCook style={{ fontSize: "30px", color: "white" }} />
-                <p className="px-2 pt-1 text-white d-lg-none">Moje konto</p>
-              </Nav.Link>
-              <Nav.Link href="" className="d-flex">
-                <BsSearch style={{ fontSize: "25px", color: "white" }} />
-                <p className="px-2 pt-1 text-white d-lg-none">Znajdź przepis</p>
-              </Nav.Link>
-              {user && (
-                <Nav.Link
-                  href="/"
-                  onClick={() => {
-                    localStorage.removeItem("jwt");
-                    localStorage.removeItem("user");
-                  }}
-                >
-                  Wyloguj się
-                </Nav.Link>
-              )}
+
+              <div className="d-lg-none">
+                <hr className="text-light mt-0" />
+                {user ? (
+                  <>
+                    <Nav.Link href="/przepisy/dodaj">Dodaj przepis</Nav.Link>
+                    <Nav.Link href="">Ulubione przepisy</Nav.Link>
+                    <Nav.Link href="/ustawienia">Ustawienia konta</Nav.Link>
+                    <hr className="text-light" />
+                    <Nav.Link
+                      href="/"
+                      onClick={() => {
+                        localStorage.removeItem("jwt");
+                        localStorage.removeItem("user");
+                      }}
+                      className="mb-3"
+                    >
+                      Wyloguj się
+                    </Nav.Link>
+                  </>
+                ) : (
+                  <>
+                    <Nav.Link href="/login">Logowanie</Nav.Link>
+                    <Nav.Link href="/rejestracja">Rejestracja</Nav.Link>
+                  </>
+                )}
+                <hr className="text-light" />
+              </div>
+
+              <NavDropdown
+                className="topbar d-none d-lg-block"
+                title={<GiCook style={{ fontSize: "30px" }} />}
+              >
+                {user ? (
+                  <>
+                    <NavDropdown.Item href="/przepisy/dodaj">
+                      Dodaj przepis
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="">
+                      Ulubione przepisy
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/ustawienia">
+                      Ustawienia konta
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item
+                      href="/"
+                      onClick={() => {
+                        localStorage.removeItem("jwt");
+                        localStorage.removeItem("user");
+                      }}
+                    >
+                      Wyloguj się
+                    </NavDropdown.Item>
+                  </>
+                ) : (
+                  <>
+                    <NavDropdown.Item href="/login">Logowanie</NavDropdown.Item>
+                    <NavDropdown.Item href="/rejestracja">
+                      Rejestracja
+                    </NavDropdown.Item>
+                  </>
+                )}
+              </NavDropdown>
             </div>
             <Button
+              onClick={() => (window.location.href = "/planner")}
               variant="danger"
               style={{ borderRadius: "40px" }}
               className="px-4"

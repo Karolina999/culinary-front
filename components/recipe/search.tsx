@@ -76,7 +76,7 @@ const Search = ({ recipes, title }: { recipes: Recipe[]; title?: string }) => {
   };
 
   return (
-    <div className="py-5" style={{ minHeight: "92vh" }}>
+    <Container className="py-5" style={{ minHeight: "92vh" }}>
       <Row className="pb-5">
         <Filtr
           setCategories={setCategories}
@@ -86,7 +86,7 @@ const Search = ({ recipes, title }: { recipes: Recipe[]; title?: string }) => {
         />
       </Row>
 
-      <Container className="pt-4">
+      <div className="pt-4">
         {filtrRecipes.length > 0 ? (
           <Row>
             {paginationRecipes.map((recipe, index) => (
@@ -108,8 +108,8 @@ const Search = ({ recipes, title }: { recipes: Recipe[]; title?: string }) => {
             onPageChange={onBasicPageChange}
           />
         </Row>
-      </Container>
-    </div>
+      </div>
+    </Container>
   );
 };
 

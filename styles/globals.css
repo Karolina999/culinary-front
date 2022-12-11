@@ -125,3 +125,7 @@ body {
 .p-tabview-selected * {
   color: #107e71 !important;
 }
+
+.topbar .dropdown-toggle::after {
+  display:none;
+}
