@@ -14,7 +14,10 @@ import { Dialog } from "primereact/dialog";
 import { template } from "../../components/planner/template";
 import { Toast } from "primereact/toast";
 import AddDialog from "../../components/planner/addDialog";
-import { postPlannerRecipe } from "../../services/plannerRecipe";
+import {
+  deletePlannerRecipe,
+  postPlannerRecipe,
+} from "../../services/plannerRecipe";
 
 const Index = () => {
   const mealType = [
@@ -34,7 +37,7 @@ const Index = () => {
     undefined
   );
   const [plannerMeals, setPlannerMeals] = useState<
-    { type: number; recipes: any[] | undefined }[] | undefined
+    { type: number; plannerRecipes: any[] | undefined }[] | undefined
   >(undefined);
   const [plannerProducts, setPlannerProducts] = useState<
     | { type: number; products: GetProductFromPlannerDto[] | undefined }[]
@@ -125,6 +128,27 @@ const Index = () => {
       });
   };
 
+  const delMeal = async (plannerRecipeId: number) => {
+    await deletePlannerRecipe(plannerRecipeId)
+      .then(async (res) => {
+        await fetchPlanner();
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Posiłek został usunięty",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Posiłek nie został usunięty",
+          life: 3000,
+        });
+      });
+  };
+
   useEffect(() => {
     setLoading(true);
     fetchPlanner();
@@ -141,10 +165,10 @@ const Index = () => {
     if (planner) {
       const filtrMeals = mealType.map((mealType, index) => {
         const type = index;
-        const recipes = planner?.plannerRecipes
-          ?.filter((pr) => pr.mealType === index)
-          .map((pr) => pr.recipe);
-        return { type, recipes };
+        const plannerRecipes = planner?.plannerRecipes?.filter(
+          (pr) => pr.mealType === index
+        );
+        return { type, plannerRecipes };
       });
       setPlannerMeals(filtrMeals);
 
@@ -282,12 +306,14 @@ const Index = () => {
                     e,
                     mealType,
                     (plannerMeals &&
-                      plannerMeals[index].recipes?.length !== 0) ||
+                      plannerMeals[index].plannerRecipes?.length !== 0) ||
                       (plannerProducts &&
                         plannerProducts[index].products?.length !== 0)
                       ? true
                       : false,
-                    plannerMeals ? plannerMeals[index].recipes?.length : 0,
+                    plannerMeals
+                      ? plannerMeals[index].plannerRecipes?.length
+                      : 0,
                     plannerProducts
                       ? plannerProducts[index].products?.length
                       : 0,
@@ -300,7 +326,7 @@ const Index = () => {
                 toggleable
                 className={`py-1 mypanel2 ${
                   plannerMeals &&
-                  plannerMeals[index].recipes?.length === 0 &&
+                  plannerMeals[index].plannerRecipes?.length === 0 &&
                   plannerProducts &&
                   plannerProducts[index].products?.length === 0 &&
                   "mypanel"
@@ -310,9 +336,13 @@ const Index = () => {
                   plannerProducts[index].products?.length !== 0 && (
                     <Products products={plannerProducts[index].products} />
                   )}
-                {plannerMeals && plannerMeals[index].recipes?.length !== 0 && (
-                  <Meals recipes={plannerMeals[index].recipes} />
-                )}
+                {plannerMeals &&
+                  plannerMeals[index].plannerRecipes?.length !== 0 && (
+                    <Meals
+                      plannerRecipes={plannerMeals[index].plannerRecipes}
+                      delMeal={delMeal}
+                    />
+                  )}
               </Panel>
             );
           })}

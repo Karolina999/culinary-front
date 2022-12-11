@@ -9,6 +9,7 @@ import type { Recipe } from './recipe';
 import type { MealTypes } from './mealTypes';
 
 export interface PlannerRecipe {
+  id?: number;
   plannerId?: number;
   planner?: Planner;
   recipeId?: number;

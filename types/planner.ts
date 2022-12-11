@@ -11,6 +11,7 @@ import type { PlannerRecipe } from './plannerRecipe';
 export interface Planner {
   id?: number;
   date?: string;
+  userId?: number;
   user?: User;
   recipes?: Recipe[] | null;
   plannerRecipes?: PlannerRecipe[] | null;

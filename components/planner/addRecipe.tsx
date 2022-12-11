@@ -117,6 +117,7 @@ const AddRecipe = ({
                           onClick={() =>
                             setFieldValue("recipeId", recipe.id!.toString())
                           }
+                          type="submit"
                         />
                       </div>
                       <hr />

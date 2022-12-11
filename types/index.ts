@@ -1,5 +1,6 @@
 export * from './deleteApiPlannerRecipeParams';
 export * from './deleteApiWatchedRecipeParams';
+export * from './getApiPlannerFromUserParams';
 export * from './getApiPlannerFromUserUserIdParams';
 export * from './getApiRecipeIncludesParams';
 export * from './getPlannerDto';

@@ -5,4 +5,4 @@
  * OpenAPI spec version: 1.0
  */
 
-export type DeleteApiPlannerRecipeParams = { plannerRecipeId?: number };
+export type GetApiPlannerFromUserParams = { date?: string };

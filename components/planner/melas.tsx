@@ -7,11 +7,12 @@ import { Button } from "primereact/button";
 import router from "next/router";
 
 interface MealsProps {
-  recipes: Recipe[] | undefined;
+  plannerRecipes: any;
+  delMeal: any;
 }
 
-const Melas = ({ recipes }: MealsProps) => {
-  const titleBodyTemplate = (rowData: Recipe) => {
+const Melas = ({ plannerRecipes, delMeal }: MealsProps) => {
+  const titleBodyTemplate = (rowData: any) => {
     return (
       <React.Fragment>
         <Row>
@@ -19,10 +20,12 @@ const Melas = ({ recipes }: MealsProps) => {
             className="cursor-pointer"
             style={{ width: "fit-content" }}
             onClick={() =>
-              router.push(`/przepisy/${rowData.id}`, "", { scroll: true })
+              router.push(`/przepisy/${rowData.recipe.id}`, "", {
+                scroll: true,
+              })
             }
           >
-            {rowData.title}
+            {rowData.recipe.title}
           </span>
         </Row>
       </React.Fragment>
@@ -35,16 +38,18 @@ const Melas = ({ recipes }: MealsProps) => {
           <Button
             icon="pi pi-times"
             className="p-button-rounded p-button-text p-button-plain"
+            onClick={() => delMeal(rowData.id)}
           />
         </Row>
       </React.Fragment>
     );
   };
+  console.log(plannerRecipes);
   return (
     <>
-      <DataTable value={recipes} responsiveLayout="scroll">
+      <DataTable value={plannerRecipes} responsiveLayout="scroll">
         <Column
-          field="title"
+          field="recipe.title"
           body={titleBodyTemplate}
           header="Przepis"
           sortable
