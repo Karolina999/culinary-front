@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { ScrollPanel } from "primereact/scrollpanel";
 import * as yup from "yup";
 import { getPopularRecipe, getRecipe } from "../../services/recipe";
@@ -8,7 +8,7 @@ import { RecipeDto } from "../../types";
 import SelectList from "../inputs/selectList";
 import { Level } from "../../frontType/level";
 import { polishPlural } from "../../frontType/polishPlural";
-import { Button as ButtonPrime } from "primereact/button";
+import { Button } from "primereact/button";
 
 interface AddRecipeProps {
   plannerId: number;
@@ -65,9 +65,9 @@ const AddRecipe = ({
       >
         {({ handleSubmit, values, errors, setFieldValue }) => (
           <Form onSubmit={handleSubmit}>
-            <div style={{ position: "relative", height: "50px" }}>
+            <div style={{ position: "relative", height: "53px" }}>
               <Form.Group
-                className="mb-3"
+                className="mb-3 mt-1"
                 style={{ position: "absolute", zIndex: "10", width: "100%" }}
               >
                 <SelectList
@@ -111,7 +111,7 @@ const AddRecipe = ({
                             )}
                           </small>
                         </div>
-                        <ButtonPrime
+                        <Button
                           icon="pi pi-plus"
                           className="p-button-rounded p-button-text p-button-plain"
                           onClick={() =>
@@ -126,10 +126,19 @@ const AddRecipe = ({
                 })}
               </ScrollPanel>
             </div>
-            <div className="d-grid">
-              <Button variant="success" type="submit" className="mt-4">
-                Dodaj potrawę
-              </Button>
+            <div className="text-end mt-4">
+              <Button
+                label="Anuluj"
+                icon="pi pi-times"
+                className="p-button-text"
+                onClick={() => setIsOpen(false)}
+              />
+              <Button
+                label="Zapisz"
+                icon="pi pi-check"
+                className="p-button-text"
+                type="submit"
+              />
             </div>
           </Form>
         )}

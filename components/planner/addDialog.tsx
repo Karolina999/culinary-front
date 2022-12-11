@@ -5,6 +5,7 @@ import { TbSoup } from "react-icons/tb";
 import { FaCarrot } from "react-icons/fa";
 import AddRecipe from "./addRecipe";
 import "primereact/resources/themes/lara-light-teal/theme.css";
+import AddProduct from "./addProduct";
 
 interface AddDialogProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface AddDialogProps {
   plannerId: number;
   mealType: number;
   addMeal: any;
+  addProduct: any;
 }
 
 const AddDialog = ({
@@ -20,11 +22,13 @@ const AddDialog = ({
   plannerId,
   mealType,
   addMeal,
+  addProduct,
 }: AddDialogProps) => {
   return (
     <Dialog
       visible={isOpen}
       onHide={() => setIsOpen(false)}
+      closable={false}
       headerStyle={{ paddingBottom: "5px" }}
       contentStyle={{
         paddingTop: "0",
@@ -55,7 +59,12 @@ const AddDialog = ({
             </>
           }
         >
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit,.</p>
+          <AddProduct
+            setIsOpen={setIsOpen}
+            plannerId={plannerId}
+            mealType={mealType}
+            addProduct={addProduct}
+          />
         </TabPanel>
       </TabView>
     </Dialog>

@@ -18,6 +18,7 @@ import {
   deletePlannerRecipe,
   postPlannerRecipe,
 } from "../../services/plannerRecipe";
+import { postProductFromPlanner } from "../../services/productFromPlanner";
 
 const Index = () => {
   const mealType = [
@@ -48,6 +49,7 @@ const Index = () => {
     await getPlanner(date.toJSON().slice(0, 10))
       .then((res) => {
         setPlanner(res);
+        res || setLoading(false);
       })
       .catch((err) => {
         setPlanner(undefined);
@@ -101,6 +103,31 @@ const Index = () => {
         });
       });
     setLoading(false);
+  };
+
+  const addProduct = async (
+    ingredientId: number,
+    plannerId: number,
+    data: any
+  ) => {
+    await postProductFromPlanner(ingredientId, plannerId, data)
+      .then(async (res) => {
+        await fetchPlanner();
+        toast.current.show({
+          severity: "success",
+          summary: "Powodzenie",
+          detail: "Produkt został dodany",
+          life: 3000,
+        });
+      })
+      .catch((err) => {
+        toast.current.show({
+          severity: "error",
+          summary: "Błąd",
+          detail: "Produkt nie został dodany",
+          life: 3000,
+        });
+      });
   };
 
   const addMeal = async (
@@ -157,7 +184,6 @@ const Index = () => {
   useEffect(() => {
     setLoading(true);
     fetchPlanner();
-    setLoading(false);
   }, [date]);
 
   useEffect(() => {
@@ -388,6 +414,7 @@ const Index = () => {
         plannerId={planner?.id!}
         mealType={mealTypeAdd}
         addMeal={addMeal}
+        addProduct={addProduct}
       />
     </Container>
   );
