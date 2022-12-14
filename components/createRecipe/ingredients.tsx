@@ -3,7 +3,7 @@ import { Button, Col, Form, Row } from "react-bootstrap";
 import { BsTrashFill } from "react-icons/bs";
 import SelectList from "../inputs/selectList";
 import { FieldArray, useFormikContext } from "formik";
-import { Unit } from "../../frontType/unit";
+import { Unit } from "../../utils/unit";
 
 interface Option {
   value: string;

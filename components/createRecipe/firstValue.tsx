@@ -1,8 +1,8 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 import SelectList from "../inputs/selectList";
-import { Category } from "../../frontType/category";
-import { Level } from "../../frontType/level";
+import { Category } from "../../utils/category";
+import { Level } from "../../utils/level";
 
 interface FirstValueProps {
   handleChange: any;

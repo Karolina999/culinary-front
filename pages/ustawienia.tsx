@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Container, Row, Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -16,6 +16,8 @@ const Ustawienia = () => {
   const schema3 = yup.object().shape({
     email: yup.string().required("To pole jest wymagane"),
   });
+
+  useEffect(() => {}, []);
   return (
     <div style={{ position: "relative" }}>
       <div className={`${styles.background}`}>

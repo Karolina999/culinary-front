@@ -6,8 +6,8 @@ import * as yup from "yup";
 import { getPopularRecipe, getRecipe } from "../../services/recipe";
 import { RecipeDto } from "../../types";
 import SelectList from "../inputs/selectList";
-import { Level } from "../../frontType/level";
-import { polishPlural } from "../../frontType/polishPlural";
+import { Level } from "../../utils/level";
+import { polishPlural } from "../../utils/polishPlural";
 import { Button } from "primereact/button";
 
 interface AddRecipeProps {

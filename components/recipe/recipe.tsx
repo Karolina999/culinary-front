@@ -11,9 +11,9 @@ import { AiFillSignal } from "react-icons/ai";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { CgNotes } from "react-icons/cg";
 import { ProductFromRecipe, RatingDto, Recipe, Step, User } from "../../types";
-import { UnitPluar } from "../../frontType/unit";
-import { Level } from "../../frontType/level";
-import { polishPlural } from "../../frontType/polishPlural";
+import { UnitPluar } from "../../utils/unit";
+import { Level } from "../../utils/level";
+import { polishPlural } from "../../utils/polishPlural";
 
 interface RecipeComponentProps {
   recipe: Recipe;

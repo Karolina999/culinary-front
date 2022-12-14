@@ -2,8 +2,8 @@ import React from "react";
 import { GetProductFromPlannerDto } from "../../types";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { UnitPluar } from "../../frontType/unit";
-import { IngredientCategory } from "../../frontType/ingredientCategory";
+import { UnitPluar } from "../../utils/unit";
+import { IngredientCategory } from "../../utils/ingredientCategory";
 import { Row } from "react-bootstrap";
 import { Button } from "primereact/button";
 

@@ -7,7 +7,7 @@ import { classNames } from "primereact/utils";
 import { Button, Form } from "react-bootstrap";
 import SelectList from "../inputs/selectList";
 import Select from "react-select";
-import { Unit } from "../../frontType/unit";
+import { Unit } from "../../utils/unit";
 
 interface AddOrEditProductDialogProps {
   productDialog: boolean;

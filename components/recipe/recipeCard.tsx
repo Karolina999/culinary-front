@@ -6,7 +6,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 import { RatingDto, Recipe } from "../../types";
 import Link from "next/link";
 import router from "next/router";
-import { Level } from "../../frontType/level";
+import { Level } from "../../utils/level";
 
 interface RecipeProps {
   recipe: Recipe;

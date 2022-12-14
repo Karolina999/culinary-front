@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Row } from "react-bootstrap";
 import MultipleSelect from "../inputs/multipleSelect";
-import { Category } from "../../frontType/category";
-import { Level } from "../../frontType/level";
+import { Category } from "../../utils/category";
+import { Level } from "../../utils/level";
 import { BsSearch } from "react-icons/bs";
 import { Divider } from "primereact/divider";
 import Image from "next/image";

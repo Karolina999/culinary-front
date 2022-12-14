@@ -5,7 +5,7 @@ import { Form } from "react-bootstrap";
 import SelectList from "../inputs/selectList";
 import { getIngredients } from "../../services/ingredients";
 import { GetProductFromPlannerDto, IngredientDto } from "../../types";
-import { Unit } from "../../frontType/unit";
+import { Unit } from "../../utils/unit";
 import { Button } from "primereact/button";
 
 interface AddProductProps {
