@@ -15,3 +15,14 @@ export const getUserShoppingLists = () => {
     (response) => response.data
   );
 };
+
+export const putUser = (data: any) => {
+  return http({ method: "PUT", url: "/User", data: data }).then((res) => res);
+};
+
+export const putUserPassword = (oldPassword: string, newPassword: string) => {
+  return http({
+    method: "PUT",
+    url: `/User/password?newPassword=${newPassword}&oldPassword=${oldPassword}`,
+  }).then((res) => res);
+};
