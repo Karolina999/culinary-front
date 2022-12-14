@@ -3,10 +3,10 @@ import { Col, Container, Row, Form, Button } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 import styles from "../styles/settings.module.css";
-import router from "next/router";
 import { UserDto } from "../types";
-import { putUser, putUserPassword } from "../services/user";
+import { getUser, putUser, putUserPassword } from "../services/user";
 import { Toast } from "primereact/toast";
+import AddImage from "../components/createRecipe/addImage";
 
 const Ustawienia = () => {
   const schema1 = yup.object().shape({
@@ -36,19 +36,21 @@ const Ustawienia = () => {
 
   const [user, setUser] = useState<UserDto>({});
   const [loading, setLoading] = useState(true);
+  const [photoError, setPhotoError] = useState("");
   const [dataError, setDataError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const toast = useRef<any>(null);
 
+  const getUserData = async () => {
+    await getUser().then((res) => {
+      setUser(res);
+      setLoading(false);
+    });
+  };
+
   useEffect(() => {
-    if (localStorage.getItem("jwt") && localStorage.getItem("user")) {
-      const storageUser = localStorage.getItem("user");
-      typeof storageUser === "string" && setUser(JSON.parse(storageUser));
-    } else {
-      router.push(`/login`, "", { scroll: true });
-    }
-    setLoading(false);
+    getUserData();
   }, []);
 
   async function updateUser(userToUpdate: UserDto) {
@@ -96,7 +98,6 @@ const Ustawienia = () => {
   return (
     <>
       <Toast ref={toast} />
-
       <div style={{ position: "relative" }}>
         <div className={`${styles.background}`}>
           {loading ? (
@@ -112,6 +113,39 @@ const Ustawienia = () => {
                     Ustawienia konta
                   </h3>
                   <h5 className="pt-4 pb-3">Dodaj zdjęcie</h5>
+                  <Formik
+                    validateOnBlur={false}
+                    validateOnChange={false}
+                    onSubmit={async (values) => {
+                      const userToUpdate = user;
+                      user.imageUrl = values.imageUrl;
+                      const error = await updateUser(userToUpdate);
+                      error ? setPhotoError(error) : setPhotoError("");
+                    }}
+                    initialValues={{
+                      imageUrl: user.imageUrl ? user.imageUrl : "",
+                    }}
+                  >
+                    {({ handleSubmit, values }) => (
+                      <Form onSubmit={handleSubmit}>
+                        <AddImage
+                          name="imageUrl"
+                          value={values.imageUrl}
+                          user
+                        />
+                        <small className="text-danger">{photoError}</small>
+                        <div className="d-grid mt-3">
+                          <Button
+                            variant="danger"
+                            type="submit"
+                            className="mt-2"
+                          >
+                            Zapisz
+                          </Button>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
                   <h5 className="pt-4 pb-3">Zmień dane</h5>
                   <Formik
                     validateOnBlur={false}
