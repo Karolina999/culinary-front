@@ -7,9 +7,10 @@ interface UploadImageProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   name: string;
   value: any;
+  user?: boolean;
 }
 
-const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
+const UploadImage = ({ onClick, name, value, user }: UploadImageProps) => {
   const { setFieldValue } = useFormikContext();
   const [images, setImages] = useState<ImageListType>([]);
   const onChange = (imageList: any, addUpdateIndex: any) => {
@@ -19,12 +20,26 @@ const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
     if (images.length > 1) {
       setImages([images[1]]);
     }
-    setFieldValue(name, images[0]);
-    console.log(value);
+    setFieldValue(
+      name,
+      typeof images[0] === "undefined" ? "" : images[0].data_url
+    );
     if (images.length === 0 && value) {
-      setImages([value]);
+      setImages([{ data_url: value }]);
     }
   }, [images]);
+
+  const mystyle: React.CSSProperties = user
+    ? {
+        height: "150px",
+        width: "100%",
+        objectFit: "cover",
+      }
+    : {
+        height: "250px",
+        width: "100%",
+        objectFit: "cover",
+      };
   return (
     <div>
       <ImageUploading
@@ -68,24 +83,16 @@ const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
                   : "Kliknij lub przeciągnij aby zmienić zdjęcie"}
                 {images.length === 0 ? (
                   <img
-                    src="../recipe.jpg"
-                    alt=""
-                    style={{
-                      height: "250px",
-                      width: "100%",
-                      objectFit: "cover",
-                    }}
+                    src={!user ? "../recipe.jpg" : "../user.jpg"}
+                    alt="user image"
+                    style={mystyle}
                     className="mt-2 px-3"
                   />
                 ) : (
                   <img
                     src={images[0].data_url}
-                    alt=""
-                    style={{
-                      height: "250px",
-                      width: "100%",
-                      objectFit: "cover",
-                    }}
+                    alt="user image"
+                    style={mystyle}
                     className="mt-2 px-3"
                   />
                 )}
@@ -119,13 +126,6 @@ const UploadImage = ({ onClick, name, value }: UploadImageProps) => {
           </div>
         )}
       </ImageUploading>
-      <div className="mt-1">
-        <Form.Text>
-          Możesz dodać zdjęcie w formacie:
-          <strong> .png .jpg .jpeg .bpm</strong>
-          {/* o maksymalnym rozmiarze{" "} <strong>5 MB</strong> */}
-        </Form.Text>
-      </div>
     </div>
   );
 };

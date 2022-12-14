@@ -3,7 +3,7 @@ import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import { Formik } from "formik";
 import * as yup from "yup";
 import styles from "../styles/login.module.css";
-import { UserLoginDto } from "../types";
+import { UserDto, UserLoginDto } from "../types";
 import { loginUser } from "../services/user";
 import router from "next/router";
 
@@ -16,7 +16,9 @@ const LogIn = () => {
     await loginUser(values)
       .then((res) => {
         localStorage.setItem("jwt", res?.headers?.jwt);
-        localStorage.setItem("user", JSON.stringify(res?.data));
+        const user: UserDto = res?.data;
+        user.password = "";
+        localStorage.setItem("user", JSON.stringify(user));
         window.location.href = "/";
       })
       .catch((err) => {

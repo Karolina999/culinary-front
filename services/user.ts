@@ -26,3 +26,9 @@ export const putUserPassword = (oldPassword: string, newPassword: string) => {
     url: `/User/password?newPassword=${newPassword}&oldPassword=${oldPassword}`,
   }).then((res) => res);
 };
+
+export const getUser = () => {
+  return http({ method: "GET", url: "/User/user" }).then(
+    (response) => response.data
+  );
+};
