@@ -7,11 +7,6 @@ interface CommentProps {
 }
 
 const Comment = ({ comment }: CommentProps) => {
-  const user = {
-    firstName: "Jan",
-    lastName: "Kowalski",
-    imageUrl: "",
-  };
   const star = comment.rating;
   const halfStar = !Number.isInteger(star);
   const fillStar = Math.floor(star ? star : 0);
@@ -20,7 +15,7 @@ const Comment = ({ comment }: CommentProps) => {
     <div className="d-flex">
       <div>
         <img
-          src={user.imageUrl.length > 0 ? user.imageUrl : "/user.jpg"}
+          src={comment.user?.photo ? comment.user?.photo : "/user.jpg"}
           className="shadow me-3"
           style={{ height: "90px", width: "90px", objectFit: "cover" }}
         />
@@ -35,7 +30,7 @@ const Comment = ({ comment }: CommentProps) => {
             <FaRegStar style={{ fontSize: "22px" }} key={index} />
           ))}
           <p className="ps-2 text-secondary">
-            {user.firstName} {user.lastName}
+            {comment.user?.firstName} {comment.user?.lastName}
           </p>
         </div>
         {comment.commentText}

@@ -84,7 +84,7 @@ const RecipeCard = ({ recipe }: RecipeProps) => {
             <FaRegStar style={{ fontSize: "18px" }} key={index} />
           ))}
           <p className="ps-2 text-dark" style={{ fontSize: "14px" }}>
-            {rating}/5 z {numberOfReviews} recenzji
+            {rating.toFixed(1)}/5 z {numberOfReviews} recenzji
           </p>
         </div>
       </div>

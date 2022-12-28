@@ -8,6 +8,7 @@ import type { MealTypes } from './mealTypes';
 import type { RecipeDto } from './recipeDto';
 
 export interface GetPlannerRecipeDto {
+  id?: number;
   plannerId?: number;
   recipeId?: number;
   mealType?: MealTypes;

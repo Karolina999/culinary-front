@@ -96,7 +96,7 @@ const RecipeComponent = ({
                 <FaRegStar style={{ fontSize: "25px" }} key={index} />
               ))}
               <p className="ps-2 text-dark" style={{ fontSize: "18px" }}>
-                {star}/5 z {rating.numberOfReviews} recenzji
+                {star?.toFixed(1)}/5 z {rating.numberOfReviews} recenzji
               </p>
             </div>
             <div className="pt-2 d-grid gap-2 d-xl-flex">

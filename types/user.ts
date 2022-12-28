@@ -13,7 +13,7 @@ export interface User {
   lastName?: string | null;
   email?: string | null;
   password?: string | null;
-  imageUrl?: string | null;
+  photo?: string | null;
   recipes?: Recipe[] | null;
   watchedRecipes?: WatchedRecipe[] | null;
 }

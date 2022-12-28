@@ -11,6 +11,7 @@ export interface UserComment {
   id?: number;
   rating?: number;
   commentText?: string | null;
+  userId?: number;
   user?: User;
   recipe?: Recipe;
 }

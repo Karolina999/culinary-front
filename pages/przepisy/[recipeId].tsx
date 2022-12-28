@@ -36,7 +36,7 @@ const ShowRecipe = ({
         author={author}
         products={products}
       />
-      <Comments comments={comments} />
+      <Comments comments={comments} recipeId={recipe.id!} />
     </>
   );
 };

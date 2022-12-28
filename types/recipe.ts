@@ -25,4 +25,5 @@ export interface Recipe {
   watchedRecipes?: WatchedRecipe[] | null;
   planners?: Planner[] | null;
   plannerRecipe?: PlannerRecipe[] | null;
+  rating?: number;
 }

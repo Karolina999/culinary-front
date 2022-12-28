@@ -32,6 +32,8 @@ export * from './productFromPlannerDto';
 export * from './productFromRecipe';
 export * from './productFromRecipeCreateDto';
 export * from './productFromRecipeDto';
+export * from './putApiProductFromPlannerProductFromPlannerIdParams';
+export * from './putApiUserPasswordParams';
 export * from './ratingDto';
 export * from './recipe';
 export * from './recipeDto';
