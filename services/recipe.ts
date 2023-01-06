@@ -11,5 +11,5 @@ export const getRecipe = () => {
 };
 
 export const getPopularRecipe = () => {
-  return http({ method: "GET", url: "/Recipe" }).then((res) => res.data);
+  return http({ method: "GET", url: "/Recipe/top12" }).then((res) => res.data);
 };

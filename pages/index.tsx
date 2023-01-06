@@ -3,6 +3,7 @@ import Banner from "../components/homePage/banner";
 import Category from "../components/homePage/category";
 import PopularRecipes from "../components/homePage/popularRecipes";
 import { Recipe } from "../types";
+import { feachApi } from "../utils/feachApi";
 
 function Home({ recipes }: { recipes: Recipe[] }) {
   return (
@@ -16,9 +17,7 @@ function Home({ recipes }: { recipes: Recipe[] }) {
 }
 
 export async function getStaticProps() {
-  process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
-  const res = await fetch("https://localhost:7193/api/Recipe");
-  const recipes = await res.json();
+  const recipes = await feachApi("/Recipe/top12");
 
   return {
     props: {

@@ -52,7 +52,18 @@ const AddComment = ({
                 values.rating = 0;
                 values.commentText = "";
               })
-              .catch(() => setError("Nie możesz ponownie dodać komentarza"));
+              .catch((err) => {
+                if (err.data.detail === "User cannot comment his own recipe") {
+                  setError("Nie możesz ocenić swojego przepisu");
+                } else if (
+                  err.data.detail ===
+                  "A user has already commented on this recipe"
+                ) {
+                  setError("Nie możesz ponownie dodać komentarza");
+                } else {
+                  setError("Nie można dodać komentarza");
+                }
+              });
           }}
           initialValues={{
             rating: 0,
