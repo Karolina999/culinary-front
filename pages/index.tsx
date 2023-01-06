@@ -9,9 +9,10 @@ function Home({ recipes }: { recipes: Recipe[] }) {
   return (
     <>
       <Banner />
-      <div className="mt-3"></div>
-      <Category />
-      <PopularRecipes popularRecipes={recipes} />
+      <div className="mt-3">
+        <Category />
+        <PopularRecipes popularRecipes={recipes} />
+      </div>
     </>
   );
 }
