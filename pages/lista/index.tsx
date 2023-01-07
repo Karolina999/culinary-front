@@ -41,14 +41,10 @@ const Listy = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchLists = async () => {
-    await getUserShoppingLists()
-      .then((res) => {
-        setLists(res);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    await getUserShoppingLists().then((res) => {
+      setLists(res);
+      setLoading(false);
+    });
   };
 
   useEffect(() => {

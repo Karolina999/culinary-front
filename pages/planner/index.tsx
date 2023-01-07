@@ -24,6 +24,9 @@ import {
 } from "../../services/productFromPlanner";
 import EditDialog from "../../components/planner/editDialog";
 import styles from "../../styles/planner.module.css";
+import { postShoppingList } from "../../services/shoppingList";
+import { postProductsFromList } from "../../services/productFromList";
+import { getRecipeProducts, getRecipesProducts } from "../../services/recipe";
 
 const Index = () => {
   const mealType = [
@@ -35,6 +38,7 @@ const Index = () => {
   ];
   const toast = useRef<any>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingAddList, setLoadingAddList] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -262,10 +266,96 @@ const Index = () => {
     setLoading(false);
   }, [planner]);
 
+  function flatten(arr: any) {
+    return arr.reduce(function (flat: any, toFlatten: any) {
+      return flat.concat(
+        Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten
+      );
+    }, []);
+  }
+
   const rightToolbarTemplate = () => {
     return (
       <React.Fragment>
         <div className="d-flex">
+          <div className="pe-2">
+            <Button
+              label={loadingAddList ? "Wczytuje..." : "Stwórz listę"}
+              className="p-button-success bg-success border-success"
+              disabled={!planner}
+              onClick={async () => {
+                setLoadingAddList(true);
+                const title = `Zakupy ${date.toLocaleDateString("pl-PL", {
+                  weekday: "short",
+                  year: undefined,
+                  month: "long",
+                  day: "numeric",
+                })}`;
+                const meals = flatten(
+                  plannerMeals?.map((x) => {
+                    return x?.plannerRecipes;
+                  })
+                );
+                const products = flatten(
+                  plannerProducts?.map((x) => {
+                    return x?.products;
+                  })
+                );
+                const mealsId = meals.map((x: any) => x.recipeId);
+                let mealsProducts: any[] = [];
+                await getRecipesProducts(mealsId).then(
+                  (res) => (mealsProducts = res)
+                );
+                const protuctsFromMeals = mealsProducts.map((p: any) => {
+                  return {
+                    unit: p.unit,
+                    amount: p.amount,
+                    ingredientId: p.ingredientId,
+                  };
+                });
+                const protuctsFromProducts = products.map((p: any) => {
+                  return {
+                    unit: p.unit,
+                    amount: p.amount,
+                    ingredientId: p.ingredientId,
+                  };
+                });
+                const protuctsToAdd = [
+                  ...protuctsFromMeals,
+                  ...protuctsFromProducts,
+                ];
+                await postShoppingList({ title: title })
+                  .then(async (res) => {
+                    await postProductsFromList(protuctsToAdd, res.id)
+                      .then(() => {
+                        toast.current.show({
+                          severity: "success",
+                          summary: "Powodzenie",
+                          detail: "Lista została utworzona",
+                          life: 3000,
+                        });
+                      })
+                      .catch(() => {
+                        toast.current.show({
+                          severity: "error",
+                          summary: "Błąd",
+                          detail: "Nie udało się stworzyć listy",
+                          life: 3000,
+                        });
+                      });
+                  })
+                  .catch(() => {
+                    toast.current.show({
+                      severity: "error",
+                      summary: "Błąd",
+                      detail: "Nie udało się stworzyć listy",
+                      life: 3000,
+                    });
+                  });
+                setLoadingAddList(false);
+              }}
+            />
+          </div>
           <div className="pe-2">
             <Button
               icon="pi pi-calendar"

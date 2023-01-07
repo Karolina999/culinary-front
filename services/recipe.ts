@@ -13,3 +13,15 @@ export const getRecipe = () => {
 export const getPopularRecipe = () => {
   return http({ method: "GET", url: "/Recipe/top12" }).then((res) => res.data);
 };
+
+export const getRecipeProducts = (recipeId: number) => {
+  return http({ method: "GET", url: `/Recipe/${recipeId}/products` }).then(
+    (res) => res.data
+  );
+};
+
+export const getRecipesProducts = (data: number[]) => {
+  return http({ method: "POST", url: `/Recipe/products`, data: data }).then(
+    (res) => res.data
+  );
+};
