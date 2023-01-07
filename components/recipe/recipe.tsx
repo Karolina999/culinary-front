@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import {
@@ -6,6 +6,7 @@ import {
   BsFillPersonFill,
   BsCalendarPlus,
   BsHeart,
+  BsHeartFill,
 } from "react-icons/bs";
 import { AiFillSignal } from "react-icons/ai";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
@@ -14,6 +15,12 @@ import { ProductFromRecipe, RatingDto, Recipe, Step, User } from "../../types";
 import { UnitPluar } from "../../utils/unit";
 import { Level } from "../../utils/level";
 import { polishPlural } from "../../utils/polishPlural";
+import {
+  deleteWatchedRecipe,
+  isWatched,
+  postWatchedRecipe,
+} from "../../services/watchedRecipe";
+import { Toast } from "primereact/toast";
 
 interface RecipeComponentProps {
   recipe: Recipe;
@@ -30,12 +37,28 @@ const RecipeComponent = ({
   author,
   products,
 }: RecipeComponentProps) => {
+  const toast = useRef<any>(null);
   const star = rating.rating;
   const halfStar = !Number.isInteger(star);
   const fillStar = Math.floor(star ? star : 0);
   const regStar = halfStar ? 5 - fillStar - 1 : 5 - fillStar;
+  const [isWatchedRecipe, setIsWatchedRecipe] = useState(false);
+
+  useEffect(() => {
+    const isRecipeWatched = async () => {
+      await isWatched(recipe.id!)
+        .then(() => {
+          setIsWatchedRecipe(false);
+        })
+        .catch(() => {
+          setIsWatchedRecipe(true);
+        });
+    };
+    isRecipeWatched();
+  }, []);
   return (
     <Container className="pt-lg-5">
+      <Toast ref={toast} />
       <Row>
         <Col xs={12} lg={5} className="d-flex flex-column py-4">
           <div>
@@ -120,13 +143,63 @@ const RecipeComponent = ({
               </Button>
             </div>
             <div className="pt-2 d-grid gap-2 d-xl-flex">
-              <Button
-                variant="danger"
-                style={{ paddingTop: "11px", paddingBottom: "11px" }}
-              >
-                <BsHeart className="me-2" style={{ fontSize: "20px" }} />
-                Dodaj do ulubionych
-              </Button>
+              {isWatchedRecipe ? (
+                <Button
+                  variant="danger"
+                  style={{ paddingTop: "11px", paddingBottom: "11px" }}
+                  onClick={async () => {
+                    await deleteWatchedRecipe(recipe.id!)
+                      .then(() => {
+                        toast.current.show({
+                          severity: "success",
+                          summary: "Powodzenie",
+                          detail: "Produkt został usunięty z obserwowanych",
+                          life: 3000,
+                        });
+                        setIsWatchedRecipe(!isWatchedRecipe);
+                      })
+                      .catch((err) => {
+                        toast.current.show({
+                          severity: "error",
+                          summary: "Błąd",
+                          detail: "Produkt nie został usunięty z obserwowanych",
+                          life: 3000,
+                        });
+                      });
+                  }}
+                >
+                  <BsHeartFill className="me-2" style={{ fontSize: "20px" }} />
+                  Usuń z ulubionych
+                </Button>
+              ) : (
+                <Button
+                  variant="danger"
+                  style={{ paddingTop: "11px", paddingBottom: "11px" }}
+                  onClick={async () => {
+                    await postWatchedRecipe(recipe.id!)
+                      .then(() => {
+                        toast.current.show({
+                          severity: "success",
+                          summary: "Powodzenie",
+                          detail: "Produkt został dodany do obserwowanych",
+                          life: 3000,
+                        });
+                        setIsWatchedRecipe(!isWatchedRecipe);
+                      })
+                      .catch((err) => {
+                        toast.current.show({
+                          severity: "error",
+                          summary: "Błąd",
+                          detail: "Produkt nie został dodany do obserwowanych",
+                          life: 3000,
+                        });
+                      });
+                  }}
+                >
+                  <BsHeart className="me-2" style={{ fontSize: "20px" }} />
+                  Dodaj do ulubionych
+                </Button>
+              )}
             </div>
           </div>
         </Col>

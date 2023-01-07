@@ -32,3 +32,9 @@ export const getUser = () => {
     (response) => response.data
   );
 };
+
+export const getUserWatchedRecipe = () => {
+  return http({ method: "GET", url: "/User/watchedRecipes" }).then(
+    (response) => response.data
+  );
+};

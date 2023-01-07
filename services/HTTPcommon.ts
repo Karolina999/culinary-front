@@ -23,7 +23,8 @@ const request = (options: any) => {
         localStorage.removeItem("jwt");
       } else if (error.response.status === 403) {
         router.push(`/login`, "", { scroll: true });
-        localStorage.removeItem("jwt");
+      } else if (error.response.status === 404) {
+        router.push(`/404`, "", { scroll: true });
       }
     }
     return Promise.reject(error.response || error.message);
