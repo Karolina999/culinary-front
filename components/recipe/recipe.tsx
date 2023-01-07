@@ -21,6 +21,8 @@ import {
   postWatchedRecipe,
 } from "../../services/watchedRecipe";
 import { Toast } from "primereact/toast";
+import { postShoppingList } from "../../services/shoppingList";
+import { postProductsFromList } from "../../services/productFromList";
 
 interface RecipeComponentProps {
   recipe: Recipe;
@@ -126,6 +128,48 @@ const RecipeComponent = ({
               <Button
                 variant="danger"
                 style={{ paddingTop: "11px", paddingBottom: "11px" }}
+                onClick={async () => {
+                  const date = new Date();
+                  const title = `${recipe.title} - ${date
+                    .toJSON()
+                    .slice(0, 10)
+                    .replaceAll("-", "/")}`;
+                  await postShoppingList({ title: title })
+                    .then(async (res) => {
+                      const protuctsToAdd = products.map((p) => {
+                        return {
+                          unit: p.unit,
+                          amount: p.amount,
+                          ingredientId: p.ingredientId,
+                        };
+                      });
+                      await postProductsFromList(protuctsToAdd, res.id)
+                        .then(() => {
+                          toast.current.show({
+                            severity: "success",
+                            summary: "Powodzenie",
+                            detail: "Lista została utworzona",
+                            life: 3000,
+                          });
+                        })
+                        .catch(() => {
+                          toast.current.show({
+                            severity: "error",
+                            summary: "Błąd",
+                            detail: "Nie udało się stworzyć listy",
+                            life: 3000,
+                          });
+                        });
+                    })
+                    .catch(() => {
+                      toast.current.show({
+                        severity: "error",
+                        summary: "Błąd",
+                        detail: "Nie udało się stworzyć listy",
+                        life: 3000,
+                      });
+                    });
+                }}
               >
                 <CgNotes className="mb-1 me-2" style={{ fontSize: "22px" }} />
                 Dodaj do listy
@@ -158,7 +202,7 @@ const RecipeComponent = ({
                         });
                         setIsWatchedRecipe(!isWatchedRecipe);
                       })
-                      .catch((err) => {
+                      .catch(() => {
                         toast.current.show({
                           severity: "error",
                           summary: "Błąd",

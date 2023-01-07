@@ -12,6 +12,14 @@ export const postProductFromList = (
   }).then((res) => res.body);
 };
 
+export const postProductsFromList = (data: any, listId: any) => {
+  return http({
+    method: "POST",
+    url: `https://localhost:7193/api/ProductFromList/products?shoppingListId=${listId}`,
+    data: data,
+  }).then((res) => res.body);
+};
+
 export const putProductFromList = (productId: any, data: any) => {
   return http({
     method: "PUT",

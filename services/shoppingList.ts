@@ -3,7 +3,7 @@ import http from "./HTTPcommon";
 
 export const postShoppingList = (data: any) => {
   return http({ method: "POST", url: "/ShoppingList", data: data }).then(
-    (res) => res.body
+    (res) => res.data
   );
 };
 
