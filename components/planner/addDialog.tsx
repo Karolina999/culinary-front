@@ -6,6 +6,8 @@ import { FaCarrot } from "react-icons/fa";
 import AddRecipe from "./addRecipe";
 import "primereact/resources/themes/lara-light-teal/theme.css";
 import AddProduct from "./addProduct";
+import { BsHeartFill } from "react-icons/bs";
+import AddWatchedRecipe from "./addWatchedRecipe";
 
 interface AddDialogProps {
   isOpen: boolean;
@@ -64,6 +66,20 @@ const AddDialog = ({
             plannerId={plannerId}
             mealType={mealType}
             addProduct={addProduct}
+          />
+        </TabPanel>
+        <TabPanel
+          header={
+            <>
+              <BsHeartFill /> Ulubione
+            </>
+          }
+        >
+          <AddWatchedRecipe
+            plannerId={plannerId}
+            mealType={mealType}
+            setIsOpen={setIsOpen}
+            addMeal={addMeal}
           />
         </TabPanel>
       </TabView>

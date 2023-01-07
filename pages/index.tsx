@@ -1,6 +1,5 @@
 import React from "react";
 import Banner from "../components/homePage/banner";
-import Category from "../components/homePage/category";
 import PopularRecipes from "../components/homePage/popularRecipes";
 import { Recipe } from "../types";
 import { feachApi } from "../utils/feachApi";
@@ -10,7 +9,6 @@ function Home({ recipes }: { recipes: Recipe[] }) {
     <>
       <Banner />
       <div className="mt-3">
-        <Category />
         <PopularRecipes popularRecipes={recipes} />
       </div>
     </>

@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Card, Container, Spinner } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import { Button } from "primereact/button";
 import { Panel } from "primereact/panel";
-import { Ripple } from "primereact/ripple";
-import { GetPlannerDto, GetProductFromPlannerDto, Recipe } from "../../types";
+import { GetPlannerDto, GetProductFromPlannerDto } from "../../types";
 import { deletePlanner, getPlanner, postPlanner } from "../../services/planner";
 import Products from "../../components/planner/products";
 import Meals from "../../components/planner/melas";
