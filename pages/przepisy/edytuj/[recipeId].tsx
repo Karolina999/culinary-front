@@ -34,7 +34,6 @@ const EditIndex = ({ recipe, steps, products }: EditRecipeProps) => {
   const deleteProduct = (productToDelete: any) => {
     setProductsToDelete([...productsToDelete, productToDelete]);
   };
-  console.log(productsToDelete);
 
   const fetchIngredients = async () => {
     await getIngredients().then((res) => {
@@ -66,10 +65,10 @@ const EditIndex = ({ recipe, steps, products }: EditRecipeProps) => {
       yup.object().shape({
         stepNumber: yup.number().required("To pole jest wymagane"),
         description: yup.string().required("To pole jest wymagane"),
-        photo: yup.object(),
+        photo: yup.string(),
       })
     ),
-    photo: yup.object(),
+    photo: yup.string(),
   });
 
   const onSubmit = async (values: any) => {
@@ -79,7 +78,7 @@ const EditIndex = ({ recipe, steps, products }: EditRecipeProps) => {
       level: Number(values.level),
       time: values.time,
       people: Number(values.people),
-      photo: "",
+      photo: values.photo,
       recipeType: Number(values.recipeType),
     };
     const productFromRecipes = values.productFromRecipes.map((product: any) => {
@@ -99,57 +98,53 @@ const EditIndex = ({ recipe, steps, products }: EditRecipeProps) => {
       };
     });
 
-    await putRecipe(recipe.id!, recipeToUpdate)
-      .then(() => {
-        stepsToUpdate.map(async (step: any) => {
-          typeof step.id === "undefined"
-            ? await postStep(
-                {
-                  stepNumber: step.stepNumber,
-                  description: step.description,
-                  photo: step.photo,
-                },
-                recipe.id!
-              )
-            : await putStep(
-                {
-                  id: step.id,
-                  stepNumber: step.stepNumber,
-                  description: step.description,
-                  photo: step.photo,
-                },
-                step.id
-              );
-        });
-
-        productFromRecipes.map(async (product: any) => {
-          typeof product.id === "undefined"
-            ? await postProductFromRecipe(
-                { unit: product.unit, amount: product.amount },
-                recipe.id!,
-                product.ingredientId
-              )
-            : await putProductFromRecipe(
-                { id: product.id, unit: product.unit, amount: product.amount },
-                product.id!,
-                product.ingredientId
-              );
-        });
-
-        stepsToDelete.map(async (step: any) => {
-          typeof step.id !== "undefined" && (await deleteStep(step.id));
-        });
-
-        productsToDelete.map(async (product: any) => {
-          typeof product.id !== "undefined" &&
-            (await deleteProductFromRecipe(product.id));
-        });
-
-        window.location.href = `/przepisy/${recipe.id}`;
-      })
-      .catch(() => {
-        console.log("nie");
+    await putRecipe(recipe.id!, recipeToUpdate).then(() => {
+      stepsToUpdate.map(async (step: any) => {
+        typeof step.id === "undefined"
+          ? await postStep(
+              {
+                stepNumber: step.stepNumber,
+                description: step.description,
+                photo: step.photo,
+              },
+              recipe.id!
+            )
+          : await putStep(
+              {
+                id: step.id,
+                stepNumber: step.stepNumber,
+                description: step.description,
+                photo: step.photo,
+              },
+              step.id
+            );
       });
+
+      productFromRecipes.map(async (product: any) => {
+        typeof product.id === "undefined"
+          ? await postProductFromRecipe(
+              { unit: product.unit, amount: product.amount },
+              recipe.id!,
+              product.ingredientId
+            )
+          : await putProductFromRecipe(
+              { id: product.id, unit: product.unit, amount: product.amount },
+              product.id!,
+              product.ingredientId
+            );
+      });
+
+      stepsToDelete.map(async (step: any) => {
+        typeof step.id !== "undefined" && (await deleteStep(step.id));
+      });
+
+      productsToDelete.map(async (product: any) => {
+        typeof product.id !== "undefined" &&
+          (await deleteProductFromRecipe(product.id));
+      });
+
+      window.location.href = `/przepisy/${recipe.id}`;
+    });
   };
 
   return (

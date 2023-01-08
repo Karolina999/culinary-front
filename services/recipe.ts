@@ -2,7 +2,7 @@ import http from "./HTTPcommon";
 
 export const postRecipe = (data: any) => {
   return http({ method: "POST", url: "/Recipe", data: data }).then(
-    (res) => res.body
+    (res) => res.data
   );
 };
 
@@ -26,7 +26,7 @@ export const getRecipesProducts = (data: number[]) => {
   );
 };
 
-export const putRecipe = (recipeId :number ,data: any) => {
+export const putRecipe = (recipeId: number, data: any) => {
   return http({ method: "PUT", url: `/Recipe/${recipeId}`, data: data }).then(
     (res) => res.body
   );

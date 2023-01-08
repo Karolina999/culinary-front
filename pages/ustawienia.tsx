@@ -34,7 +34,7 @@ const Ustawienia = () => {
       .email("Podaj adres e-mail"),
   });
 
-  const [user, setUser] = useState<UserDto>({});
+  const [user, setUser] = useState<any>({});
   const [loading, setLoading] = useState(true);
   const [photoError, setPhotoError] = useState("");
   const [dataError, setDataError] = useState("");
@@ -53,11 +53,12 @@ const Ustawienia = () => {
     getUserData();
   }, []);
 
-  async function updateUser(userToUpdate: UserDto) {
+  async function updateUser(userToUpdate: any) {
     let error = "";
     await putUser(userToUpdate)
       .then((res) => {
-        localStorage.setItem("user", JSON.stringify(userToUpdate));
+        console.log(res);
+        // localStorage.setItem("user", JSON.stringify(userToUpdate));
         toast.current.show({
           severity: "success",
           summary: "Powodzenie",
@@ -117,13 +118,14 @@ const Ustawienia = () => {
                     validateOnBlur={false}
                     validateOnChange={false}
                     onSubmit={async (values) => {
-                      const userToUpdate = user;
-                      user.imageUrl = values.imageUrl;
-                      const error = await updateUser(userToUpdate);
+                      const error = await updateUser({
+                        ...user,
+                        photo: values.imageUrl,
+                      });
                       error ? setPhotoError(error) : setPhotoError("");
                     }}
                     initialValues={{
-                      imageUrl: user.imageUrl ? user.imageUrl : "",
+                      imageUrl: user.photo ? user.photo : "",
                     }}
                   >
                     {({ handleSubmit, values }) => (

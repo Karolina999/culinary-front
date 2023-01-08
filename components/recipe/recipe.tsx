@@ -58,6 +58,7 @@ const RecipeComponent = ({
     };
     isRecipeWatched();
   }, []);
+  console.log(steps);
   return (
     <Container className="pt-lg-5">
       <Toast ref={toast} />
@@ -174,7 +175,7 @@ const RecipeComponent = ({
                 <CgNotes className="mb-1 me-2" style={{ fontSize: "22px" }} />
                 Dodaj do listy
               </Button>
-              <Button
+              {/* <Button
                 variant="danger"
                 className="d-inline"
                 style={{ paddingTop: "11px", paddingBottom: "11px" }}
@@ -184,9 +185,9 @@ const RecipeComponent = ({
                   style={{ fontSize: "22px" }}
                 />
                 Dodaj do plannera
-              </Button>
-            </div>
-            <div className="pt-2 d-grid gap-2 d-xl-flex">
+              </Button> */}
+              {/* </div>
+            <div className="pt-2 d-grid gap-2 d-xl-flex"> */}
               {isWatchedRecipe ? (
                 <Button
                   variant="danger"

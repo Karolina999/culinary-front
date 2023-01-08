@@ -13,16 +13,12 @@ const Dodaj = () => {
   const [options, setOptions] = useState([]);
 
   const fetchIngredients = async () => {
-    await getIngredients()
-      .then((res) => {
-        const ingredients = res.map((ingredient: any) => {
-          return { label: ingredient.name, value: ingredient.id.toString() };
-        });
-        setOptions(ingredients);
-      })
-      .catch((err) => {
-        console.log(err);
+    await getIngredients().then((res) => {
+      const ingredients = res.map((ingredient: any) => {
+        return { label: ingredient.name, value: ingredient.id.toString() };
       });
+      setOptions(ingredients);
+    });
   };
 
   useEffect(() => {
@@ -79,15 +75,9 @@ const Dodaj = () => {
       steps: steps,
     };
 
-    console.log(recipe);
-    await postRecipe(recipe)
-      .then((res) => {
-        console.log("tak");
-      })
-      .catch((err) => {
-        console.log("nie");
-        console.log(err);
-      });
+    await postRecipe(recipe).then((res) => {
+      window.location.href = `/przepisy/${res.id}`;
+    });
   };
 
   return (
