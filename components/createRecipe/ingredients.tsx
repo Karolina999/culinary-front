@@ -15,6 +15,7 @@ interface IngredientsProps {
   errors: any;
   values: { unit: string; ingredientId: string; amount: string }[];
   handleChange: any;
+  deleteProduct?: any;
 }
 
 const Ingredients = ({
@@ -22,6 +23,7 @@ const Ingredients = ({
   errors,
   values,
   handleChange,
+  deleteProduct,
 }: IngredientsProps) => {
   const { setFieldValue } = useFormikContext();
   return (
@@ -81,7 +83,13 @@ const Ingredients = ({
                           <Button
                             variant="link"
                             className="px-0"
-                            onClick={() => values.length > 1 && remove(index)}
+                            onClick={() => {
+                              if (values.length > 1) {
+                                deleteProduct(values[index]);
+                                const removeIndex: any = index;
+                                remove(removeIndex);
+                              }
+                            }}
                           >
                             <BsTrashFill
                               style={{ fontSize: "22px" }}

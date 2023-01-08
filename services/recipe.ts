@@ -25,3 +25,9 @@ export const getRecipesProducts = (data: number[]) => {
     (res) => res.data
   );
 };
+
+export const putRecipe = (recipeId :number ,data: any) => {
+  return http({ method: "PUT", url: `/Recipe/${recipeId}`, data: data }).then(
+    (res) => res.body
+  );
+};

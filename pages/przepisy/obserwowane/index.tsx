@@ -3,8 +3,6 @@ import { Col, Row, Container } from "react-bootstrap";
 import { BsHeart } from "react-icons/bs";
 import RecipeCard from "../../../components/recipe/recipeCard";
 import { getUserWatchedRecipe } from "../../../services/user";
-import { Recipe } from "../../../types";
-import { feachApi } from "../../../utils/feachApi";
 
 const Watched = () => {
   const [recipes, setRecipes] = useState([]);
@@ -21,7 +19,13 @@ const Watched = () => {
           <h3 className="pb-4 px-2 text-center">Obserwowane przepisy</h3>
           <Row>
             {recipes?.map((recipe, index) => (
-              <Col md={6} lg={4} xl={3} className="pb-3" key={index}>
+              <Col
+                md={6}
+                lg={4}
+                xl={3}
+                className="pb-3 d-flex justify-content-center"
+                key={index}
+              >
                 <RecipeCard recipe={recipe} />
               </Col>
             ))}

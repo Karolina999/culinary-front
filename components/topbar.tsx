@@ -57,6 +57,7 @@ const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
                 {user ? (
                   <>
                     <Nav.Link href="/przepisy/dodaj">Dodaj przepis</Nav.Link>
+                    <Nav.Link href="/przepisy/dodane">Moje przepisy</Nav.Link>
                     <Nav.Link href="/przepisy/obserwowane">
                       Ulubione przepisy
                     </Nav.Link>
@@ -90,6 +91,9 @@ const Topbar = ({ transparent, transparentNav }: TopbarProps) => {
                   <>
                     <NavDropdown.Item href="/przepisy/dodaj">
                       Dodaj przepis
+                    </NavDropdown.Item>
+                    <NavDropdown.Item href="/przepisy/dodane">
+                      Moje przepisy
                     </NavDropdown.Item>
                     <NavDropdown.Item href="/przepisy/obserwowane">
                       Ulubione przepisy

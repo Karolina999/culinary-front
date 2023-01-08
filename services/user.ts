@@ -38,3 +38,9 @@ export const getUserWatchedRecipe = () => {
     (response) => response.data
   );
 };
+
+export const getUserRecipes = () => {
+  return http({ method: "GET", url: "/User/recipes" }).then(
+    (response) => response.data
+  );
+};

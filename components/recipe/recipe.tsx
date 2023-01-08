@@ -291,8 +291,10 @@ const RecipeComponent = ({
                 style={{ fontWeight: "500" }}
               >
                 {product.amount}{" "}
-                {product.unit &&
-                  UnitPluar(product.amount ? product.amount : 0, product.unit)}
+                {UnitPluar(
+                  product.amount ? product.amount : 0,
+                  product.unit || 0
+                )}
               </Col>
             </div>
           ))}

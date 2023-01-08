@@ -83,7 +83,7 @@ const UploadImage = ({ onClick, name, value, user }: UploadImageProps) => {
                   : "Kliknij lub przeciągnij aby zmienić zdjęcie"}
                 {images.length === 0 ? (
                   <img
-                    src={!user ? "../recipe.jpg" : "../user.jpg"}
+                    src={!user ? "../../recipe.jpg" : "../user.jpg"}
                     alt="user image"
                     style={mystyle}
                     className="mt-2 px-3"

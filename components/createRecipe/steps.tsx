@@ -8,9 +8,10 @@ interface StepsProps {
   errors: any;
   values: { stepNumber: number; description: string; photo: string }[];
   handleChange: any;
+  deleteSetp?: any;
 }
 
-const Steps = ({ errors, values, handleChange }: StepsProps) => {
+const Steps = ({ errors, values, handleChange, deleteSetp }: StepsProps) => {
   const [showAddImage, setShowAddImage] = useState(-1);
   return (
     <FieldArray
@@ -28,7 +29,7 @@ const Steps = ({ errors, values, handleChange }: StepsProps) => {
                   <Col>
                     <Form.Control
                       as="textarea"
-                      rows={1}
+                      rows={values[index].description.length > 80 ? 3 : 1}
                       placeholder="Opisz krok"
                       name={`steps.${index}.description`}
                       value={values[index].description}
@@ -65,6 +66,7 @@ const Steps = ({ errors, values, handleChange }: StepsProps) => {
                           className="px-0"
                           onClick={() => {
                             if (values.length > 1) {
+                              deleteSetp(values[index]);
                               remove(index);
                               values.map((value, i) => {
                                 if (value.stepNumber > index) {
