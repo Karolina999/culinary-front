@@ -13,7 +13,12 @@ const PopularRecipes = ({ popularRecipes }: PopularRecipesProps) => {
       <h3 className="caladea-font bold pb-4">Popularne przepisy</h3>
       <Row>
         {popularRecipes.map((recipe) => (
-          <Col md={6} lg={4} xl={3} className="pb-3">
+          <Col
+            md={6}
+            lg={4}
+            xl={3}
+            className="pb-3 d-flex justify-content-center"
+          >
             <RecipeCard recipe={recipe} />
           </Col>
         ))}

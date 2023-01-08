@@ -17,7 +17,6 @@ const EditDialog = ({
   editProduct,
   product,
 }: EditDialogProps) => {
-  console.log(product);
   return (
     <Dialog
       visible={isOpen}

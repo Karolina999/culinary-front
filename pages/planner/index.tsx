@@ -26,7 +26,7 @@ import EditDialog from "../../components/planner/editDialog";
 import styles from "../../styles/planner.module.css";
 import { postShoppingList } from "../../services/shoppingList";
 import { postProductsFromList } from "../../services/productFromList";
-import { getRecipeProducts, getRecipesProducts } from "../../services/recipe";
+import { getRecipesProducts } from "../../services/recipe";
 
 const Index = () => {
   const mealType = [

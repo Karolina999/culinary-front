@@ -12,7 +12,6 @@ import { ProductFromList, ShoppingList, ShoppingListDto } from "../../types";
 import { InputText } from "primereact/inputtext";
 import { UnitPluar } from "../../utils/unit";
 import { IngredientCategory } from "../../utils/ingredientCategory";
-import { exportPdf } from "../../pdf/exportPdf";
 import ListDataTable from "../../components/shoppingList/listDataTable";
 import { BreadCrumb } from "primereact/breadcrumb";
 import AddOrEditProductDialog from "../../components/shoppingList/addOrEditProductDialog";
@@ -308,17 +307,6 @@ const Lista = ({ listId }: ListaProps) => {
               className="p-button-danger bg-danger border-danger"
               onClick={confirmDeleteSelected}
               disabled={!selectedProducts || !selectedProducts.length}
-              // style={{ width: "100%" }}
-            />
-          </Col>
-          <Col xs={5} sm="auto" className="py-2 py-sm-0">
-            <Button
-              label="PDF"
-              icon="pi pi-file-pdf"
-              onClick={() => exportPdf(products, list)}
-              className="p-button-warning mr-2"
-              data-pr-tooltip="PDF"
-              disabled={products.length < 1}
               // style={{ width: "100%" }}
             />
           </Col>
