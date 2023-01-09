@@ -46,7 +46,7 @@ const AddComment = ({
             commentText: yup.string().required("Napisz komentarz"),
           })}
           onSubmit={async (values) => {
-            await postComment(user.id!, recipeId, values)
+            await postComment(recipeId, values)
               .then(async () => {
                 await fetchComments();
                 values.rating = 0;
