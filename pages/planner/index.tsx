@@ -532,7 +532,7 @@ const Index = () => {
               left={
                 <>
                   <Button
-                    label="Dodaj planner"
+                    label="Dodaj planer"
                     icon="pi pi-plus"
                     className="p-button-success bg-success border-success"
                     onClick={() => addPlanner()}

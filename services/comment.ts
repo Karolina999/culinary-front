@@ -1,9 +1,9 @@
 import http from "./HTTPcommon";
 
-export const postComment = (userId: number, recipeId: number, data: any) => {
+export const postComment = (recipeId: number, data: any) => {
   return http({
     method: "POST",
-    url: `/UserComment?userId=${userId}&recipeId=${recipeId}`,
+    url: `/UserComment?recipeId=${recipeId}`,
     data: data,
   }).then((res) => res.data);
 };
