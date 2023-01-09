@@ -1,0 +1,50 @@
+@media screen and (min-width: 769px){
+    .background {
+        min-height: 100vh;
+    }
+    .background::after {
+        position: absolute;
+        z-index: -2;
+        content: '';
+        height: 110%;
+        width: 50%;
+        top:20px;
+        left:0px;
+        background-image: url("../public/loginLeft.jpg");
+        background-position: top right;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .background::before {
+        position: absolute;
+        z-index: -1;
+        content: '';
+        height: calc(100vh + 110px);
+        width: 50%;
+        right:0;
+        top: 20px;
+        background: linear-gradient(-90deg, rgba(255, 255, 255, 0) 47.75%, #FFFFFF 100%), url("../public/loginRight.jpg");
+        background-position: top left;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+@media screen and (max-width: 768px){
+    .background {
+        min-height: 90vh;
+    }
+    .background::before {
+        position: absolute;
+        z-index: -1;
+        content: '';
+        height: 97vw;
+        width: 100%;
+        top:0;
+        right:0;
+        background: linear-gradient(-90deg, rgba(255, 255, 255, 0) 90%, #FFFFFF 100%), url("../public/loginRight.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+        transform:rotate(-90deg);
+    }
+}

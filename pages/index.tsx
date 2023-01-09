@@ -1,23 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Banner from "../components/homePage/banner";
-import Topbar from "../components/topbar";
+import PopularRecipes from "../components/homePage/popularRecipes";
+import { Recipe } from "../types";
+import { feachApi } from "../utils/feachApi";
 
-export default function Home() {
-  const [scrollY, setScrollY] = useState(0);
-  useEffect(() => {
-    const handleScroll = (event: any) => {
-      setScrollY(window.scrollY);
-    };
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+function Home({ recipes }: { recipes: Recipe[] }) {
   return (
     <>
-      <Topbar transparent={scrollY < 90} />
       <Banner />
+      <div className="mt-3">
+        <PopularRecipes popularRecipes={recipes} />
+      </div>
     </>
   );
 }
+
+export async function getStaticProps() {
+  const recipes = await feachApi("/Recipe/top12");
+
+  return {
+    props: {
+      topbarTransparent: true,
+      recipes: recipes,
+    },
+  };
+}
+
+export default Home;
